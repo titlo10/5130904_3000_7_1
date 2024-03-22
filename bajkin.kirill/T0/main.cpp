@@ -1,4 +1,5 @@
 #include <iostream>
+
 namespace bajkin {
 	void printName() {
 		std::cout << "bajkin.kirill";
