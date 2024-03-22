@@ -1,6 +1,11 @@
 #include <iostream>
+namespace bajkin {
+	void printName() {
+		std::cout << "bajkin.kirill";
+	}
+}
 
 int main() {
-	std::cout << "bajkin.kirill";
+	bajkin::printName();
 	return 0;
 }
