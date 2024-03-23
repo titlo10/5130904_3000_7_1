@@ -1,4 +1,4 @@
 #include <iostream>
  int main()
 {
- std::cout >> bajkin.kirill;}
+ std::cout >> "bajkin.kirill"; }
