@@ -1,12 +1,4 @@
 #include <iostream>
-
-namespace bajkin {
-	void printName() {
-		std::cout << "bajkin.kirill";
-	}
-}
-
-int main() {
-	bajkin::printName();
-	return 0;
-}
+ int main()
+{
+ std::cout >> bajkin.kirill;}
