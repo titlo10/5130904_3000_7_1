@@ -2,20 +2,20 @@
 
 namespace abrosimov
 {
-	void printFullName();
+    void printFullName();
 }
 
-int main
-(
-	abrosimov::printFullName();
+int main()
+{
+    abrosimov::printFullName();
 
-	return 0;
-)
+    return 0;
+}
 
 namespace abrosimov
 {
-	void printFullName()
-	{
-		std::cout << "abrosimov" << "." << "artem" << std::endl;
-	}
+    void printFullName()
+    {
+        std::cout << "abrosimov.artem" << std::endl;
+    }
 }
