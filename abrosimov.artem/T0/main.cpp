@@ -4,7 +4,7 @@ namespace abrosimov
 {
     void printFullName()
     {
-        std::cout << "abrosimov.artem" << std::endl;
+        std::cout << "abrosimov.artem" << "\n";
     }
 }
 
