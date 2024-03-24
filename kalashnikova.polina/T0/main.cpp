@@ -1,8 +1,6 @@
 #include <iostream>
 
-using namespace std;
-
 int main() {
-	cout << "kalashnikova.polina" << endl;
-	return 0;
+  std::cout << "kalashnikova.polina\n";
+  return 0;
 }
