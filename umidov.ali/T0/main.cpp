@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+
 int main() {
     char u = 'u';
     char m = 'm';
