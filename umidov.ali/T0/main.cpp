@@ -1,5 +1,5 @@
-	#include <iostream>
-	int main() {
-	std::cout << "umidov.ali\n";
-	return 0;
-	}
+		#include <iostream>
+		int main(){
+		std::cout << "umidov.ali\n";
+		return 0;
+		}
