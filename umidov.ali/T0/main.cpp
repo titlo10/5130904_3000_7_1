@@ -4,8 +4,8 @@
 
 int main() {
     
-    std::cout << "umidov.ali\n";
+   std::cout << "umidov.ali\n";
 
     
-    return 0;
+   return 0;
 }
