@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <cmath>
 #include <complex>
+#include <iterator>
 
 struct DataStruct {
     unsigned long long key1;
@@ -39,7 +40,7 @@ std::istream& operator>>(std::istream& is, DataStruct& data) {
 }
 
 std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
-    os << "(:key1 " << data.key1 << "ull:key2 " << data.key2 << "ull:key3 " << std::quoted(data.key3) << ":)";
+    os << "(:key1 " << data.key1 << " :key2 " << data.key2 << " :key3 " << std::quoted(data.key3) << ")";
     return os;
 }
 
@@ -57,7 +58,6 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 
 int main() {
     std::vector<DataStruct> dataVector;
-
     std::string line;
     while (std::getline(std::cin, line)) {
         std::istringstream iss(line);
