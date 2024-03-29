@@ -8,32 +8,45 @@
 #include <iterator>
 
 struct DataStruct {
-    unsigned long long key1;
-    unsigned long long key2;
+    unsigned long long key1 = 0;
+    unsigned long long key2 = 0;
     std::string key3;
 };
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
+    data = DataStruct();
     char c;
     is >> c;
+
     while (is >> c && c != ':') {}
 
-    while (is >> c && c == ':') {
-        std::string keyName;
-        is >> keyName;
-
+    std::string keyName, keyValue;
+    while (is >> keyName) {
+        if (keyName.back() != ':') {
+            is.setstate(std::ios_base::failbit);
+            return is;
+        }
+        keyName.pop_back();
         if (keyName == "key1") {
-            is >> data.key1;
+            if (!(is >> data.key1)) {
+                is.setstate(std::ios_base::failbit);
+                return is;
+            }
         }
         else if (keyName == "key2") {
-            is >> data.key2;
+            if (!(is >> data.key2)) {
+                is.setstate(std::ios_base::failbit);
+                return is;
+            }
         }
         else if (keyName == "key3") {
-            is >> std::quoted(data.key3);
+            if (!(is >> std::quoted(data.key3))) {
+                is.setstate(std::ios_base::failbit);
+                return is;
+            }
         }
         else {
-            std::string value;
-            is >> value;
+            std::getline(is, keyValue, ':');
         }
     }
     return is;
@@ -57,6 +70,7 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 }
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     std::vector<DataStruct> dataVector;
     std::string line;
     while (std::getline(std::cin, line)) {
@@ -64,6 +78,10 @@ int main() {
         DataStruct data;
         if (iss >> data) {
             dataVector.push_back(data);
+        }
+        else {
+            std::cerr << "Ошибка чтения данных: " << line << std::endl;
+            iss.clear();
         }
     }
 
