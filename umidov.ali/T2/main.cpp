@@ -6,10 +6,11 @@
 #include <cmath>
 #include <complex>
 #include <iterator>
+#include <string>
 
 struct DataStruct {
-    unsigned long long key1 = 0;
-    unsigned long long key2 = 0;
+    long long key1 = 0;
+    std::string key2;
     std::string key3;
 };
 
@@ -17,15 +18,16 @@ std::istream& operator>>(std::istream& is, DataStruct& data) {
     std::string line;
     if (std::getline(is, line)) {
         std::istringstream iss(line);
+        std::string key, key2_temp;
         char colon;
-        std::string key;
 
         while (iss >> key >> colon && colon == ':') {
             if (key == "key1") {
                 if (!(iss >> data.key1)) return is;
             }
             else if (key == "key2") {
-                if (!(iss >> data.key2)) return is;
+                if (!(iss >> key2_temp)) return is;
+                data.key2 = key2_temp;
             }
             else if (key == "key3") {
                 if (!(iss >> std::quoted(data.key3))) return is;
