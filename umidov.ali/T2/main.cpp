@@ -1,10 +1,10 @@
 #include "DataStruct.h"
-#include <vector>
 #include <algorithm>
-#include <sstream>
-#include <limits>
-#include <iterator>
 #include <iostream>
+#include <iterator>
+#include <limits>
+#include <sstream>
+#include <vector>
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
     std::string line;
