@@ -7,27 +7,27 @@
 #include <vector>
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
-    std::string line;
+    std::string line, key, value;
+    char colon;
+
     if (std::getline(is, line, ')')) {
         std::istringstream iss(line.substr(1));
-        std::string key, value;
-        char colon;
 
         while (iss >> colon >> key >> value) {
             if (colon != ':') {
                 is.setstate(std::ios::failbit);
-                return is;
+                break;
             }
+            value.pop_back();
             if (key == "key1") {
-                data.key1 = std::stoull(value.substr(0, value.size() - 3));
+                data.key1 = std::stoull(value);
             }
             else if (key == "key2") {
-                data.key2 = std::stoull(value.substr(0, value.size() - 3), 0, 8);
+                data.key2 = std::stoull(value, nullptr, 8);
             }
             else if (key == "key3") {
                 data.key3 = value.substr(1, value.size() - 2);
             }
-            iss.ignore(std::numeric_limits<std::streamsize>::max(), ':');
         }
     }
     else {
