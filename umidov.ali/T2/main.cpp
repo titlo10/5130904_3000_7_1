@@ -2,19 +2,13 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
-#include <limits>
-#include <sstream>
 #include <vector>
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
-    std::string line;
-    std::string key;
-    std::string value;
+    std::string line, key, value;
     char colon;
-
     if (std::getline(is, line, ')')) {
         std::istringstream iss(line.substr(1));
-
         while (iss >> colon >> key >> value) {
             if (colon != ':') {
                 is.setstate(std::ios::failbit);
@@ -53,24 +47,14 @@ bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
 int main() {
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
-
-    std::copy(
-        std::istream_iterator<DataStruct>(std::cin),
+    std::copy(std::istream_iterator<DataStruct>(std::cin),
         std::istream_iterator<DataStruct>(),
-        std::back_inserter(dataVector)
-    );
-
+        std::back_inserter(dataVector));
     std::cout << "Data reading completed.\n";
-
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
     std::cout << "Sorting completed.\n";
-
-    std::copy(
-       dataVector.begin(),
-       dataVector.end(),
-       std::ostream_iterator<DataStruct>(std::cout, "\n")
-   );
+    std::copy(dataVector.begin(), dataVector.end(),
+        std::ostream_iterator<DataStruct>(std::cout, "\n"));
     std::cout << "Data output completed.\n";
-
     return 0;
 }
