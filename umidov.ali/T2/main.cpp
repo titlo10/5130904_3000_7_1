@@ -4,6 +4,7 @@
 #include <sstream>
 #include <limits>
 #include <iterator>
+#include <iostream>
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
     std::string line;
@@ -36,11 +37,12 @@ std::istream& operator>>(std::istream& is, DataStruct& data) {
 }
 
 std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
-    os << "(:key1 " << data.key1 << "ull:key2 " << std::oct << data.key2 << ":key3 \"" << data.key3 << "\":)";
+    os << "(:key1 " << data.key1 << "ull :key2 " << std::oct << data.key2
+        << " :key3 \"" << data.key3 << "\":)";
     return os;
 }
 
-bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
+bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
     if (a.key1 != b.key1) return a.key1 < b.key1;
     if (a.key2 != b.key2) return a.key2 < b.key2;
     return a.key3.size() < b.key3.size();
@@ -48,20 +50,20 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 
 int main() {
     std::vector<DataStruct> dataVector;
-    std::cout << "Start reading data..." << std::endl;
+    std::cout << "Start reading data...\n";
 
     std::copy(std::istream_iterator<DataStruct>(std::cin),
         std::istream_iterator<DataStruct>(),
         std::back_inserter(dataVector));
 
-    std::cout << "Data reading completed." << std::endl;
+    std::cout << "Data reading completed.\n";
 
-    std::sort(dataVector.begin(), dataVector.end(), compareDataStruct);
-    std::cout << "Sorting completed." << std::endl;
+    std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
+    std::cout << "Sorting completed.\n";
 
     std::copy(dataVector.begin(), dataVector.end(),
         std::ostream_iterator<DataStruct>(std::cout, "\n"));
-    std::cout << "Data output completed." << std::endl;
+    std::cout << "Data output completed.\n";
 
     return 0;
 }
