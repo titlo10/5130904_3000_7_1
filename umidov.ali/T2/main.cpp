@@ -66,10 +66,10 @@ int main() {
     std::cout << "Sorting completed.\n";
 
     std::copy(
-        dataVector.begin(),
-        dataVector.end(),
-        std::ostream_iterator<DataStruct>(std::cout, "\n")
-    );
+       dataVector.begin(),
+       dataVector.end(),
+       std::ostream_iterator<DataStruct>(std::cout, "\n")
+   );
     std::cout << "Data output completed.\n";
 
     return 0;
