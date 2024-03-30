@@ -1,46 +1,42 @@
-#include <iostream>
+#include "DataStruct.h"
 #include <vector>
 #include <algorithm>
 #include <sstream>
-#include <iomanip>
-#include <cmath>
-#include <complex>
+#include <limits>
 #include <iterator>
-#include <string>
-
-struct DataStruct {
-    long long key1 = 0;
-    std::string key2;
-    std::string key3;
-};
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
     std::string line;
-    if (std::getline(is, line)) {
-        std::istringstream iss(line);
-        std::string key, key2_temp;
+    if (std::getline(is, line, ')')) {
+        std::istringstream iss(line.substr(1));
+        std::string key, value;
         char colon;
 
-        while (iss >> key >> colon && colon == ':') {
+        while (iss >> colon >> key >> value) {
+            if (colon != ':') {
+                is.setstate(std::ios::failbit);
+                return is;
+            }
             if (key == "key1") {
-                if (!(iss >> data.key1)) return is;
+                data.key1 = std::stoull(value.substr(0, value.size() - 3));
             }
             else if (key == "key2") {
-                if (!(iss >> key2_temp)) return is;
-                data.key2 = key2_temp;
+                data.key2 = std::stoull(value.substr(0, value.size() - 3), 0, 8);
             }
             else if (key == "key3") {
-                if (!(iss >> std::quoted(data.key3))) return is;
+                data.key3 = value.substr(1, value.size() - 2);
             }
+            iss.ignore(std::numeric_limits<std::streamsize>::max(), ':');
         }
+    }
+    else {
+        is.setstate(std::ios::failbit);
     }
     return is;
 }
 
 std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
-    os << "DataStruct { key1: " << data.key1
-        << ", key2: " << data.key2
-        << ", key3: " << std::quoted(data.key3) << " }";
+    os << "(:key1 " << data.key1 << "ull:key2 " << std::oct << data.key2 << ":key3 \"" << data.key3 << "\":)";
     return os;
 }
 
@@ -52,24 +48,20 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 
 int main() {
     std::vector<DataStruct> dataVector;
-    std::string line;
+    std::cout << "Start reading data..." << std::endl;
 
-    while (std::getline(std::cin, line)) {
-        std::istringstream iss(line);
-        DataStruct data;
-        if (iss >> data) {
-            dataVector.push_back(data);
-        }
-        else {
-            std::cerr << "Ошибка чтения данных: " << line << std::endl;
-        }
-    }
+    std::copy(std::istream_iterator<DataStruct>(std::cin),
+        std::istream_iterator<DataStruct>(),
+        std::back_inserter(dataVector));
+
+    std::cout << "Data reading completed." << std::endl;
 
     std::sort(dataVector.begin(), dataVector.end(), compareDataStruct);
+    std::cout << "Sorting completed." << std::endl;
 
-    for (const auto& data : dataVector) {
-        std::cout << data << std::endl;
-    }
+    std::copy(dataVector.begin(), dataVector.end(),
+        std::ostream_iterator<DataStruct>(std::cout, "\n"));
+    std::cout << "Data output completed." << std::endl;
 
     return 0;
 }
