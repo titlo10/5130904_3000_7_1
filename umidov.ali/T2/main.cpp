@@ -2,20 +2,25 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <limits>
+#include <sstream>
 #include <vector>
 
-std::istream& operator>>(std::istream& is, DataStruct& data)
-{
-    std::string line, key, value;
+std::istream& operator>>(std::istream& is, DataStruct& data) {
+    std::string line;
+    std::string key;
+    std::string value;
     char colon;
+
     if (std::getline(is, line, ')')) {
         std::istringstream iss(line.substr(1));
+
         while (iss >> colon >> key >> value) {
             if (colon != ':') {
                 is.setstate(std::ios::failbit);
                 break;
             }
-            value.pop_back();
+            value.pop_back(); // Assuming the value ends with a type specifier like "ull"
             if (key == "key1") {
                 data.key1 = std::stoull(value);
             }
@@ -33,32 +38,39 @@ std::istream& operator>>(std::istream& is, DataStruct& data)
     return is;
 }
 
-std::ostream& operator<<(std::ostream& os, const DataStruct& data)
-{
+std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
     os << "(:key1 " << data.key1 << "ull :key2 " << std::oct << data.key2
         << " :key3 \"" << data.key3 << "\":)";
     return os;
 }
 
-bool compareDataStructs(const DataStruct& a, const DataStruct& b)
-{
+bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
     if (a.key1 != b.key1) return a.key1 < b.key1;
     if (a.key2 != b.key2) return a.key2 < b.key2;
     return a.key3.size() < b.key3.size();
 }
 
-int main()
-{
+int main() {
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
-    std::copy(std::istream_iterator<DataStruct>(std::cin),
+
+    std::copy(
+        std::istream_iterator<DataStruct>(std::cin),
         std::istream_iterator<DataStruct>(),
-        std::back_inserter(dataVector));
+        std::back_inserter(dataVector)
+    );
+
     std::cout << "Data reading completed.\n";
+
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
     std::cout << "Sorting completed.\n";
-    std::copy(dataVector.begin(), dataVector.end(),
-        std::ostream_iterator<DataStruct>(std::cout, "\n"));
+
+    std::copy(
+        dataVector.begin(),
+        dataVector.end(),
+        std::ostream_iterator<DataStruct>(std::cout, "\n")
+    );
     std::cout << "Data output completed.\n";
+
     return 0;
 }
