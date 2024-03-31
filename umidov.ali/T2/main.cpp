@@ -10,21 +10,41 @@ std::istream& operator>>(std::istream& is, DataStruct& ds) {
     std::replace(input.begin(), input.end(), ':', ' ');
     std::istringstream iss(input);
     while (iss >> temp) {
-        if (temp == "key1") {
-            std::string ullStr;
-            iss >> ullStr;
-            ullStr.pop_back(); ullStr.pop_back(); ullStr.pop_back();
-            ds.key1 = std::stoull(ullStr);
+        try {
+            if (temp == "key1") {
+                std::string ullStr;
+                iss >> ullStr;
+                ullStr.pop_back(); ullStr.pop_back(); ullStr.pop_back();
+                ds.key1 = std::stoull(ullStr);
+            }
+            else if (temp == "key2") {
+                std::string octStr;
+                iss >> octStr;
+                ds.key2 = std::stoull(octStr, nullptr, 8);
+            }
+            else if (temp == "key3") {
+                iss >> std::ws;
+                std::getline(iss, ds.key3, '\"');
+                std::getline(iss, ds.key3, '\"');
+            }
         }
-        else if (temp == "key2") {
-            std::string octStr;
-            iss >> octStr;
-            ds.key2 = std::stoull(octStr, nullptr, 8);
+        catch (const std::invalid_argument& ia) {
+            // Вывод сообщения об ошибке и установка состояния потока в failbit
+            std::cerr << "Invalid argument: " << ia.what() << '\n';
+            is.setstate(std::ios::failbit);
+            return is; // Выход из функции
         }
-        else if (temp == "key3") {
-            iss >> std::ws;
-            std::getline(iss, ds.key3, '"');
-            std::getline(iss, ds.key3, '"');
+        catch (const std::out_of_range& oor) {
+            // Обработка исключения выхода за диапазон числового типа
+            std::cerr << "Out of range: " << oor.what() << '\n';
+            is.setstate(std::ios::failbit);
+            return is; // Выход из функции
+        }
+        catch (...) {
+            // Обработка любых других исключений
+            std::cerr << "Unknown error occurred" << '\n';
+            is.setstate(std::ios::failbit);
+            return is; // Выход из функции
         }
     }
     return is;
