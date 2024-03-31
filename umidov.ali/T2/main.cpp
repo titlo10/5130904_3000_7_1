@@ -8,23 +8,25 @@ int main() {
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
 
-    std::copy(
-        std::istream_iterator<DataStruct>(std::cin),
-        std::istream_iterator<DataStruct>(),
-        std::back_inserter(dataVector)
-    );
+    DataStruct temp;
+    while (std::cin >> temp) {
+        dataVector.push_back(temp);
+        std::cout << "Read record: " << temp << std::endl; // Проверка успешного чтения
+    }
 
-    std::cout << "Data reading completed.\nSorting...\n";
+    if (dataVector.empty()) {
+        std::cout << "No data read. Exiting." << std::endl;
+        return 0;
+    }
+
+    std::cout << "Data reading completed.\n" << dataVector.size() << " records read. Sorting...\n";
 
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
 
     std::cout << "Sorted data:\n";
-
-    std::copy(
-        dataVector.begin(),
-        dataVector.end(),
-        std::ostream_iterator<DataStruct>(std::cout, "\n")
-    );
+    for (const auto& data : dataVector) {
+        std::cout << data << "\n";
+    }
 
     return 0;
 }
