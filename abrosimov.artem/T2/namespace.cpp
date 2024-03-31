@@ -41,7 +41,6 @@ namespace abrosimov
         
         std::string input;
         in >> input;
-        
         // Пример обработки двоичного литерала (например, преобразование из бинарной строки)
         if (input.size() > 2 && input.substr(0, 2) == "0b")
         {
