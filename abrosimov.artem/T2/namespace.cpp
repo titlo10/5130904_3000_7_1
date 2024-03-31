@@ -38,7 +38,6 @@ namespace abrosimov
         {
             return in; // Не удалось установить sentry, возврат input stream
         }
-        
         std::string input;
         in >> input;
         // Пример обработки двоичного литерала (например, преобразование из бинарной строки)
