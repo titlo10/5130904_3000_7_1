@@ -77,7 +77,6 @@ namespace golikov
     DataStruct input;
     {
       using sep = DelimiterIO;
-      using label = LabelIO;
       using ULL = ULLIO;
       using cmp = CMPDoubleIO;
       using str = StringIO;
