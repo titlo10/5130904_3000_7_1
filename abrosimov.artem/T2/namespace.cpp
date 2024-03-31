@@ -41,7 +41,7 @@ namespace abrosimov
         
         std::string input;
         in >> input;
-        
+       
         // Пример обработки двоичного литерала (например, преобразование из бинарной строки)
         if (input.size() > 2 && input.substr(0, 2) == "0b")
         {
@@ -64,7 +64,7 @@ namespace abrosimov
         }
         return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
     }
-    
+
     std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
         std::istream::sentry sentry(in);

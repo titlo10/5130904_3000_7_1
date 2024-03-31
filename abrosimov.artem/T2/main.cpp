@@ -18,11 +18,10 @@ int main()
                 data.push_back(tmp);
             }
         }
-        
-        std::sort(std::begin(data), std::end(data), abrosimov::compareDataStruct);
-        
+ 
+        std::sort(std::begin(data), std::end(data), abrosimov::compareDataStruct);       
         std::copy(std::begin(data), std::end(data), std::ostream_iterator< DataStruct >(std::cout, "\n"));
-    }
+    } 
     catch (std::exception& ex)
     {
         std::cerr << ex.what();
