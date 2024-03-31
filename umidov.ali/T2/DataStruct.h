@@ -4,10 +4,11 @@
 #include <iostream>
 #include <string>
 
-struct DataStruct {
-   unsigned long long key1{};
-   unsigned long long key2{};
-     std::string key3;
+struct DataStruct
+{
+	unsigned long long key1{};
+	unsigned long long key2{};
+	std::string key3;
 };
 
 std::istream& operator>>(std::istream& is, DataStruct& data);
