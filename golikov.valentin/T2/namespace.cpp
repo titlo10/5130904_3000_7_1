@@ -37,6 +37,7 @@ namespace golikov
     return in;
   }
 
+
   std::istream& operator>>(std::istream& in, DoubleIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -47,8 +48,7 @@ namespace golikov
     return in >> dest.num;
   }
 
-  std::istream& operator>>(std::istream& in, ULLIO&& dest)
-  {
+  std::istream& operator>>(std::istream& in, ULLIO&& dest) {
     std::istream::sentry sentry(in);
     if (!sentry)
     {
@@ -67,6 +67,21 @@ namespace golikov
     return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
   }
 
+  std::istream& operator>>(std::istream& in, LabelIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    std::string data = "";
+    if ((in >> data) && (data != dest.exp))
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
   std::istream& operator>>(std::istream& in, DataStruct& dest)
   {
     std::istream::sentry sentry(in);
@@ -77,7 +92,9 @@ namespace golikov
     DataStruct input;
     {
       using sep = DelimiterIO;
+      using label = LabelIO;
       using ULL = ULLIO;
+      using dbl = DoubleIO;
       using cmp = CMPDoubleIO;
       using str = StringIO;
 
@@ -96,11 +113,13 @@ namespace golikov
           {
             in >> ULL{ input.key1 };
             flag1 = true;
-          } else if (key == "key2")
+          }
+          else if (key == "key2")
           {
             in >> sep{ '#' } >> sep{ 'c' } >> cmp{ input.key2 };
             flag2 = true;
-          } else if (key == "key3")
+          }
+          else if (key == "key3")
           {
             in >> str{ input.key3 };
             flag3 = true;
@@ -160,15 +179,6 @@ namespace golikov
       }
     }
     return false;
-  }
-
-  void insertData(std::istringstream& iss, std::vector< DataStruct >& data)
-  {
-    std::copy(
-      std::istream_iterator< DataStruct >(iss),
-      std::istream_iterator< DataStruct >(),
-      std::back_inserter(data)
-    );
   }
 
   iofmtguard::iofmtguard(std::basic_ios< char >& s) :
