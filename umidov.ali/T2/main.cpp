@@ -8,24 +8,28 @@ int main() {
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
 
+    // Чтение данных в вектор
     DataStruct temp;
     while (std::cin >> temp) {
         dataVector.push_back(temp);
-        std::cout << "Read record: " << temp << std::endl; // Проверка успешного чтения
     }
 
+    // Проверка наличия считанных данных
     if (dataVector.empty()) {
-        std::cout << "No data read. Exiting." << std::endl;
+        std::cout << "No data read. Exiting.\n";
         return 0;
     }
+    else {
+        std::cout << "Data reading completed.\nSorting...\n";
+    }
 
-    std::cout << "Data reading completed.\n" << dataVector.size() << " records read. Sorting...\n";
-
+    // Сортировка данных
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
 
+    // Вывод отсортированных данных
     std::cout << "Sorted data:\n";
-    for (const auto& data : dataVector) {
-        std::cout << data << "\n";
+    for (const auto& item : dataVector) {
+        std::cout << item << "\n";
     }
 
     return 0;

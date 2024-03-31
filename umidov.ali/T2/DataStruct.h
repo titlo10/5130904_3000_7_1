@@ -12,7 +12,8 @@ struct DataStruct {
 inline std::istream& operator>>(std::istream& is, DataStruct& data) {
     std::string line;
     if (std::getline(is, line, ')')) {
-        std::replace(line.begin(), line.end(), ':', ' ');
+        // Удаление двоеточий из строки
+        line.erase(std::remove(line.begin(), line.end(), ':'), line.end());
         std::istringstream iss(line.substr(1));
         if (!(iss >> data.key1 >> data.key2 >> std::ws
             && std::getline(iss, data.key3, '\"')
@@ -22,6 +23,7 @@ inline std::istream& operator>>(std::istream& is, DataStruct& data) {
     }
     return is;
 }
+
 
 inline std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
     os << "(:key1 " << data.key1 << " :key2 " << data.key2
