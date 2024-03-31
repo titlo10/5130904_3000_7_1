@@ -1,43 +1,36 @@
 #include "DataStruct.h"
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 #include <iterator>
 
-bool isSupported([[maybe_unused]] const DataStruct& data) {
+std::istream& operator>>(std::istream& is, DataStruct& data) {
+    std::getline(is, data.key1, ':');
+    std::getline(is, data.key2, ':');
+    std::getline(is, data.key3);
+    return is;
+}
 
-    return true;
+std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
+    os << "(:key1 " << data.key1 << " :key2 " << data.key2 << " :key3 \"" << data.key3 << "\":)";
+    return os;
+}
+
+bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
+    return a.key1 < b.key1;
 }
 
 int main() {
     std::vector<DataStruct> dataVector;
-    std::cout << "Start reading data...\n";
-
     DataStruct temp;
-    bool hasSupported = false;
     while (std::cin >> temp) {
-        if (isSupported(temp)) {
-            hasSupported = true;
-            dataVector.push_back(temp);
-        }
+        dataVector.push_back(temp);
     }
-
-    if (!hasSupported) {
-        std::cout << "Looks like there is no supported record. Cannot determine input. Test skipped\n";
-        return 0;
-    }
-
-    std::cout << "Data reading completed.\nSorting...\n";
 
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
 
-    std::cout << "Sorted data:\n";
-
-    std::copy(
-        dataVector.begin(),
-        dataVector.end(),
-        std::ostream_iterator<DataStruct>(std::cout, "\n")
-    );
+    for (const auto& data : dataVector) {
+        std::cout << data << "\n";
+    }
 
     return 0;
 }
