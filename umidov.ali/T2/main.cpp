@@ -2,29 +2,36 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <iterator>
 
-int main() {
+
+int main()
+{
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
 
-    std::copy(
-        std::istream_iterator<DataStruct>(std::cin),
-        std::istream_iterator<DataStruct>(),
-        std::back_inserter(dataVector)
-    );
+    DataStruct data;
+    while (std::cin >> data)
+    {
+        dataVector.push_back(data);
+    }
 
-    std::cout << "Data reading completed.\nSorting...\n";
+    if (dataVector.empty())
+    {
+        std::cerr << "Looks like there are no supported records. Cannot determine input. Test skipped." << std::endl;
+        return 0;
+    }
+
+    std::cout << "Data reading completed." << std::endl;
+    std::cout << "Sorting..." << std::endl;
 
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
 
-    std::cout << "Sorted data:\n";
+    std::cout << "Sorted data:" << std::endl;
 
-    std::copy(
-        dataVector.begin(),
-        dataVector.end(),
-        std::ostream_iterator<DataStruct>(std::cout, "\n")
-    );
+    for (const auto& d : dataVector)
+    {
+        std::cout << d << std::endl;
+    }
 
     return 0;
 }
