@@ -39,11 +39,6 @@ namespace golikov
     std::string& ref;
   };
 
-  struct LabelIO
-  {
-    std::string exp;
-  };
-
   // scope guard для возврата состояния потока в первоначальное состояние
   class iofmtguard
   {
@@ -61,7 +56,6 @@ namespace golikov
   std::istream& operator>>(std::istream& in, CMPDoubleIO&& dest);
   std::istream& operator>>(std::istream& in, ULLIO&& dest);
   std::istream& operator>>(std::istream& in, StringIO&& dest);
-  std::istream& operator>>(std::istream& in, LabelIO&& dest);
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
 
