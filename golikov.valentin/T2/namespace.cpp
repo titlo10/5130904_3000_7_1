@@ -78,7 +78,6 @@ namespace golikov
     {
       using sep = DelimiterIO;
       using ULL = ULLIO;
-      using dbl = DoubleIO;
       using cmp = CMPDoubleIO;
       using str = StringIO;
 
