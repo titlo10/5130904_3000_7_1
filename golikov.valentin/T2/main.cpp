@@ -22,8 +22,6 @@ int main()
     //Сортировка вектора
     std::sort(std::begin(data), std::end(data), golikov::compareDataStruct);
 
-    std::cout << "Data:\n";
-
     //Вывод вектора с отсортированой информацией
     std::copy(
       std::begin(data),
