@@ -1,48 +1,40 @@
-#ifndef DATASTRUCT_H
-#define DATASTRUCT_H
-
 #include <iostream>
-#include <sstream>
 #include <string>
-#include <vector>
-#include <bitset>
+#include <sstream>
 #include <algorithm>
-#include <complex>
 
-struct DataStruct
-{
-    unsigned long long key1;
-    unsigned long long key2;
+struct DataStruct {
+    int key1;
+    int key2;
     std::string key3;
-
-    friend bool operator<(const DataStruct& lhs, const DataStruct& rhs)
-    {
-        if (lhs.key1 != rhs.key1) return lhs.key1 < rhs.key1;
-        if (lhs.key2 != rhs.key2) return lhs.key2 < rhs.key2;
-        return lhs.key3.length() < rhs.key3.length();
-    }
-
-    friend std::istream& operator>>(std::istream& is, DataStruct& ds)
-    {
-        std::string input;
-        if (std::getline(is, input, ')'))
-        {
-            std::replace(input.begin(), input.end(), ':', ' ');
-            std::istringstream iss(input.substr(1));
-            char key2_prefix;
-            iss >> ds.key1 >> key2_prefix >> ds.key2 >> std::ws;
-            std::getline(iss, ds.key3, '\"');
-            std::getline(iss, ds.key3, '\"');
-        }
-        return is;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const DataStruct& ds)
-    {
-        os << "(:key1 " << ds.key1 << " :key2 0b" << std::bitset<64>(ds.key2)
-            << " :key3 \"" << ds.key3 << "\":)";
-        return os;
-    }
 };
 
-#endif
+inline std::istream& operator>>(std::istream& is, DataStruct& data) {
+    std::string line;
+    if (std::getline(is, line, ')')) {
+        std::replace(line.begin(), line.end(), ':', ' ');
+        std::istringstream iss(line.substr(1));
+        if (!(iss >> data.key1 >> data.key2 >> std::ws
+            && std::getline(iss, data.key3, '\"')
+            && std::getline(iss, data.key3, '\"'))) {
+            is.setstate(std::ios::failbit);
+        }
+    }
+    return is;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
+    os << "(:key1 " << data.key1 << " :key2 " << data.key2
+        << " :key3 \"" << data.key3 << "\":)";
+    return os;
+}
+
+inline bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
+    if (a.key1 != b.key1) {
+        return a.key1 < b.key1;
+    }
+    if (a.key2 != b.key2) {
+        return a.key2 < b.key2;
+    }
+    return a.key3 < b.key3;
+}
