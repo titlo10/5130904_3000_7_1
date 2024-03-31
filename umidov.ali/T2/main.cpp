@@ -3,7 +3,8 @@
 #include <algorithm>
 #include <iterator>
 
-int main() {
+int main()
+{
     std::vector<DataStruct> dataVector;
 
     std::copy(std::istream_iterator<DataStruct>(std::cin),
