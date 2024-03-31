@@ -41,7 +41,7 @@ int main()
       std::ostream_iterator< DataStruct >(std::cout, "\n")
     );
   }
-  catch (std::exception ex)
+  catch (std::exception& const ex)
   {
     std::cerr << ex.what();
     return EXIT_FAILURE;
