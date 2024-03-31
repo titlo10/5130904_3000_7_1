@@ -1,5 +1,3 @@
-#ifndef DATASTRUCT_H
-#define DATASTRUCT_H
 #include <iostream>
 #include <string>
 
@@ -13,5 +11,3 @@ struct DataStruct {
 };
 
 bool compareDataStructs(const DataStruct& a, const DataStruct& b);
-
-#endif
