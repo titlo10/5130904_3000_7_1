@@ -38,10 +38,10 @@ namespace abrosimov
         {
             return in; // Ќе удалось установить sentry, возврат input stream
         }
-
+        
         std::string input;
         in >> input;
-
+        
         // ѕример обработки двоичного литерала (например, преобразование из бинарной строки)
         if (input.size() > 2 && input.substr(0, 2) == "0b")
         {
@@ -51,7 +51,7 @@ namespace abrosimov
         {
             in.setstate(std::ios::failbit); // Ќеправильный формат ввода, установка failbit
         }
-
+        
         return in;
     }
     
@@ -72,14 +72,14 @@ namespace abrosimov
         {
             return in;
         }
-
+        
         DataStruct input;
         {
             using sep = DelimiterIO;
             using ull = ULongLiteralIO;
             using ulbl = ULongBinaryLiteralIO;
             using str = StringIO;
-
+            
             in >> sep{ '(' };
             bool flag1 = false;
             bool flag2 = false;
@@ -97,7 +97,7 @@ namespace abrosimov
                 {
                     break;
                 }
-
+                
                 if (c == ':' && (in >> key))
                 {
                     if (key == "key1")
