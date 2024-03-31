@@ -1,36 +1,30 @@
 #include "DataStruct.h"
-#include <algorithm>
+#include <iostream>
 #include <vector>
+#include <algorithm>
 #include <iterator>
-
-std::istream& operator>>(std::istream& is, DataStruct& data) {
-    std::getline(is, data.key1, ':');
-    std::getline(is, data.key2, ':');
-    std::getline(is, data.key3);
-    return is;
-}
-
-std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
-    os << "(:key1 " << data.key1 << " :key2 " << data.key2 << " :key3 \"" << data.key3 << "\":)";
-    return os;
-}
-
-bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
-    return a.key1 < b.key1;
-}
 
 int main() {
     std::vector<DataStruct> dataVector;
-    DataStruct temp;
-    while (std::cin >> temp) {
-        dataVector.push_back(temp);
-    }
+    std::cout << "Start reading data...\n";
+
+    std::copy(
+        std::istream_iterator<DataStruct>(std::cin),
+        std::istream_iterator<DataStruct>(),
+        std::back_inserter(dataVector)
+    );
+
+    std::cout << "Data reading completed.\nSorting...\n";
 
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
 
-    for (const auto& data : dataVector) {
-        std::cout << data << "\n";
-    }
+    std::cout << "Sorted data:\n";
+
+    std::copy(
+        dataVector.begin(),
+        dataVector.end(),
+        std::ostream_iterator<DataStruct>(std::cout, "\n")
+    );
 
     return 0;
 }
