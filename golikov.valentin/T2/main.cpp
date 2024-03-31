@@ -43,7 +43,7 @@ int main()
   }
   catch (std::exception& ex)
   {
-    std::cerr << what();
+    std::cerr << ex.what();
     return EXIT_FAILURE;
   }
 
