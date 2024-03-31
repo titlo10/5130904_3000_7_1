@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <iterator>
 
-bool isSupported(const DataStruct& data)
-{
+bool isSupported([[maybe_unused]] const DataStruct& data) {
+
     return true;
 }
 
@@ -24,7 +24,7 @@ int main() {
 
     if (!hasSupported) {
         std::cout << "Looks like there is no supported record. Cannot determine input. Test skipped\n";
-        return 0; // или возвращаем код ошибки
+        return 0;
     }
 
     std::cout << "Data reading completed.\nSorting...\n";
