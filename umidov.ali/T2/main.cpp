@@ -4,13 +4,11 @@
 #include <algorithm>
 #include <iterator>
 
-int main()
-{
+int main() {
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
 
-    std::copy
-    (
+    std::copy(
         std::istream_iterator<DataStruct>(std::cin),
         std::istream_iterator<DataStruct>(),
         std::back_inserter(dataVector)
