@@ -4,15 +4,28 @@
 #include <algorithm>
 #include <iterator>
 
+bool isSupported(const DataStruct& data)
+{
+    return true;
+}
+
 int main() {
     std::vector<DataStruct> dataVector;
     std::cout << "Start reading data...\n";
 
-    std::copy(
-        std::istream_iterator<DataStruct>(std::cin),
-        std::istream_iterator<DataStruct>(),
-        std::back_inserter(dataVector)
-    );
+    DataStruct temp;
+    bool hasSupported = false;
+    while (std::cin >> temp) {
+        if (isSupported(temp)) {
+            hasSupported = true;
+            dataVector.push_back(temp);
+        }
+    }
+
+    if (!hasSupported) {
+        std::cout << "Looks like there is no supported record. Cannot determine input. Test skipped\n";
+        return 0; // или возвращаем код ошибки
+    }
 
     std::cout << "Data reading completed.\nSorting...\n";
 
