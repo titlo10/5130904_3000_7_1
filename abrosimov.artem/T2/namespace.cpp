@@ -17,7 +17,6 @@ namespace abrosimov
         }
         return in;
     }
-    
     std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -30,7 +29,6 @@ namespace abrosimov
         dest.ref = std::stoull(input);
         return in;
     }
-    
     std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -52,7 +50,6 @@ namespace abrosimov
         
         return in;
     }
-    
     std::istream& operator>>(std::istream& in, StringIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -62,7 +59,6 @@ namespace abrosimov
         }
         return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
     }
-    
     std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
         std::istream::sentry sentry(in);
@@ -123,7 +119,6 @@ namespace abrosimov
         }
         return in;
     }
-    
     std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
         std::ostream::sentry sentry(out);
@@ -139,7 +134,6 @@ namespace abrosimov
         out << ")";
         return out;
     }
-    
     iofmtguard::iofmtguard(std::basic_ios<char>& s) :
         s_(s),
         fill_(s.fill()),
