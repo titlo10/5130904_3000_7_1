@@ -1,31 +1,26 @@
-#include "DataStruct.h"
-#include <vector>
-#include <algorithm>
+﻿#include "DataStruct.h"
 #include <sstream>
+#include <algorithm>
+#include <cctype>
 #include <iomanip>
 
 std::istream& operator>>(std::istream& is, DataStruct& ds) {
-    std::string input, temp;
+    std::string input, key, value;
+    char ch;
     if (!std::getline(is, input, ')')) return is;
-    std::replace(input.begin(), input.end(), ':', ' ');
-    std::istringstream iss(input);
-    while (iss >> temp) {
-        if (temp == "key1") {
-            std::string ullStr;
-            iss >> ullStr;
-            ullStr.pop_back(); ullStr.pop_back(); ullStr.pop_back();
-            ds.key1 = std::stoull(ullStr);
+    std::istringstream iss(input.substr(1));
+
+    while (iss >> key >> value) {
+        if (key == "key1") {
+            ds.key1 = std::stoull(value.substr(0, value.find("ull")));
         }
-        else if (temp == "key2") {
-            std::string octStr;
-            iss >> octStr;
-            ds.key2 = std::stoull(octStr, nullptr, 8);
+        else if (key == "key2") {
+            ds.key2 = std::stoull(value, nullptr, 8);
         }
-        else if (temp == "key3") {
-            iss >> std::ws;
-            std::getline(iss, ds.key3, '"');
-            std::getline(iss, ds.key3, '"');
+        else if (key == "key3") {
+            ds.key3 = value.substr(1, value.size() - 2);
         }
+        while (iss >> std::noskipws >> ch && ch != ':');
     }
     return is;
 }
@@ -38,24 +33,5 @@ std::ostream& operator<<(std::ostream& os, const DataStruct& ds) {
 bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
     if (a.key1 != b.key1) return a.key1 < b.key1;
     if (a.key2 != b.key2) return a.key2 < b.key2;
-    return a.key3.length() < b.key3.length();
-}
-
-int main() {
-    std::vector<DataStruct> dataVector;
-    DataStruct temp;
-
-    std::cout << "Enter data, finish with EOF (Ctrl+D or Ctrl+Z):\n";
-
-    while (std::cin >> temp) {
-        dataVector.push_back(temp);
-    }
-
-    std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
-
-    for (const auto& data : dataVector) {
-        std::cout << data << "\n";
-    }
-
-    return 0;
+    return a.key3 < b.key3;
 }
