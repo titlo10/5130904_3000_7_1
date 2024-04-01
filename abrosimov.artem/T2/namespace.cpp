@@ -34,18 +34,17 @@ namespace abrosimov
         std::istream::sentry sentry(in);
         if (!sentry)
         {
-            return in; // Ќе удалось установить sentry, возврат input stream
+            return in;
         }
         std::string input;
         in >> input;
-        // ѕример обработки двоичного литерала (например, преобразование из бинарной строки)
         if (input.size() > 2 && input.substr(0, 2) == "0b")
         {
             dest.ref = std::bitset<64>(input.substr(2)).to_ullong();
         }
         else
         {
-            in.setstate(std::ios::failbit); // Ќеправильный формат ввода, установка failbit
+            in.setstate(std::ios::failbit);
         }
 
         return in;
