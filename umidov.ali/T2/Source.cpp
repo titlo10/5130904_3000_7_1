@@ -42,9 +42,11 @@ namespace umidov
     }
     std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
+        std::ios_base::fmtflags f(out.flags());
         out << "(:key1 " << src.key1
             << " :key2 " << std::oct << src.key2 << std::dec
             << " :key3 \"" << src.key3 << "\")";
+        out.flags(f);
         return out;
     }
 }
