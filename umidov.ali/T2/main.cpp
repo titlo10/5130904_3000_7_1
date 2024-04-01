@@ -5,8 +5,7 @@
 #include <sstream>
 #include <iomanip>
 
-std::istream& operator>>(std::istream& is, DataStruct& ds)
-{
+std::istream& operator>>(std::istream& is, DataStruct& ds) {
     std::string input;
     if (!std::getline(is, input, ')'))
     {
@@ -19,8 +18,7 @@ std::istream& operator>>(std::istream& is, DataStruct& ds)
     std::istringstream iss(input);
     std::string temp;
 
-    while (iss >> temp)
-    {
+    while (iss >> temp) {
         if (temp == "key1")
         {
             std::string ullStr;
@@ -33,34 +31,29 @@ std::istream& operator>>(std::istream& is, DataStruct& ds)
             iss >> octStr;
             ds.key2 = std::stoull(octStr, nullptr, 8);
         }
-        else if (temp == "key3")
-        {
+        else if (temp == "key3") {
             iss >> std::ws;
             std::getline(iss, ds.key3, '\"');
             std::getline(iss, ds.key3, '\"');
         }
     }
-
     return is;
 }
 
-std::ostream& operator<<(std::ostream& os, const DataStruct& ds)
-{
+std::ostream& operator<<(std::ostream& os, const DataStruct& ds) {
     os << "(:key1 " << ds.key1 << "ull:key2 0"
         << std::oct << ds.key2 << std::dec
         << ":key3 \"" << ds.key3 << "\":)";
     return os;
 }
 
-bool compareDataStructs(const DataStruct& a, const DataStruct& b)
-{
+bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
     if (a.key1 != b.key1) return a.key1 < b.key1;
     if (a.key2 != b.key2) return a.key2 < b.key2;
     return a.key3.length() < b.key3.length();
 }
 
-int main()
-{
+int main(){
     std::vector<DataStruct> dataVector;
     DataStruct temp;
 
@@ -70,7 +63,6 @@ int main()
     {
         dataVector.push_back(temp);
     }
-
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
 
     for (const auto& data : dataVector)
