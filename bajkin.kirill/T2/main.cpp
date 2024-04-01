@@ -3,7 +3,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include "DataStruct.h"
+#include "dataStruct.h"
 
 int main()
 {
