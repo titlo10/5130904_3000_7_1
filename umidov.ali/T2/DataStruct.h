@@ -2,6 +2,8 @@
 #define DATASTRUCT_H
 #include <iostream>
 #include <string>
+#include <utility>
+#include <complex>
 namespace umidov {
     struct DataStruct
     {
