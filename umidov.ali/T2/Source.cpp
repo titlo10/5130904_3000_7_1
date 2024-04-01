@@ -4,14 +4,14 @@
 #include <limits>
 #include <ios>
 #include <charconv>
-#include <cctype>
 namespace umidov
 {
-    bool isAllDigits(const std::string& str) {
-        for (char c : str) {
-            if (!isdigit(static_cast<unsigned char>(c))) return false;
-        }
-        return true;
+    unsigned long long readUnsignedLongLong(const std::string& str)
+    {
+        unsigned long long value = 0;
+        std::istringstream iss(str);
+        iss >> value;
+        return value;
     }
     std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
@@ -22,30 +22,21 @@ namespace umidov
             std::string key;
             while (iss >> key)
             {
-                try {
-                    if (key == "(:key1")
-                    {
-                        if (!(iss >> dest.key1)) { throw std::runtime_error("Invalid key1 value"); }
-                    }
-                    else if (key == ":key2")
-                    {
-                        std::string octalValue;
-                        if (!(iss >> std::ws) || !std::getline(iss, octalValue, ':') || octalValue.empty() || !isAllDigits(octalValue)) {
-                            throw std::runtime_error("Invalid key2 value");
-                        }
-                        dest.key2 = std::stoull(octalValue, nullptr, 8);
-                    }
-                    else if (key == ":key3")
-                    {
-                        if (!(iss.ignore(std::numeric_limits<std::streamsize>::max(), '"')) || !std::getline(iss, dest.key3, '"')) {
-                            throw std::runtime_error("Invalid key3 value");
-                        }
-                    }
+                if (key == "(:key1")
+                {
+                    iss >> std::ws;
+                    iss >> dest.key1;
                 }
-                catch (const std::exception& e) {
-                    std::cerr << "Error reading DataStruct: " << e.what() << '\n';
-                    in.setstate(std::ios::failbit);
-                    break;
+                else if (key == ":key2")
+                {
+                    std::string octalValue;
+                    iss >> octalValue;
+                    dest.key2 = readUnsignedLongLong(octalValue.substr(0, octalValue.find(':')));
+                }
+                else if (key == ":key3")
+                {
+                    iss.ignore(std::numeric_limits<std::streamsize>::max(), '"');
+                    std::getline(iss, dest.key3, '"');
                 }
             }
         }

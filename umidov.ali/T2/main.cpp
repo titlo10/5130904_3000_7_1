@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <iomanip>
 using namespace umidov;
 int main() {
     std::vector<DataStruct> data;
@@ -17,6 +18,8 @@ int main() {
             return a.key2 < b.key2;
         return a.key3.length() < b.key3.length();
         });
-    std::copy(data.begin(), data.end(), std::ostream_iterator<DataStruct>(std::cout, "\n"));
+    for (const auto& item : data) {
+        std::cout << item << "\n";
+    }
     return 0;
 }
