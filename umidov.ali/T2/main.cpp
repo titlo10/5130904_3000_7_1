@@ -6,9 +6,14 @@ using namespace umidov;
 int main() {
     std::vector<DataStruct> data;
     DataStruct temp;
-    while (std::cin >> temp)
+    std::string line;
+    while (std::getline(std::cin, line))
     {
-        data.push_back(temp);
+        std::istringstream iss(line);
+        if (iss >> temp)
+        {
+            data.push_back(temp);
+        }
     }
     std::sort(data.begin(), data.end(), [](const DataStruct& a, const DataStruct& b) {
         if (a.key1 != b.key1)
