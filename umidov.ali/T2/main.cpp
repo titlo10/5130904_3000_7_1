@@ -8,11 +8,17 @@
 std::istream& operator>>(std::istream& is, DataStruct& ds)
 {
     std::string input;
-    if (!std::getline(is, input, ')')) return is;
+    if (!std::getline(is, input, ')'))
+    {
+        return is;
+    }
+
     input.erase(std::remove(input.begin(), input.end(), '('), input.end());
     std::replace(input.begin(), input.end(), ':', ' ');
+
     std::istringstream iss(input);
     std::string temp;
+
     while (iss >> temp)
     {
         if (temp == "key1")
@@ -34,6 +40,7 @@ std::istream& operator>>(std::istream& is, DataStruct& ds)
             std::getline(iss, ds.key3, '\"');
         }
     }
+
     return is;
 }
 
