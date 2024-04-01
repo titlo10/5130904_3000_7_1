@@ -2,10 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-
 std::istream& operator>>(std::istream& is, DataStruct& ds);
 std::ostream& operator<<(std::ostream& os, const DataStruct& ds);
-
 int main() {
     std::vector<DataStruct> dataVector;
     DataStruct temp;

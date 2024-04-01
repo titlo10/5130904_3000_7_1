@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
-
 std::istream& operator>>(std::istream& is, DataStruct& ds) {
     std::string input, key, value;
     char ch;
@@ -24,12 +23,10 @@ std::istream& operator>>(std::istream& is, DataStruct& ds) {
     }
     return is;
 }
-
 std::ostream& operator<<(std::ostream& os, const DataStruct& ds) {
     os << "(:key1 " << ds.key1 << "ull:key2 0" << std::oct << ds.key2 << std::dec << ":key3 \"" << ds.key3 << "\":)";
     return os;
 }
-
 bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
     if (a.key1 != b.key1) return a.key1 < b.key1;
     if (a.key2 != b.key2) return a.key2 < b.key2;
