@@ -1,25 +1,26 @@
 ﻿#include "DataStruct.h"
-#include <vector>
 #include <sstream>
-#include <algorithm>
 #include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
 std::istream& operator>>(std::istream& is, DataStruct& ds) {
-    std::string input, key, value;
-    char ch;
-    if (!std::getline(is, input, ')')) return is;
-    std::istringstream iss(input.substr(1));
-
-    while (iss >> key >> value) {
-        if (key == "key1") {
-            ds.key1 = std::stoull(value.substr(0, value.find("ull")));
+    std::string input, part;
+    if (!std::getline(is, input)) return is;
+    std::istringstream iss(input);
+    ds = DataStruct();
+    try {
+        while (iss >> part) {
+            if (part.find("key1") != std::string::npos) {
+            }
+            else if (part.find("key2") != std::string::npos) {
+            }
+            else if (part.find("key3") != std::string::npos) {
+            }
         }
-        else if (key == "key2") {
-            ds.key2 = std::stoull(value, nullptr, 8);
-        }
-        else if (key == "key3") {
-            ds.key3 = value.substr(1, value.size() - 2);
-        }
-        while (iss >> std::noskipws >> ch && ch != ':');
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to parse input: " << e.what() << '\n';
+        is.setstate(std::ios::failbit);
     }
     return is;
 }
