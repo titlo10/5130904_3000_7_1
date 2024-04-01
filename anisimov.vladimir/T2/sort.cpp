@@ -1,5 +1,6 @@
 #include "sort.h"
-#include <sstream>
+#include <iostream>
+#include <iomanip>
 
 std::istream& operator>>(std::istream& is, DataStruct& data) {
   char ch;
@@ -11,16 +12,15 @@ std::istream& operator>>(std::istream& is, DataStruct& data) {
       is >> data.key1;
     }
     else if (field == "key2") {
-      std::string key2_str;
-      is >> key2_str;
-      std::stringstream ss(key2_str);
-      ss >> std::hex >> data.key2;
+      is >> std::hex >> data.key2;
     }
     else if (field == "key3") {
-      is >> data.key3;
-      is.get();
-      is.get();
+      is >> std::quoted(data.key3);
     }
   }
   return is;
+}
+std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
+  os << "(:key1 " << data.key1 << ":key2 " << std::hex << data.key2 << ":key3 \"" << data.key3 << "\":)";
+  return os;
 }
