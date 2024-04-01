@@ -1,21 +1,18 @@
-﻿#include <iostream>
+﻿#ifndef SORT_H
+#define SORT_H
+
+#include <iostream>
 #include <vector>
 #include <algorithm>
-#include <complex>
-#include <iomanip>
+#include <string>
+#include <sstream>
 
 struct DataStruct {
   unsigned long long key1;
-  std::complex<double> key2;
+  unsigned long long key2;
   std::string key3;
 };
 
-struct SortComparator {
-  bool operator()(const DataStruct& lhs, const DataStruct& rhs) const {
-    if (lhs.key1 != rhs.key1)
-      return lhs.key1 < rhs.key1;
-    if (lhs.key2 != rhs.key2)
-      return std::abs(lhs.key2) < std::abs(rhs.key2);
-    return lhs.key3.length() < rhs.key3.length();
-  }
-};
+std::istream& operator>>(std::istream& is, DataStruct& data);
+std::ostream& operator<<(std::ostream& os, const DataStruct& data);
+#endif
