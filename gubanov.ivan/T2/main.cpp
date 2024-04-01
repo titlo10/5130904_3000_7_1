@@ -5,9 +5,9 @@
 #include <algorithm>
 #include "io.h" 
 
-using namespace gubanov; 
+using namespace gubanov;
 
-int main() 
+int main()
 { 
   std::vector<DataStruct> data;
   std::string line = "";
