@@ -10,7 +10,7 @@ std::istream& operator>>(std::istream& is, DataStruct& data) {
       is >> data.key1;
     }
     else if (field == "key2") {
-      is >> std::hex >> data.key2
+      is >> std::hex >> data.key2;
     }
     else if (field == "key3") {
       is >> std::quoted(data.key3);
