@@ -127,7 +127,7 @@ namespace abrosimov
         }
         iofmtguard fmtguard(out);
         out << "(";
-        out << ":key1 " << dest.key1;
+        out << ":key1 " << dest.key1 << "ull";
         out << ":key2 " << "0b" << dest.key2;
         out << ":key3 " << "\"" << dest.key3 << "\"" << ":";
         out << ")";
