@@ -4,14 +4,14 @@
 #include <limits>
 #include <ios>
 #include <charconv>
+#include <cctype>
 namespace umidov
 {
-    unsigned long long readOctal(const std::string& str)
-    {
-        unsigned long long value = 0;
-        std::istringstream iss(str);
-        iss >> std::oct >> value;
-        return value;
+    bool isAllDigits(const std::string& str) {
+        for (char c : str) {
+            if (!isdigit(static_cast<unsigned char>(c))) return false;
+        }
+        return true;
     }
     std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
@@ -22,20 +22,30 @@ namespace umidov
             std::string key;
             while (iss >> key)
             {
-                if (key == "(:key1")
-                {
-                    iss >> dest.key1;
+                try {
+                    if (key == "(:key1")
+                    {
+                        if (!(iss >> dest.key1)) { throw std::runtime_error("Invalid key1 value"); }
+                    }
+                    else if (key == ":key2")
+                    {
+                        std::string octalValue;
+                        if (!(iss >> std::ws) || !std::getline(iss, octalValue, ':') || octalValue.empty() || !isAllDigits(octalValue)) {
+                            throw std::runtime_error("Invalid key2 value");
+                        }
+                        dest.key2 = std::stoull(octalValue, nullptr, 8);
+                    }
+                    else if (key == ":key3")
+                    {
+                        if (!(iss.ignore(std::numeric_limits<std::streamsize>::max(), '"')) || !std::getline(iss, dest.key3, '"')) {
+                            throw std::runtime_error("Invalid key3 value");
+                        }
+                    }
                 }
-                else if (key == ":key2")
-                {
-                    std::string octalValue;
-                    iss >> octalValue;
-                    dest.key2 = readOctal(octalValue.substr(0, octalValue.find(':')));
-                }
-                else if (key == ":key3")
-                {
-                    iss.ignore(std::numeric_limits<std::streamsize>::max(), '"');
-                    std::getline(iss, dest.key3, '"');
+                catch (const std::exception& e) {
+                    std::cerr << "Error reading DataStruct: " << e.what() << '\n';
+                    in.setstate(std::ios::failbit);
+                    break;
                 }
             }
         }
