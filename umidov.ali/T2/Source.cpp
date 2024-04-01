@@ -2,15 +2,13 @@
 #include <sstream>
 #include <iomanip>
 #include <limits>
-#include <ios>
-#include <charconv>
 namespace umidov
 {
-    unsigned long long readUnsignedLongLong(const std::string& str)
+    unsigned long long readOctal(const std::string& str)
     {
         unsigned long long value = 0;
         std::istringstream iss(str);
-        iss >> value;
+        iss >> std::oct >> value;
         return value;
     }
     std::istream& operator>>(std::istream& in, DataStruct& dest)
@@ -24,14 +22,14 @@ namespace umidov
             {
                 if (key == "(:key1")
                 {
-                    iss >> std::ws;
+                    iss.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
                     iss >> dest.key1;
                 }
                 else if (key == ":key2")
                 {
                     std::string octalValue;
                     iss >> octalValue;
-                    dest.key2 = readUnsignedLongLong(octalValue.substr(0, octalValue.find(':')));
+                    dest.key2 = readOctal(octalValue.substr(0, octalValue.find(' ')));
                 }
                 else if (key == ":key3")
                 {
@@ -45,8 +43,8 @@ namespace umidov
     std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
         out << "(:key1 " << src.key1
-            << ":key2 " << std::oct << src.key2 << std::dec
-            << ":key3 \"" << src.key3 << "\":)";
+            << " :key2 " << std::oct << src.key2 << std::dec
+            << " :key3 \"" << src.key3 << "\")";
         return out;
     }
 }

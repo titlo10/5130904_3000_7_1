@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iterator>
 #include <iomanip>
+#include <iostream>
 using namespace umidov;
 int main() {
     std::vector<DataStruct> data;
