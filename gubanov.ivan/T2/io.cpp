@@ -93,7 +93,7 @@ std::istream& gubanov::operator>>(std::istream& in, gubanov::StringIO&& dest)
   {
     return in;
   }
-  return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"'); 
+  return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
 }
 
 

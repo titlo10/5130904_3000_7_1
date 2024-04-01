@@ -54,4 +54,4 @@ namespace gubanov
   std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
 }
 
-#endif 
+#endif

@@ -3,7 +3,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include "io.h" 
+#include "io.h"
 
 using namespace gubanov;
 
