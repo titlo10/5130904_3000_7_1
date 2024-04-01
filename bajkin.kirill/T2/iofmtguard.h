@@ -13,6 +13,7 @@ private:
 	std::streamsize precision_;
 	std::basic_ios<char>::fmtflags fmt_;
 };
+
 iofmtguard::iofmtguard(std::basic_ios<char>& s) :
 	s_(s),
 	fill_(s.fill()),
