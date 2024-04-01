@@ -156,6 +156,25 @@ std::istream& gubanov::operator>>(std::istream& in, gubanov::DataStruct& dest)
   return in;
 }
 
+std::string gubanov::doubleToScientific(double x)
+{
+  std::stringstream ss;
+  ss << std::scientific << x;
+  std::string out = ss.str();
+  size_t i = std::min(out.find('E'), out.find('e'));
+  while (out[i - 1] == '0' && out[i - 2] != '.')
+  {
+    out.erase(i - 1, 1);
+    i = std::min(out.find('E'), out.find('e'));
+  }
+  while (out[i + 2] == '0')
+  {
+    out.erase(i + 2, 1);
+    i = std::min(out.find('E'), out.find('e'));
+  }
+  return out;
+}
+
 std::ostream& gubanov::operator<<(std::ostream& out, const gubanov::DataStruct& src)
 {
   std::ostream::sentry sentry(out);
@@ -167,7 +186,7 @@ std::ostream& gubanov::operator<<(std::ostream& out, const gubanov::DataStruct& 
 
   StreamGuard fmtguard(out);
   out << "(";
-  out << ":key1 " << std::setprecision(1) << std::scientific << src.key1;
+  out << ":key1 " << doubleToScientific(src.key1);
   out << ":key2 " << "'" << src.key2 << "'";
   out << ":key3 " << "\"" << src.key3 << "\"" << ":";
   out << ")";
