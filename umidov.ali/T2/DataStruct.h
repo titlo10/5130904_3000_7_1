@@ -5,12 +5,12 @@
 #include <utility>
 #include <complex>
 namespace umidov{
-    struct DataStruct
-    {
+    struct DataStruct {
         double key1 = 0.0;
-        char key2 = '\0';
+        unsigned long long key2 = 0;
         std::string key3 = "";
     };
+
     std::istream& operator>>(std::istream& in, DataStruct& dest);
     std::ostream& operator<<(std::ostream& out, const DataStruct& src);
 }
