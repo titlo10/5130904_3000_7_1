@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <iterator>
 using namespace umidov;
-int main()
-{
+int main() {
     std::vector<DataStruct> data;
     DataStruct temp;
     while (std::cin >> temp)
@@ -20,3 +19,4 @@ int main()
         });
     std::copy(data.begin(), data.end(), std::ostream_iterator<DataStruct>(std::cout, "\n"));
     return 0;
+}

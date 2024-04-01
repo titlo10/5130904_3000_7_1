@@ -4,8 +4,7 @@
 #include <string>
 #include <utility>
 #include <complex>
-namespace umidov
-{
+namespace umidov{
     struct DataStruct
     {
         unsigned long long key1;

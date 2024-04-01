@@ -30,7 +30,7 @@ namespace umidov
                 {
                     std::string octalValue;
                     iss >> octalValue;
-                    dest.key2 = readOctal(octalValue.substr(0, octalValue.find(':'))); // Подстрока до двоеточия
+                    dest.key2 = readOctal(octalValue.substr(0, octalValue.find(':')));
                 }
                 else if (key == ":key3")
                 {
