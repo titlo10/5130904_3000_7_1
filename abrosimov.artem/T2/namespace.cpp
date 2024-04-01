@@ -24,10 +24,7 @@ namespace abrosimov
         {
             return in;
         }
-        std::string input;
-        in >> input;
-        dest.ref = std::stoull(input);
-        return in;
+        return in >> dest.ref;
     }
     std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest)
     {
@@ -36,15 +33,30 @@ namespace abrosimov
         {
             return in;
         }
-        std::string input;
-        in >> input;
-        if (input.size() > 2 && input.substr(0, 2) == "0b")
+        unsigned long long value = 0;
+        int count = 0;
+        char ch;
+        while (in.get(ch))
         {
-            dest.ref = std::bitset<64>(input.substr(2)).to_ullong();
+            if (ch == '0' || ch == '1')
+            {
+                value = (value << 1) + (ch - '0');
+                count++;
+            }
+            else
+            {
+                in.putback(ch);
+                break;
+            }
+        }
+
+        if (count == 0)
+        {
+            in.setstate(std::ios_base::failbit);
         }
         else
         {
-            in.setstate(std::ios::failbit);
+            dest.ref = value;
         }
 
         return in;
