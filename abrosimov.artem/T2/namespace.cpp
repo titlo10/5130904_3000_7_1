@@ -33,33 +33,7 @@ namespace abrosimov
         {
             return in;
         }
-        unsigned long long value = 0;
-        int count = 0;
-        char ch;
-        while (in.get(ch))
-        {
-            if (ch == '0' || ch == '1')
-            {
-                value = (value << 1) + (ch - '0');
-                count++;
-            }
-            else
-            {
-                in.putback(ch);
-                break;
-            }
-        }
-
-        if (count == 0)
-        {
-            in.setstate(std::ios_base::failbit);
-        }
-        else
-        {
-            dest.ref = value;
-        }
-
-        return in;
+        return in >> std::hex >> dest.ref;
     }
     std::istream& operator>>(std::istream& in, StringIO&& dest)
     {
@@ -140,7 +114,7 @@ namespace abrosimov
         iofmtguard fmtguard(out);
         out << "(";
         out << ":key1 " << dest.key1 << "ull";
-        out << ":key2 " << "0b" << dest.key2;
+        out << ":key2 " << std::uppercase << std::hex << "0x" << dest.key2;
         out << ":key3 " << "\"" << dest.key3 << "\"" << ":";
         out << ")";
         return out;
