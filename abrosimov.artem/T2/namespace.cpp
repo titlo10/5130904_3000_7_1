@@ -47,7 +47,7 @@ namespace abrosimov
         {
             in.setstate(std::ios::failbit); // Неправильный формат ввода, установка failbit
         }
-        
+
         return in;
     }
     std::istream& operator>>(std::istream& in, StringIO&& dest)
@@ -66,14 +66,14 @@ namespace abrosimov
         {
             return in;
         }
-        
+
         DataStruct input;
         {
             using sep = DelimiterIO;
             using ull = ULongLiteralIO;
             using ulbl = ULongBinaryLiteralIO;
             using str = StringIO;
-            
+
             in >> sep{ '(' };
             bool flag1 = false;
             bool flag2 = false;
@@ -91,7 +91,7 @@ namespace abrosimov
                 {
                     break;
                 }
-                
+
                 if (c == ':' && (in >> key))
                 {
                     if (key == "key1")
@@ -147,4 +147,3 @@ namespace abrosimov
         s_.flags(fmt_);
     }
 }
-

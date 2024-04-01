@@ -8,7 +8,7 @@ int main()
     {
         std::string input = "";
         std::vector< DataStruct > data;
-        
+
         while (std::getline(std::cin, input))
         {
             std::istringstream iss(input);

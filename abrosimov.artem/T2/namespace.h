@@ -18,27 +18,27 @@ namespace abrosimov
         unsigned long long key2;
         std::string key3;
     };
-    
+
     struct DelimiterIO
     {
         char exp;
     };
-    
+
     struct StringIO
     {
         std::string& ref;
     };
-    
+
     struct ULongLiteralIO
     {
         unsigned long long& ref;
     };
-    
+
     struct ULongBinaryLiteralIO
     {
         unsigned long long& ref;
     };
-    
+
     class iofmtguard
     {
     public:
@@ -50,14 +50,14 @@ namespace abrosimov
         std::streamsize precision_;
         std::basic_ios<char>::fmtflags fmt_;
     };
-    
+
     std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
     std::istream& operator>>(std::istream& in, StringIO&& dest);
     std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest);
     std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest);
     std::istream& operator>>(std::istream& in, DataStruct&& dest);
     std::istream& operator<<(std::istream& out, const DataStruct&& dest);
-    
+
     bool compareDataStruct(const DataStruct& a, const DataStruct& b);
 }
 
