@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-namespace gubanov 
+namespace gubanov
 {
   struct DataStruct
   {
@@ -38,7 +38,6 @@ namespace gubanov
   public:
     StreamGuard(std::basic_ios<char>& s);
     ~StreamGuard();
-
   private:
     std::basic_ios<char>& s_;
     char fill_;
@@ -53,5 +52,4 @@ namespace gubanov
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
 }
-
 #endif
