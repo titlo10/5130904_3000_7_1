@@ -1,5 +1,3 @@
-#ifndef DATASTRUCT_H
-#define DATASTRUCT_H
 #include <iostream>
 #include <string>
 struct DataStruct
@@ -13,5 +11,3 @@ struct DataStruct
     friend std::istream& operator>>(std::istream& is, DataStruct& ds);
     friend std::ostream& operator<<(std::ostream& os, const DataStruct& ds);
 };
-
-#endif
