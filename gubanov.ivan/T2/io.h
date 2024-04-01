@@ -52,6 +52,6 @@ namespace gubanov
   std::istream& operator>>(std::istream& in, StringIO&& dest);
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
-  std::string doubleToScientific(double x); 
+  std::string doubleToScientific(double x);
 }
 #endif
