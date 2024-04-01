@@ -1,19 +1,51 @@
 #include "DataStruct.h"
-#include <vector>
-#include <algorithm>
-#include <iostream>
-std::istream& operator>>(std::istream& is, DataStruct& ds);
-std::ostream& operator<<(std::ostream& os, const DataStruct& ds);
-int main() {
-    std::vector<DataStruct> dataVector;
-    DataStruct temp;
-    std::cout << "Enter data, finish with EOF (Ctrl+D or Ctrl+Z on UNIX, Ctrl+Z then Enter on Windows):\n";
-    while (std::cin >> temp) {
-        dataVector.push_back(temp);
+#include <sstream>
+#include <iomanip>
+#include <limits>
+#include <ios>
+#include <charconv>
+namespace umidov
+{
+    unsigned long long readOctal(const std::string& str)
+    {
+        unsigned long long value = 0;
+        std::istringstream iss(str);
+        iss >> std::oct >> value;
+        return value;
     }
-    std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
-    for (const auto& data : dataVector) {
-        std::cout << data << "\n";
+    std::istream& operator>>(std::istream& in, DataStruct& dest)
+    {
+        std::string line;
+        if (std::getline(in, line))
+        {
+            std::istringstream iss(line);
+            std::string key;
+            while (iss >> key)
+            {
+                if (key == "(:key1")
+                {
+                    iss >> dest.key1;
+                }
+                else if (key == ":key2")
+                {
+                    std::string octalValue;
+                    iss >> octalValue;
+                    dest.key2 = readOctal(octalValue.substr(0, octalValue.find(':'))); // Подстрока до двоеточия
+                }
+                else if (key == ":key3")
+                {
+                    iss.ignore(std::numeric_limits<std::streamsize>::max(), '"');
+                    std::getline(iss, dest.key3, '"');
+                }
+            }
+        }
+        return in;
     }
-    return 0;
+    std::ostream& operator<<(std::ostream& out, const DataStruct& src)
+    {
+        out << "(:key1 " << src.key1
+            << ":key2 " << std::oct << src.key2 << std::dec
+            << ":key3 \"" << src.key3 << "\":)";
+        return out;
+    }
 }
