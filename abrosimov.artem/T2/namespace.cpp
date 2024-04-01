@@ -118,7 +118,7 @@ namespace abrosimov
         }
         return in;
     }
-    std::ostream& operator<<(std::ostream& out, const DataStruct& src)
+    std::ostream& operator<<(std::ostream& out, const DataStruct& dest)
     {
         std::ostream::sentry sentry(out);
         if (!sentry)
@@ -127,11 +127,26 @@ namespace abrosimov
         }
         iofmtguard fmtguard(out);
         out << "(";
-        out << ":key1 " << src.key1;
-        out << ":key2 " << "0b" << src.key2;
-        out << ":key3 " << "\"" << src.key3 << "\"" << ":";
+        out << ":key1 " << dest.key1;
+        out << ":key2 " << "0b" << dest.key2;
+        out << ":key3 " << "\"" << dest.key3 << "\"" << ":";
         out << ")";
         return out;
+    }
+    bool compareDataStruct(const DataStruct& a, const DataStruct& b)
+    {
+        if (a.key1 != b.key1)
+        {
+            return a.key1 < b.key1;
+        }
+        else if (a.key2 != b.key2)
+        {
+            return a.key2 < b.key2;
+        }
+        else
+        {
+            return a.key3.length() < b.key3.length();
+        }
     }
     iofmtguard::iofmtguard(std::basic_ios<char>& s) :
         s_(s),

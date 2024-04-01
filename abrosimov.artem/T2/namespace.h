@@ -55,8 +55,8 @@ namespace abrosimov
     std::istream& operator>>(std::istream& in, StringIO&& dest);
     std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest);
     std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest);
-    std::istream& operator>>(std::istream& in, DataStruct&& dest);
-    std::istream& operator<<(std::istream& out, const DataStruct&& dest);
+    std::istream& operator>>(std::istream& in, DataStruct& dest);
+    std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
 
     bool compareDataStruct(const DataStruct& a, const DataStruct& b);
 }
