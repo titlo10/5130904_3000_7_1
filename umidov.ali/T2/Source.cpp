@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <iterator>
 #include "DataStruct.h" 
-
 unsigned long long readOctal(const std::string& str)
 {
     unsigned long long value = 0;
@@ -16,7 +15,6 @@ unsigned long long readOctal(const std::string& str)
     iss >> std::oct >> value;
     return value;
 }
-
 std::istream& umidov::operator>>(std::istream& in, umidov::DataStruct& dest)
 {
     std::string line;
@@ -45,7 +43,6 @@ std::istream& umidov::operator>>(std::istream& in, umidov::DataStruct& dest)
     }
     return in;
 }
-
 std::ostream& umidov::operator<<(std::ostream& out, const umidov::DataStruct& src)
 {
     out << "(:key1 " << src.key1
