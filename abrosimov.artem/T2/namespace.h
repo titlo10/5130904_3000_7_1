@@ -60,5 +60,4 @@ namespace abrosimov
 
     bool compareDataStruct(const DataStruct& a, const DataStruct& b);
 }
-
 #endif
