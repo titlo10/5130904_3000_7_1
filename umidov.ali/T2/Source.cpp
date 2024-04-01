@@ -1,12 +1,7 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
 #include <iterator>
-#include "DataStruct.h"
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <iterator>
 #include "DataStruct.h" 
 unsigned long long readOctal(const std::string& str)
 {
