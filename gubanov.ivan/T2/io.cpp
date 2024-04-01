@@ -167,7 +167,7 @@ std::ostream& gubanov::operator<<(std::ostream& out, const gubanov::DataStruct& 
 
   StreamGuard fmtguard(out);
   out << "(";
-  out << ":key1 " << std::setprecision(2) << std::scientific << src.key1;
+  out << ":key1 " << std::setprecision(1) << std::scientific << src.key1;
   out << ":key2 " << "'" << src.key2 << "'";
   out << ":key3 " << "\"" << src.key3 << "\"" << ":";
   out << ")";
