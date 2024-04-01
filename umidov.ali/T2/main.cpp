@@ -11,7 +11,6 @@ int main() {
     }
     std::sort(dataVector.begin(), dataVector.end(), compareDataStructs);
     for (const auto& data : dataVector) {
-        std::cout << data << "\n";
     }
     return 0;
 }
