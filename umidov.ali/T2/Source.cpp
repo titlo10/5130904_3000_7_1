@@ -6,6 +6,7 @@
 namespace umidov {
     std::istream& operator>>(std::istream& in, DataStruct& dest) {
         std::string part;
+        bool isValidRecord = false;
         while (std::getline(in, part, ';')) {
             if (part.find("key1") != std::string::npos) {
                 std::string number = part.substr(part.find("=") + 1);
