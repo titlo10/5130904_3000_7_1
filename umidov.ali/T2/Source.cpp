@@ -5,12 +5,6 @@
 #include <iomanip>
 #include <charconv>
 namespace umidov {
-    std::ostream& operator<<(std::ostream& out, const DataStruct& dest) {
-        out << "key1=" << dest.key1 << "; ";
-        out << "key2=" << static_cast<int>(dest.key2) << "; ";
-        out << "key3=" << dest.key3;
-        return out;
-    }
     std::istream& operator>>(std::istream& in, DataStruct& dest) {
         std::string part;
         while (std::getline(in, part, ';')) {
@@ -42,4 +36,11 @@ namespace umidov {
         }
         return in;
     }
+        std::ostream& operator<<(std::ostream& out, const DataStruct& dest) {
+            out << "key1=" << dest.key1 << "; ";
+            out << "key2=" << dest.key2 << "; ";
+            out << "key3=" << dest.key3;
+            return out;
+        }
+
 }
