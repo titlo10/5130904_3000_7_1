@@ -7,8 +7,8 @@ namespace umidov
 {
     struct DataStruct
     {
-        double key1;
-        char key2;
+        double key1 = 0.0;
+        char key2 = '\0';
         std::string key3;
     };
     std::istream& operator>>(std::istream& in, DataStruct& dest);
