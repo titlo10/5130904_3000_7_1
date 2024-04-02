@@ -41,14 +41,14 @@ namespace umidov {
         return in;
     }
     std::ostream& operator<<(std::ostream& out, const DataStruct& dest) {
-        try {
-            out << "key1=" << dest.key1 << "; ";
+        out << "key1=" << dest.key1 << "; ";
+        if (dest.key2 == '\0') {
+            out << "key2=[NUL]; ";
+        }
+        else {
             out << "key2=" << dest.key2 << "; ";
-            out << "key3=" << dest.key3;
         }
-        catch (const std::exception& e) {
-            std::cerr << "Ошибка вывода: " << e.what() << '\n';
-        }
+        out << "key3=" << dest.key3;
         return out;
     }
 }
