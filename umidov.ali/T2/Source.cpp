@@ -3,7 +3,6 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include <charconv>
 namespace umidov {
     std::istream& operator>>(std::istream& in, DataStruct& dest) {
         std::string part;
@@ -13,21 +12,26 @@ namespace umidov {
                 try {
                     dest.key1 = std::stod(number);
                 }
-                catch (const std::invalid_argument& e) {
-                    std::cerr << "Ошибка преобразования key1: " << e.what() << '\n';
-                }
-                catch (const std::out_of_range& e) {
+                catch (const std::exception& e) {
                     std::cerr << "Ошибка преобразования key1: " << e.what() << '\n';
                 }
             }
             else if (part.find("key2") != std::string::npos) {
                 std::string value = part.substr(part.find("=") + 1);
-                if (value.front() == '\'') {
-                    dest.key2 = value.at(1);
+                try {
+                    if (value.front() == '\'') {
+                        dest.key2 = value.at(1);
+                    }
+                    else if (value.front() == '0' && (value.at(1) == 'x' || value.at(1) == 'X')) {
+                        unsigned long long hexValue = std::stoull(value, nullptr, 16);
+                        dest.key2 = static_cast<char>(hexValue & 0xFF);
+                    }
+                    else {
+                        throw std::invalid_argument("Неподдерживаемый формат key2");
+                    }
                 }
-                else if (value.front() == '0' && (value.at(1) == 'x' || value.at(1) == 'X')) {
-                    unsigned long long hexValue = std::stoull(value, nullptr, 16);
-                    dest.key2 = static_cast<char>(hexValue & 0xFF);
+                catch (const std::exception& e) {
+                    std::cerr << "Ошибка обработки key2: " << e.what() << '\n';
                 }
             }
             else if (part.find("key3") != std::string::npos) {
@@ -36,11 +40,15 @@ namespace umidov {
         }
         return in;
     }
-        std::ostream& operator<<(std::ostream& out, const DataStruct& dest) {
+    std::ostream& operator<<(std::ostream& out, const DataStruct& dest) {
+        try {
             out << "key1=" << dest.key1 << "; ";
             out << "key2=" << dest.key2 << "; ";
             out << "key3=" << dest.key3;
-            return out;
         }
-
+        catch (const std::exception& e) {
+            std::cerr << "Ошибка вывода: " << e.what() << '\n';
+        }
+        return out;
+    }
 }
