@@ -1,12 +1,19 @@
 #include "header.h"
 #include <iostream>
+#include "header.h"
+#include <iostream>
 using namespace umidov;
 int main() {
+    umidov::DataStruct data;
     setlocale(LC_ALL, "rus");
-    DataStruct data;
-    std::cout << "Введите данные в формате key1=<значение>;key2=<значение>;key3=<строка>:" << std::endl;
+    auto initialKey1 = data.key1;
+    std::cout << "Начальное значение key1: " << initialKey1 << std::endl;
+    std::cout << "Введите данные в формате key1=<double>;key2=<oct>;key3=<string>:" << std::endl;
     std::cin >> data;
-    std::cout << "Вы ввели:" << std::endl;
-    std::cout << data << std::endl;
+    auto str = data.key3;
+    for (auto c : str) {
+        std::cout << c << " ";
+    }
+    std::cout << std::endl;
     return 0;
 }
