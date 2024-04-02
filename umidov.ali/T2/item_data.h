@@ -8,7 +8,6 @@ namespace myspace {
         double key1 = 0.0;
         char key2 = '\0';
         std::string key3;
-
         friend std::istream& operator>>(std::istream& in, ItemData& item);
         friend std::ostream& operator<<(std::ostream& out, const ItemData& item);
     };
