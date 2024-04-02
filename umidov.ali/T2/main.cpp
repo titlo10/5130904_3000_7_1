@@ -1,11 +1,12 @@
 #include "header.h"
 #include <iostream>
-#include <sstream>
-#include <iomanip>
 int main() {
-    setlocale(LC_ALL,"rus");
     umidov::DataStruct data;
-    std::cin >> data;
-    std::cout << data << std::endl;
+    if (std::cin >> data) {
+        std::cout << data << std::endl;
+    }
+    else {
+        std::cerr << "Error: Process completed with exit code 2.\n";
+    }
     return 0;
 }
