@@ -1,46 +1,38 @@
-#include "DataStruct.h" 
-#include <algorithm>
-#include <iterator>
+#include "io.h"
 #include <iostream>
-#include <vector>
-unsigned long long readOctal(const std::string& str)
+#include <string>
+#include <sstream>
+#include <iomanip>
+namespace umidov
 {
-    unsigned long long value = 0;
-    std::istringstream iss(str);
-    iss >> std::oct >> value;
-    return value;
-}
-std::istream& umidov::operator>>(std::istream& in, umidov::DataStruct& dest)
-{
-    std::string line;
-    if (std::getline(in, line))
+    std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
-        std::istringstream iss(line);
-        std::string key;
-        while (iss >> key)
+        std::string part;
+        while (std::getline(in, part, ';'))
         {
-            if (key == "(:key1")
+            if (part.find("key1") != std::string::npos)
             {
-                iss >> dest.key1;
+                std::string number = part.substr(part.find("=") + 1);
+                dest.key1 = stod(number);
             }
-            else if (key == ":key2")
+            else if (part.find("key2") != std::string::npos)
             {
-                std::string octalValue;
-                iss >> octalValue;
-                dest.key2 = readOctal(octalValue.substr(0, octalValue.find(':')));
+                std::string number = part.substr(part.find("=") + 1);
+                unsigned long long octValue = std::stoull(number, nullptr, 8);
+                dest.key2 = static_cast<char>(octValue & 0xFF);
             }
-            else if (key == ":key3")
+            else if (part.find("key3") != std::string::npos)
             {
-                iss.ignore(std::numeric_limits<std::streamsize>::max(), '"');
-                std::getline(iss, dest.key3, '"');
+                dest.key3 = part.substr(part.find("=") + 1);
             }
         }
+        return in;
     }
-    return in;
-}
-std::ostream& umidov::operator<<(std::ostream& out, const umidov::DataStruct& src) {
-    out << "(:key1 " << src.key1
-        << ":key2 " << std::oct << src.key2 << std::dec
-        << ":key3 \"" << src.key3 << "\":)";
-    return out;
+    std::ostream& operator<<(std::ostream& out, const DataStruct& dest)
+    {
+        out << "key1=" << dest.key1 << "; ";
+        out << "key2=" << static_cast<int>(dest.key2) << "; ";
+        out << "key3=" << dest.key3;
+        return out;
+    }
 }
