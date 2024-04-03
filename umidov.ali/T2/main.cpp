@@ -1,13 +1,19 @@
 #include "item_data.h"
-#include <vector>
-#include <algorithm>
-#include <iterator>
 using namespace myspace;
 int main() {
     std::vector<ItemData> items;
     ItemData tempItem;
-    while (std::cin >> tempItem) {
-        items.push_back(tempItem);
+    std::string tempLine;
+
+    while (std::getline(std::cin, tempLine, ')')) {
+        std::istringstream itemStream (tempLine + ')');
+        if (itemStream >> tempItem) {
+            items.push_back(tempItem);
+        }
+        else {
+            std::cerr << "Failed to parse item." << std::endl;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
     std::sort(items.begin(), items.end(), [](const ItemData& a, const ItemData& b) {
         if (a.key1 != b.key1) return a.key1 < b.key1;
