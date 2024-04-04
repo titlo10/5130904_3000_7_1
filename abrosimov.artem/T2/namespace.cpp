@@ -2,6 +2,18 @@
 
 namespace abrosimov
 {
+    std::string binaryNull(unsigned long long ref)
+    {
+        std::stringstream ss;
+        ss << "0b" << std::setfill('0') << std::setw(2) << std::to_string(ref);
+        std::string out = ss.str();
+        size_t i = out.find('b');
+        if (out[i + 1] == '0' and out[i + 2] == '0')
+        {
+            out.erase(i + 2, 1);
+        }
+        return out;
+    }
     std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -33,7 +45,7 @@ namespace abrosimov
         {
             return in;
         }
-        return in >> std::hex >> dest.ref;
+        return in >> dest.ref;
     }
     std::istream& operator>>(std::istream& in, StringIO&& dest)
     {
@@ -81,12 +93,12 @@ namespace abrosimov
                 {
                     if (key == "key1")
                     {
-                        in >> ull{ input.key1 };
+                        in >> ull{ input.key1 } >> sep{ 'u' } >> sep{ 'l' } >> sep{ 'l' };
                         flag1 = true;
                     }
                     else if (key == "key2")
                     {
-                        in >> ulbl{ input.key2 };
+                        in >> sep{ '0' } >> sep{ 'b' } >> ulbl{ input.key2 };
                         flag2 = true;
                     }
                     else if (key == "key3")
@@ -104,7 +116,7 @@ namespace abrosimov
         }
         return in;
     }
-    std::ostream& operator<<(std::ostream& out, const DataStruct& dest)
+    std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
         std::ostream::sentry sentry(out);
         if (!sentry)
@@ -113,10 +125,10 @@ namespace abrosimov
         }
         iofmtguard fmtguard(out);
         out << "(";
-        out << ":key1 " << dest.key1 << "ull";
-        out << ":key2 " << std::uppercase << std::hex << "0x" << dest.key2;
-        out << ":key3 " << "\"" << dest.key3 << "\"" << ":";
-        out << ")";
+        out << ":key1 " << src.key1 << "ull";
+        out << ":key2 " << binaryNull(src.key2);
+        out << ":key3 " << "\"" << dest.key3 << "\"";
+        out << ":)";
         return out;
     }
     bool compareDataStruct(const DataStruct& a, const DataStruct& b)
