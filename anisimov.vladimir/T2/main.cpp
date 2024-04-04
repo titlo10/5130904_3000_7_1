@@ -17,6 +17,7 @@ int main() {
       return lhs.key2 < rhs.key2;
     return lhs.key3.length() < rhs.key3.length();
     });
+
   for (const auto& data : dataVector) {
     std::cout << data << std::endl;
   }
