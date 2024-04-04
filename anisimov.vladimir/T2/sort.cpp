@@ -31,4 +31,7 @@ std::istream& operator>>(std::istream& is, DataStruct& data) {
   }
   return is;
 }
-
+std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
+  os << "(:key1 " << data.key1 << ":key2 " << std::hex << data.key2 << ":key3 \"" << data.key3 << "\":)";
+  return os;
+}
