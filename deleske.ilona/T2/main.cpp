@@ -8,16 +8,11 @@ using namespace std;
 
 int main() {
     vector<DataStruct> ds_original;
-    string request;
-    while (!cin.eof()) {
-        if (!getline(cin, request))
-            break;
-        istringstream iss(request);
-        DataStruct temp;
-        if (iss >> temp) {
-            ds_original.push_back(temp);
-        }
+    DataStruct temp;
+    while (cin >> temp) {
+        ds_original.push_back(temp);
     }
+
     sort(ds_original.begin(), ds_original.end(),
         [](const DataStruct &ds1, const DataStruct &ds2) {
             if (ds1.key1 != ds2.key1)
