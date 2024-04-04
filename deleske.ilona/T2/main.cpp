@@ -9,7 +9,9 @@ using namespace std;
 int main() {
     vector<DataStruct> ds_original;
     string request;
-    while (getline(cin, request)) {
+    while (!cin.eof()) {
+        if (!getline(cin, request))
+            break;
         istringstream iss(request);
         DataStruct temp;
         if (iss >> temp) {
