@@ -22,7 +22,7 @@ int main()
     [](const DataStruct &ds1, const DataStruct &ds2)
     {
         if (ds1.key1 != ds2.key1)
-            return ds1.key1 < ds2.key1;
+            return ds1.key1 < ds2.key1;   
         
         if (abs(ds1.key2) != abs(ds2.key2))
             return abs(ds1.key2) < abs(ds2.key2);
