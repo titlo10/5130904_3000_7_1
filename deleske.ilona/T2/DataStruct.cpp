@@ -41,6 +41,7 @@ istream& operator>>(istream &in, UllIO &elem)
     }
     return in;
 }
+
 istream& operator>>(istream &in, ComplexIO &elem)
 {
     istream::sentry sentry(in);
