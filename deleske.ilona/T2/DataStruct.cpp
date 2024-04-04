@@ -5,133 +5,113 @@
 #include "DataStruct.h"
 using namespace std;
 
-istream& operator>>(istream& in, DelimiterIO&& elem)
-{
+istream& operator>>(istream& in, DelimiterIO&& elem) {
     istream::sentry sentry(in);
-    if (!sentry)
-    {
+    if (!sentry) {
         return in;
     }
 
     string del;
     size_t tSize = elem.delim.length();
     in >> setw(tSize) >> del;
-    if (!in)
-    {
+    if (!in) {
         return in;
     }
-    if(elem.delim != del)
-    {
+    if (elem.delim != del) {
         in.setstate(ios_base::failbit);
     }
     return in;
 }
 
-istream& operator>>(istream &in, UllIO &elem)
-{
+istream& operator>>(istream& in, UllIO& elem) {
     istream::sentry sentry(in);
     ResPars rGard(in);
-    if (!sentry)
-    {
+    if (!sentry) {
         return in;
     }
-    if (!(in >> oct >> elem.ref))
-    {
+    if (!(in >> oct >> elem.ref)) {
         return in;
     }
     return in;
 }
 
-istream& operator>>(istream &in, ComplexIO &elem)
-{
+istream& operator>>(istream& in, ComplexIO& elem) {
     istream::sentry sentry(in);
-    if (!sentry)
-    {
+    if (!sentry) {
         return in;
     }
     string del;
     double real, imag;
-    if (!(in >> DelimiterIO{"#c("}))
-    {
+    if (!(in >> DelimiterIO{"#c("})) {
         return in;
     }
-    if (!(in >> real >> imag))
-    {
+    if (!(in >> real >> imag)) {
         return in;
     }
-    if (!(in >> DelimiterIO{")"}))
-    {
+    if (!(in >> DelimiterIO{")"})) {
         return in;
     }
     elem.ref = complex<double>(real, imag);
     return in;
 }
 
-istream& operator>>(istream &in, StringIO &elem)
-{
+istream& operator>>(istream& in, StringIO& elem) {
     istream::sentry sentry(in);
-    if (!sentry)
-    {
+    if (!sentry) {
         return in;
     }
     return getline(in >> DelimiterIO{"\""}, elem.ref, '"');
 }
 
-istream& operator>>(istream &in, DataStruct &elem)
-{
+istream& operator>>(istream& in, DataStruct& elem) {
     istream::sentry sentry(in);
-    if (!sentry)
-    {
+    if (!sentry) {
         return in;
     }
 
     in >> DelimiterIO{"(:"};
-    if (!in)
+    if (!in) {
         return in;
+    }
     
-    for (int i = 0; i < 3; i++)
-    {
+    for (int i = 0; i < 3; i++) {
         string key;
-        if (!(in >> key))
+        if (!(in >> key)) {
             return in;
+        }
         
-        if (key == "key1")
-        {
-            UllIO io{ elem.key1 };
-            if (!(in >> io))
+        if (key == "key1") {
+            UllIO io{elem.key1};
+            if (!(in >> io)) {
                 return in;
-        }
-        else if (key == "key2")
-        {
-            ComplexIO io{ elem.key2 };
-            if (!(in >> io))
+            }
+        } else if (key == "key2") {
+            ComplexIO io{elem.key2};
+            if (!(in >> io)) {
                 return in;
-        }
-        else if (key == "key3")
-        {
-            StringIO io{ elem.key3 };
-            if (!(in >> io))
+            }
+        } else if (key == "key3") {
+            StringIO io{elem.key3};
+            if (!(in >> io)) {
                 return in;
-        }
-        else
-        {
+            }
+        } else {
             in.setstate(ios_base::failbit);
             return in;
         }
         in >> DelimiterIO{":"};
-        if (!in)
+        if (!in) {
             return in;
+        }
     }
     in >> DelimiterIO{")"};
     
     return in;
 }
 
-ostream& operator<<(ostream &op, const DataStruct &elem)
-{
+ostream& operator<<(ostream& op, const DataStruct& elem) {
     ostream::sentry sentry(op);
-    if (!sentry)
-    {
+    if (!sentry) {
         return op;
     }
 
@@ -144,15 +124,14 @@ ostream& operator<<(ostream &op, const DataStruct &elem)
     return op;
 }
 
-ResPars::ResPars(basic_ios<char> &strm):
+ResPars::ResPars(basic_ios<char>& strm) :
     strm_(strm),
     fill_(strm.fill()),
     precision_(strm.precision()),
     fmtFlags_(strm.flags())
 {}
 
-ResPars::~ResPars()
-{
+ResPars::~ResPars() {
     strm_.fill(fill_);
     strm_.precision(precision_);
     strm_.flags(fmtFlags_);
