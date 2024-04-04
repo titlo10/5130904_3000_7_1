@@ -127,7 +127,7 @@ namespace abrosimov
         out << "(";
         out << ":key1 " << src.key1 << "ull";
         out << ":key2 " << binaryNull(src.key2);
-        out << ":key3 " << "\"" << dest.key3 << "\"";
+        out << ":key3 " << "\"" << src.key3 << "\"";
         out << ":)";
         return out;
     }
