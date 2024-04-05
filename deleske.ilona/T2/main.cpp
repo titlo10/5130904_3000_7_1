@@ -14,7 +14,6 @@ int main() {
   while (getline(cin, request)) {
     if (request.empty())
       break;
-    
     istringstream iss(request);
     DataStruct temp;
     if (iss >> temp) {
