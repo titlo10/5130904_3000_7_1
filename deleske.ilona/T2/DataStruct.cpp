@@ -6,7 +6,7 @@
 
 using namespace std;
 
-istream& operator>>(istream& in, DelimIO&& dest)
+istream& operator>>(istream& in, DelimiterIO&& dest)
 {
   istream::sentry sentry(in);
   if (!sentry)
@@ -31,6 +31,7 @@ istream& operator>>(istream& in, DelimIO&& dest)
 istream& operator>>(istream& in, UllIO&& dest)
 {
   istream::sentry sentry(in);
+  ResPars rGard(in);
   if (!sentry)
   {
     return in;
@@ -51,7 +52,7 @@ istream& operator>>(istream& in, ComplexIO&& dest)
   }
   string del;
   double real, imag;
-  if (!(in >> DelimIO{"#c("}))
+  if (!(in >> DelimiterIO{"#c("}))
   {
     return in;
   }
@@ -59,7 +60,7 @@ istream& operator>>(istream& in, ComplexIO&& dest)
   {
     return in;
   }
-  if (!(in >> DelimIO{")"}))
+  if (!(in >> DelimiterIO{")"}))
   {
     return in;
   }
@@ -74,7 +75,7 @@ istream& operator>>(istream& in, StringIO&& dest)
   {
     return in;
   }
-  return getline(in >> DelimIO{"\""}, dest.ref, '"');
+  return getline(in >> DelimiterIO{"\""}, dest.ref, '"');
 }
 
 istream& operator>>(istream& in, DataStruct& dest)
@@ -85,7 +86,7 @@ istream& operator>>(istream& in, DataStruct& dest)
     return in;
   }
 
-  in >> DelimIO{"(:"};
+  in >> DelimiterIO{"(:"};
   if (!in)
   {
     return in;
@@ -125,13 +126,13 @@ istream& operator>>(istream& in, DataStruct& dest)
       in.setstate(ios_base::failbit);
       return in;
     }
-    in >> DelimIO{":"};
+    in >> DelimiterIO{":"};
     if (!in)
     {
       return in;
     }
   }
-  in >> DelimIO{")"};
+  in >> DelimiterIO{")"};
 
   return in;
 }
@@ -146,10 +147,12 @@ ostream& operator<<(ostream& out, const DataStruct& dest)
 
   ResPars rGard(out);
 
-  out << "(:key1 " << uppercase << oct << showbase << elem.key1 <<
-    ":key2 " << "#c(" << fixed << setprecision(1) << elem.key2.real() << " " <<
-    fixed << setprecision(1) << elem.key2.imag() << ")" <<
-    ":key3 \"" << elem.key3 << "\":)";
+  out << "(:key1 " << "0" << oct << dest.key1 <<
+        ":key2 " << "#c(" << fixed << setprecision(1) << dest.key2.real() << " " <<
+        fixed << setprecision(1) << dest.key2.imag() << ")" <<
+        ":key3 \"" << dest.key3 << "\":)";
+
+  return out;
 }
 
 ResPars::ResPars(basic_ios<char>& strm) :
