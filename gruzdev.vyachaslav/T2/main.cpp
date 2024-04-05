@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "iter.h"
+#include "iterator.h"
 
 int main() {
     try {
         std::string input = "";
-        std::vector< brat::DataStruct > data;
+        std::vector<brat::DataStruct> data;
 
         while (std::getline(std::cin, input)) {
             std::istringstream iss(input);
@@ -16,6 +16,7 @@ int main() {
             }
         }
 
+        // Сортировка с использованием пользовательской функции сравнения compareDataStruct
         std::sort(std::begin(data), std::end(data), brat::compareDataStruct);
 
         for (const auto& d : data) {
