@@ -1,10 +1,8 @@
 #ifndef _DATASTRUCT_H_
 #define _DATASTRUCT_H_
-
 #include <iostream>
 #include <vector>
 #include <complex>
-
 using namespace std;
 
 struct DataStruct
@@ -31,7 +29,7 @@ struct StringIO
 
 struct DelimiterIO
 {
-    string delim;
+    string delimiter;
 };
 
 class ResPars
@@ -53,6 +51,6 @@ istream& operator>>(istream &in, ComplexIO &elem);
 istream& operator>>(istream &in, StringIO &elem);
 istream& operator>>(istream &in, DataStruct &elem);
 ostream& operator<<(ostream &op, const DataStruct &elem);
-
 #endif
+
 
