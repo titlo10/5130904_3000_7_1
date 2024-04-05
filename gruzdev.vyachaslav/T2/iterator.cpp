@@ -1,4 +1,4 @@
-#include "Iterator.h"
+#include "iterator.h"
 
 namespace brat
 {

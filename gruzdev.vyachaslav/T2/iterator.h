@@ -1,5 +1,5 @@
-#ifndef ITERATORS_H
-#define ITERATORS_H
+#ifndef ITERATOR_H
+#define ITERATOR_H
 
 #include <iostream>
 #include <sstream>
