@@ -1,25 +1,33 @@
-﻿#include "sort.h"
+﻿#include "namespace.h"
 
-int main() {
-  std::vector<DataStruct> dataVector;
-  std::string line;
-  while (std::getline(std::cin, line)) {
-    std::istringstream iss(line);
-    DataStruct data;
-    if (iss >> data) {
-      dataVector.push_back(data);
+using anisimov::DataStruct;
+
+int main()
+{
+  try
+  {
+    std::string input = "";
+    std::vector< DataStruct > data;
+
+    while (std::getline(std::cin, input))
+    {
+      std::istringstream iss(input);
+      DataStruct tmp;
+      if (iss >> tmp)
+      {
+        data.push_back(tmp);
+      }
     }
-  }
-  std::sort(dataVector.begin(), dataVector.end(), [](const DataStruct& lhs, const DataStruct& rhs) {
-    if (lhs.key1 != rhs.key1)
-      return lhs.key1 < rhs.key1;
-    if (lhs.key2 != rhs.key2)
-      return lhs.key2 < rhs.key2;
-    return lhs.key3.length() < rhs.key3.length();
-    });
 
-  for (const auto& data : dataVector) {
-    std::cout << data << std::endl;
+    std::sort(std::begin(data), std::end(data), anisimov::compareDataStruct);
+
+    std::copy(std::begin(data), std::end(data), std::ostream_iterator< DataStruct >(std::cout, "\n"));
   }
-  return 0;
+  catch (std::exception& ex)
+  {
+    std::cerr << ex.what();
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
 }
