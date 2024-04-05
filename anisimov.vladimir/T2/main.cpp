@@ -6,6 +6,7 @@ int main()
 {
   try
   {
+    setlocale(LC_ALL, "ru");
     std::string input = "";
     std::vector< DataStruct > data;
 
