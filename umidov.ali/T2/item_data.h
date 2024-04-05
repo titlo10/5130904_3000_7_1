@@ -1,5 +1,6 @@
 #ifndef ITEM_DATA_H
 #define ITEM_DATA_H
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -8,6 +9,7 @@
 #include <algorithm>
 #include <bitset>
 #include <string>
+
 namespace umidov
 {
     struct DataStruct
@@ -27,31 +29,40 @@ namespace umidov
         std::string& ref;
     };
 
-    struct ULongLiteralIO
+    struct LIT
     {
         unsigned long long& ref;
     };
-    struct ULongBinaryLiteralIO
+
+    struct OCT
     {
         unsigned long long& ref;
     };
+
     class iofmtguard
     {
     public:
-        iofmtguard(std::basic_ios<char>& s);
+        iofmtguard(std::basic_ios<char>& stream);
         ~iofmtguard();
     private:
-        std::basic_ios<char>& s_;
+        std::basic_ios<char>& stream_;
         char fill_;
         std::streamsize precision_;
-        std::basic_ios<char>::fmtflags fmt_;
+        std::basic_ios<char>::fmtflags flags_;
     };
-    std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
-    std::istream& operator>>(std::istream& in, StringIO&& dest);
-    std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest);
-    std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest);
-    std::istream& operator>>(std::istream& in, DataStruct& dest);
-    std::ostream& operator<<(std::ostream& out, const DataStruct& src);
-    bool compareDataStruct(const DataStruct& a, const DataStruct& b);
+
+    std::istream& readDelimiter(std::istream& input, DelimiterIO&& destination);
+    std::istream& readString(std::istream& input, StringIO&& destination);
+    std::istream& readULongLiteral(std::istream& input, LIT&& destination);
+    std::istream& readULongBinaryLiteral(std::istream& input, OCT&& destination);
+    std::istream& operator>>(std::istream& input, DelimiterIO&& destination);
+    std::istream& operator>>(std::istream& input, StringIO&& destination);
+    std::istream& operator>>(std::istream& input, LIT&& destination);
+    std::istream& operator>>(std::istream& input, OCT&& destination);
+    std::istream& operator>>(std::istream& input, DataStruct& destination);
+    std::ostream& operator<<(std::ostream& output, const DataStruct& source);
+
+    bool compareDataStruct(const DataStruct& first, const DataStruct& second);
 }
+
 #endif

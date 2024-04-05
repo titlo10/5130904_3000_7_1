@@ -1,4 +1,5 @@
 #include "item_data.h"
+
 namespace umidov
 {
     std::string binaryNull(unsigned long long ref)
@@ -13,6 +14,7 @@ namespace umidov
         }
         return out;
     }
+
     std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -28,7 +30,8 @@ namespace umidov
         }
         return in;
     }
-    std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest)
+
+    std::istream& operator>>(std::istream& in, LIT&& dest)
     {
         std::istream::sentry sentry(in);
         if (!sentry)
@@ -37,7 +40,8 @@ namespace umidov
         }
         return in >> dest.ref;
     }
-    std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest)
+
+    std::istream& operator>>(std::istream& in, OCT&& dest)
     {
         std::istream::sentry sentry(in);
         if (!sentry)
@@ -46,6 +50,7 @@ namespace umidov
         }
         return in >> dest.ref;
     }
+
     std::istream& operator>>(std::istream& in, StringIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -55,6 +60,7 @@ namespace umidov
         }
         return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
     }
+
     std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
         std::istream::sentry sentry(in);
@@ -62,12 +68,14 @@ namespace umidov
         {
             return in;
         }
+
         DataStruct input;
         {
             using sep = DelimiterIO;
-            using ull = ULongLiteralIO;
-            using ulbl = ULongBinaryLiteralIO;
+            using lit = LIT;
+            using oct = OCT;
             using str = StringIO;
+
             in >> sep{ '(' };
             bool flag1 = false;
             bool flag2 = false;
@@ -90,12 +98,12 @@ namespace umidov
                 {
                     if (key == "key1")
                     {
-                        in >> ull{ input.key1 } >> sep{ 'u' } >> sep{ 'l' } >> sep{ 'l' };
+                        in >> lit{ input.key1 } >> sep{ 'u' } >> sep{ 'l' } >> sep{ 'l' };
                         flag1 = true;
                     }
                     else if (key == "key2")
                     {
-                        in >> sep{ '0' } >> sep{ 'b' } >> ulbl{ input.key2 };
+                        in >> sep{ '0' } >> sep{ 'b' } >> oct{ input.key2 };
                         flag2 = true;
                     }
                     else if (key == "key3")
@@ -113,6 +121,7 @@ namespace umidov
         }
         return in;
     }
+
     std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
         std::ostream::sentry sentry(out);
@@ -128,6 +137,7 @@ namespace umidov
         out << ":)";
         return out;
     }
+
     bool compareDataStruct(const DataStruct& a, const DataStruct& b)
     {
         if (a.key1 != b.key1)
@@ -143,16 +153,18 @@ namespace umidov
             return a.key3.length() < b.key3.length();
         }
     }
-    iofmtguard::iofmtguard(std::basic_ios<char>& s) :
-        s_(s),
-        fill_(s.fill()),
-        precision_(s.precision()),
-        fmt_(s.flags())
+
+    iofmtguard::iofmtguard(std::basic_ios<char>& stream) :
+        stream_(stream),
+        fill_(stream.fill()),
+        precision_(stream.precision()),
+        flags_(stream.flags())
     {}
+
     iofmtguard::~iofmtguard()
     {
-        s_.fill(fill_);
-        s_.precision(precision_);
-        s_.flags(fmt_);
+        stream_.fill(fill_);
+        stream_.precision(precision_);
+        stream_.flags(flags_);
     }
 }

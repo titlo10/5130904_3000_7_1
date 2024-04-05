@@ -1,28 +1,33 @@
 #include "item_data.h"
+
 using umidov::DataStruct;
+
 int main()
 {
     try
     {
-        std::string input = "";
-        std::vector< DataStruct > data;
-        while (std::getline(std::cin, input))
+        std::string userInput = "";
+        std::vector<DataStruct> dataCollection;
+
+        while (std::getline(std::cin, userInput))
         {
-            std::istringstream iss(input);
-            DataStruct tmp;
-            if (iss >> tmp)
+            std::istringstream inputStream(userInput);
+            DataStruct temporaryData;
+            if (inputStream >> temporaryData)
             {
-                data.push_back(tmp);
+                dataCollection.push_back(temporaryData);
             }
         }
-        std::sort(std::begin(data), std::end(data), umidov::compareDataStruct);
 
-        std::copy(std::begin(data), std::end(data), std::ostream_iterator< DataStruct >(std::cout, "\n"));
+        std::sort(std::begin(dataCollection), std::end(dataCollection), umidov::compareDataStruct);
+
+        std::copy(std::begin(dataCollection), std::end(dataCollection), std::ostream_iterator<DataStruct>(std::cout, "\n"));
     }
     catch (std::exception& ex)
     {
         std::cerr << ex.what();
         return EXIT_FAILURE;
     }
+
     return EXIT_SUCCESS;
 }
