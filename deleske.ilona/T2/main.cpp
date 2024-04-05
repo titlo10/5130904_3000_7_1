@@ -11,10 +11,15 @@ int main() {
   vector<DataStruct> ds_original;
   string request;
   while (getline(cin, request)) {
+    if (request.empty()) {
+        break;
+    }
     istringstream iss(request);
     DataStruct temp;
     if (iss >> temp) {
       ds_original.push_back(temp);
+    } else {
+      break;
     }
   }
 
@@ -31,3 +36,4 @@ int main() {
   copy(ds_original.begin(), ds_original.end(), ostream_iterator<DataStruct>(cout, "\n"));
   return 0;
 }
+
