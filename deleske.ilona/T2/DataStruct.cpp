@@ -6,7 +6,7 @@
 
 using namespace std;
 
-istream& operator>>(istream& in, DelimiterIO&& elem)
+istream& operator>>(istream& in, DelimiterIO&& dest)
 {
     istream::sentry sentry(in);
     if (!sentry)
@@ -15,20 +15,20 @@ istream& operator>>(istream& in, DelimiterIO&& elem)
     }
 
     string del;
-    size_t tSize = elem.delimiter.length();
+    size_t tSize = dest.delimiter.length();
     in >> setw(tSize) >> del;
     if (!in)
     {
         return in;
     }
-    if (elem.delimiter != del)
+    if (dest.delimiter != del)
     {
         in.setstate(ios_base::failbit);
     }
     return in;
 }
 
-istream& operator>>(istream& in, UllIO&& elem)
+istream& operator>>(istream& in, UllIO&& dest)
 {
     istream::sentry sentry(in);
     ResPars rGard(in);
@@ -36,14 +36,14 @@ istream& operator>>(istream& in, UllIO&& elem)
     {
         return in;
     }
-    if (!(in >> oct >> elem.ref))
+    if (!(in >> oct >> dest.ref))
     {
         return in;
     }
     return in;
 }
 
-istream& operator>>(istream& in, ComplexIO&& elem)
+istream& operator>>(istream& in, ComplexIO&& dest)
 {
     istream::sentry sentry(in);
     if (!sentry)
@@ -64,21 +64,21 @@ istream& operator>>(istream& in, ComplexIO&& elem)
     {
         return in;
     }
-    elem.ref = complex<double>(real, imag);
+    dest.ref = complex<double>(real, imag);
     return in;
 }
 
-istream& operator>>(istream& in, StringIO&& elem)
+istream& operator>>(istream& in, StringIO&& dest)
 {
     istream::sentry sentry(in);
     if (!sentry)
     {
         return in;
     }
-    return getline(in >> DelimiterIO{"\""}, elem.ref, '"');
+    return getline(in >> DelimiterIO{"\""}, dest.ref, '"');
 }
 
-istream& operator>>(istream& in, DataStruct& elem)
+istream& operator>>(istream& in, DataStruct& dest)
 {
     istream::sentry sentry(in);
     if (!sentry)
@@ -102,21 +102,21 @@ istream& operator>>(istream& in, DataStruct& elem)
 
         if (key == "key1")
         {
-            if (!(in >> UllIO{ elem.key1 }))
+            if (!(in >> UllIO{ dest.key1 }))
             {
                 return in;
             }
         }
         else if (key == "key2")
         {
-            if (!(in >> ComplexIO{ elem.key2 }))
+            if (!(in >> ComplexIO{ dest.key2 }))
             {
                 return in;
             }
         }
         else if (key == "key3")
         {
-            if (!(in >> StringIO{ elem.key3 }))
+            if (!(in >> StringIO{ dest.key3 }))
             {
                 return in;
             }
@@ -137,22 +137,22 @@ istream& operator>>(istream& in, DataStruct& elem)
     return in;
 }
 
-ostream& operator<<(ostream& op, const DataStruct& elem)
+ostream& operator<<(ostream& out, const DataStruct& dest)
 {
-    ostream::sentry sentry(op);
+    ostream::sentry sentry(out);
     if (!sentry)
     {
-        return op;
+        return out;
     }
 
-    ResPars rGard(op);
+    ResPars rGard(out);
 
-    op << "(:key1 " << uppercase << oct << showbase << elem.key1
-       << ":key2 " << "#c(" << fixed << setprecision(1) << elem.key2.real() << " "
-       << fixed << setprecision(1) << elem.key2.imag() << ")"
-       << ":key3 \"" << elem.key3 << "\":)";
-    return op;
-  }
+    out << "(:key1 " << uppercase << oct << showbase << dest.key1;
+    out << ":key2 " << "#c(" << fixed << setprecision(1) << dest.key2.real() << " ";
+    out << fixed << setprecision(1) << dest.key2.imag() << ")";
+    out << ":key3 \"" << dest.key3 << "\":)";
+
+    return out;
 
 ResPars::ResPars(basic_ios<char>& strm) :
     strm_(strm),
@@ -167,5 +167,4 @@ ResPars::~ResPars()
     strm_.precision(precision_);
     strm_.flags(fmtFlags_);
 }
-
 

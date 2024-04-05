@@ -1,8 +1,10 @@
 #ifndef _DATASTRUCT_H_
 #define _DATASTRUCT_H_
+
 #include <iostream>
 #include <vector>
 #include <complex>
+
 using namespace std;
 
 struct DataStruct
@@ -45,12 +47,12 @@ private:
     basic_ios<char>::fmtflags fmtFlags_;
 };
 
-istream& operator>>(istream &in, DelimiterIO&& elem);
-istream& operator>>(istream &in, UllIO &elem);
-istream& operator>>(istream &in, ComplexIO &elem);
-istream& operator>>(istream &in, StringIO &elem);
-istream& operator>>(istream &in, DataStruct &elem);
-ostream& operator<<(ostream &op, const DataStruct &elem);
-#endif
+istream& operator>>(istream &in, DelimiterIO&& dest);
+istream& operator>>(istream &in, UllIO &dest);
+istream& operator>>(istream &in, ComplexIO &dest);
+istream& operator>>(istream &in, StringIO &dest);
+istream& operator>>(istream &in, DataStruct &dest);
+ostream& operator<<(ostream &out, const DataStruct &dest);
 
+#endif
 
