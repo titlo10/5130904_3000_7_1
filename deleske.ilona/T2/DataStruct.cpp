@@ -15,13 +15,13 @@ istream& operator>>(istream& in, DelimiterIO&& dest)
   }
 
   string del;
-  size_t tSize = dest.delim.length();
+  size_t tSize = dest.delimiter.length();
   in >> setw(tSize) >> del;
   if (!in)
   {
     return in;
   }
-  if (dest.delim != del)
+  if (dest.delimiter != del)
   {
     in.setstate(ios_base::failbit);
   }
