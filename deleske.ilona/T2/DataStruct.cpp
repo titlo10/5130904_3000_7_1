@@ -126,4 +126,3 @@ ResPars::~ResPars() {
   strm_.flags(fmtFlags_);
 }
 
-
