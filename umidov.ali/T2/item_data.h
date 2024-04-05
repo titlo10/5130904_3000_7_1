@@ -1,6 +1,5 @@
 #ifndef ITEM_DATA_H
 #define ITEM_DATA_H
-
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -9,7 +8,6 @@
 #include <algorithm>
 #include <bitset>
 #include <string>
-
 namespace umidov
 {
     struct DataStruct
@@ -18,27 +16,22 @@ namespace umidov
         unsigned long long key2;
         std::string key3;
     };
-
     struct DelimiterIO
     {
         char exp;
     };
-
     struct StringIO
     {
         std::string& ref;
     };
-
     struct LIT
     {
         unsigned long long& ref;
     };
-
     struct OCT
     {
         unsigned long long& ref;
     };
-
     class iofmtguard
     {
     public:
@@ -50,7 +43,6 @@ namespace umidov
         std::streamsize precision_;
         std::basic_ios<char>::fmtflags flags_;
     };
-
     std::istream& readDelimiter(std::istream& input, DelimiterIO&& destination);
     std::istream& readString(std::istream& input, StringIO&& destination);
     std::istream& readULongLiteral(std::istream& input, LIT&& destination);
@@ -61,8 +53,6 @@ namespace umidov
     std::istream& operator>>(std::istream& input, OCT&& destination);
     std::istream& operator>>(std::istream& input, DataStruct& destination);
     std::ostream& operator<<(std::ostream& output, const DataStruct& source);
-
     bool compareDataStruct(const DataStruct& first, const DataStruct& second);
 }
-
 #endif

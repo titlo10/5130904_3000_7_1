@@ -1,5 +1,4 @@
 #include "item_data.h"
-
 namespace umidov
 {
     std::string binaryNull(unsigned long long ref)
@@ -14,7 +13,6 @@ namespace umidov
         }
         return out;
     }
-
     std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -30,7 +28,6 @@ namespace umidov
         }
         return in;
     }
-
     std::istream& operator>>(std::istream& in, LIT&& dest)
     {
         std::istream::sentry sentry(in);
@@ -40,7 +37,6 @@ namespace umidov
         }
         return in >> dest.ref;
     }
-
     std::istream& operator>>(std::istream& in, OCT&& dest)
     {
         std::istream::sentry sentry(in);
@@ -50,7 +46,6 @@ namespace umidov
         }
         return in >> dest.ref;
     }
-
     std::istream& operator>>(std::istream& in, StringIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -60,7 +55,6 @@ namespace umidov
         }
         return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
     }
-
     std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
         std::istream::sentry sentry(in);
@@ -68,14 +62,12 @@ namespace umidov
         {
             return in;
         }
-
         DataStruct input;
         {
             using sep = DelimiterIO;
             using lit = LIT;
             using oct = OCT;
             using str = StringIO;
-
             in >> sep{ '(' };
             bool flag1 = false;
             bool flag2 = false;
@@ -93,7 +85,6 @@ namespace umidov
                 {
                     break;
                 }
-
                 if (c == ':' && (in >> key))
                 {
                     if (key == "key1")
@@ -121,7 +112,6 @@ namespace umidov
         }
         return in;
     }
-
     std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
         std::ostream::sentry sentry(out);
@@ -137,7 +127,6 @@ namespace umidov
         out << ":)";
         return out;
     }
-
     bool compareDataStruct(const DataStruct& a, const DataStruct& b)
     {
         if (a.key1 != b.key1)
@@ -153,14 +142,12 @@ namespace umidov
             return a.key3.length() < b.key3.length();
         }
     }
-
     iofmtguard::iofmtguard(std::basic_ios<char>& stream) :
         stream_(stream),
         fill_(stream.fill()),
         precision_(stream.precision()),
         flags_(stream.flags())
     {}
-
     iofmtguard::~iofmtguard()
     {
         stream_.fill(fill_);
