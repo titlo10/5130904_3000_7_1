@@ -147,10 +147,10 @@ ostream& operator<<(ostream& out, const DataStruct& dest)
 
   ResPars rGard(out);
 
-  out << "(:key1 " << "0" << oct << dest.key1 <<
-        ":key2 " << "#c(" << fixed << setprecision(1) << dest.key2.real() << " " <<
-        fixed << setprecision(1) << dest.key2.imag() << ")" <<
-        ":key3 \"" << dest.key3 << "\":)";
+  out << "(:key1 " << uppercase << oct << showbase << elem.key1 <<
+    ":key2 " << "#c(" << fixed << setprecision(1) << elem.key2.real() << " " <<
+    fixed << setprecision(1) << elem.key2.imag() << ")" <<
+    ":key3 \"" << elem.key3 << "\":)";
 
   return out;
 }
