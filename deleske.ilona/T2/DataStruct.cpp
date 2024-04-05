@@ -12,7 +12,6 @@ istream& operator>>(istream& in, DelimiterIO&& dest)
   {
     return in;
   }
-
   string del;
   size_t tSize = dest.delimiter.length();
   in >> setw(tSize) >> del;
@@ -26,7 +25,6 @@ istream& operator>>(istream& in, DelimiterIO&& dest)
   }
   return in;
 }
-
 istream& operator>>(istream& in, UllIO&& dest)
 {
   istream::sentry sentry(in);
@@ -41,7 +39,6 @@ istream& operator>>(istream& in, UllIO&& dest)
   }
   return in;
 }
-
 istream& operator>>(istream& in, ComplexIO&& dest)
 {
   istream::sentry sentry(in);
@@ -66,7 +63,6 @@ istream& operator>>(istream& in, ComplexIO&& dest)
   dest.ref = complex<double>(real, imag);
   return in;
 }
-
 istream& operator>>(istream& in, StringIO&& dest)
 {
   istream::sentry sentry(in);
@@ -76,7 +72,6 @@ istream& operator>>(istream& in, StringIO&& dest)
   }
   return getline(in >> DelimiterIO{"\""}, dest.ref, '"');
 }
-
 istream& operator>>(istream& in, DataStruct& dest)
 {
   istream::sentry sentry(in);
@@ -84,7 +79,6 @@ istream& operator>>(istream& in, DataStruct& dest)
   {
     return in;
   }
-
   in >> DelimiterIO{"(:"};
   if (!in)
     return in;
@@ -123,7 +117,6 @@ istream& operator>>(istream& in, DataStruct& dest)
   
   return in;
 }
-
 ostream& operator<<(ostream& out, const DataStruct& dest)
 {
   ostream::sentry sentry(out);
