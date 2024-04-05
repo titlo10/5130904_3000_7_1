@@ -1,30 +1,28 @@
 #include "item_data.h"
-namespace myspace {
-    std::istream& operator>>(std::istream& in, ItemData& item) {
-        std::string line;
-        if (!std::getline(in, line, ')')) {
-            in.setstate(std::ios::failbit);
-            return in;
+using umidov::DataStruct;
+int main()
+{
+    try
+    {
+        std::string input = "";
+        std::vector< DataStruct > data;
+        while (std::getline(std::cin, input))
+        {
+            std::istringstream iss(input);
+            DataStruct tmp;
+            if (iss >> tmp)
+            {
+                data.push_back(tmp);
+            }
         }
-        std::istringstream iss(line.substr(1));
-        std::string key, value;
-        char delim;
-        while (iss >> key >> delim && delim == ' ' && std::getline(iss, value, ':')) {
-            if (key == "key1") {
-                item.key1 = std::stoull(value.substr(0, value.find("ull")));
-            }
-            else if (key == "key2") {
-                item.key2 = value[1];
-            }
-            else if (key == "key3") {
-                item.key3 = value.substr(1, value.length() - 2);
-            }
-            if (iss.peek() == ' ') iss.ignore();
-        }
-        return in;
+        std::sort(std::begin(data), std::end(data), umidov::compareDataStruct);
+
+        std::copy(std::begin(data), std::end(data), std::ostream_iterator< DataStruct >(std::cout, "\n"));
     }
-    std::ostream& operator<<(std::ostream& out, const ItemData& item) {
-        out << "(:key1 " << item.key1 << "ull:key2 '" << item.key2 << "':key3 \"" << item.key3 << "\":)";
-        return out;
+    catch (std::exception& ex)
+    {
+        std::cerr << ex.what();
+        return EXIT_FAILURE;
     }
+    return EXIT_SUCCESS;
 }

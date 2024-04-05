@@ -1,17 +1,57 @@
 #ifndef ITEM_DATA_H
 #define ITEM_DATA_H
-#include <vector>
-#include <algorithm>
 #include <iostream>
-#include <string>
 #include <sstream>
-namespace myspace {
-    struct ItemData {
-        unsigned long long key1 = 0;
-        char key2 = '\0';
+#include <vector>
+#include <iterator>
+#include <iomanip>
+#include <algorithm>
+#include <bitset>
+#include <string>
+namespace umidov
+{
+    struct DataStruct
+    {
+        unsigned long long key1;
+        unsigned long long key2;
         std::string key3;
-        friend std::istream& operator>>(std::istream& in, ItemData& item);
-        friend std::ostream& operator<<(std::ostream& out, const ItemData& item);
     };
+
+    struct DelimiterIO
+    {
+        char exp;
+    };
+
+    struct StringIO
+    {
+        std::string& ref;
+    };
+
+    struct ULongLiteralIO
+    {
+        unsigned long long& ref;
+    };
+    struct ULongBinaryLiteralIO
+    {
+        unsigned long long& ref;
+    };
+    class iofmtguard
+    {
+    public:
+        iofmtguard(std::basic_ios<char>& s);
+        ~iofmtguard();
+    private:
+        std::basic_ios<char>& s_;
+        char fill_;
+        std::streamsize precision_;
+        std::basic_ios<char>::fmtflags fmt_;
+    };
+    std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
+    std::istream& operator>>(std::istream& in, StringIO&& dest);
+    std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest);
+    std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest);
+    std::istream& operator>>(std::istream& in, DataStruct& dest);
+    std::ostream& operator<<(std::ostream& out, const DataStruct& src);
+    bool compareDataStruct(const DataStruct& a, const DataStruct& b);
 }
 #endif
