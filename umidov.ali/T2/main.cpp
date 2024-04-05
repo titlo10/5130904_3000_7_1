@@ -4,7 +4,6 @@ int main() {
     std::vector<ItemData> items;
     ItemData tempItem;
     std::string tempLine;
-
     while (std::getline(std::cin, tempLine, ')')) {
         std::istringstream itemStream (tempLine + ')');
         if (itemStream >> tempItem) {
