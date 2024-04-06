@@ -1,45 +1,146 @@
 #include <iostream>
-#include <sstream>
-#include <vector>
-#include <iterator>
+#include <iomanip>
 #include <algorithm>
-#include "iterator.h"
+#include <iterator>
+#include <vector>
+#include <string>
+#include <complex>
 
-using namespace gruzdev;
+using namespace std;
+
+struct DataStruct
+{
+    unsigned long long key1 = 0;
+    complex<double> key2;
+    string key3;
+};
+
+struct UllIO
+{
+    unsigned long long& ref;
+};
+
+struct ComplexIO
+{
+    complex<double>& ref;
+};
+
+struct StringIO
+{
+    string& ref;
+};
+
+struct DelimiterIO
+{
+    string delimiter;
+};
+
+istream& operator>>(istream& in, DelimiterIO&& dest)
+{
+    istream::sentry sentry(in);
+    if (!sentry)
+    {
+        return in;
+    }
+
+    string del;
+    size_t tSize = dest.delimiter.length();
+    in >> setw(tSize) >> del;
+    if (!in)
+    {
+        return in;
+    }
+    if (dest.delimiter != del)
+    {
+        in.setstate(ios_base::failbit);
+    }
+    return in;
+}
+
+istream& operator>>(istream& in, UllIO&& dest)
+{
+    istream::sentry sentry(in);
+    if (!sentry)
+    {
+        return in;
+    }
+    in >> dest.ref;
+    return in;
+}
+
+istream& operator>>(istream& in, ComplexIO&& dest)
+{
+    istream::sentry sentry(in);
+    if (!sentry)
+    {
+        return in;
+    }
+    in >> dest.ref;
+    return in;
+}
+
+istream& operator>>(istream& in, StringIO&& dest)
+{
+    istream::sentry sentry(in);
+    if (!sentry)
+    {
+        return in;
+    }
+    return getline(in >> DelimiterIO{ "\"" }, dest.ref, '"');
+}
+
+istream& operator>>(istream& in, DataStruct& dest)
+{
+    istream::sentry sentry(in);
+    if (!sentry)
+    {
+        return in;
+    }
+
+    in >> DelimiterIO{ "(:key1" } >> UllIO{ dest.key1 }
+        >> DelimiterIO{ ":key2" } >> DelimiterIO{ "#c(" } >> ComplexIO{ dest.key2 }
+        >> DelimiterIO{ ")" } >> DelimiterIO{ ":key3" } >> StringIO{ dest.key3 }
+    >> DelimiterIO{ ")" };
+
+    return in;
+}
+
+ostream& operator<<(ostream& out, const DataStruct& dest)
+{
+    out << "(:key1 " << dest.key1 << " :key2 " << dest.key2 << " :key3 \"" << dest.key3 << "\")";
+    return out;
+}
 
 int main()
 {
-    std::vector<DataStruct> data;
-    std::string line = "";
-
-    while (std::getline(std::cin, line))
+    vector<DataStruct> ds_original;
+    string request;
+    while (getline(cin, request))
     {
-        std::istringstream iss(line);
-        DataStruct tmp;
-        if (iss >> tmp)
+        istringstream iss(request);
+        DataStruct temp;
+        if (iss >> temp)
         {
-            data.push_back(tmp);
+            ds_original.push_back(temp);
         }
     }
 
-    std::sort(std::begin(data), std::end(data),
-        [](const DataStruct& d1, const DataStruct& d2)
+    sort(ds_original.begin(), ds_original.end(), [](const DataStruct& ds1, const DataStruct& ds2)
         {
-            if (d1.key1 == d2.key1)
+            if (ds1.key1 != ds2.key1)
+                return ds1.key1 < ds2.key1;
+
+            if (abs(ds1.key2) != abs(ds2.key2))
             {
-                if (d1.key2 == d2.key2)
-                    return d1.key3.length() < d2.key3.length();
-                return d1.key2 < d2.key2;
+                return abs(ds1.key2) < abs(ds2.key2);
             }
-            return d1.key1 < d2.key1;
-        }
-    );
+            else
+            {
+                return ds1.key3.length() < ds2.key3.length();
+            }
+        });
 
-    std::copy(
-        std::begin(data),
-        std::end(data),
-        std::ostream_iterator<DataStruct>(std::cout, "\n")
-    );
+    copy(ds_original.begin(), ds_original.end(), ostream_iterator<DataStruct>(cout, "\n"));
 
-    return EXIT_SUCCESS;
+    return 0;
 }
