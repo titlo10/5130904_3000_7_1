@@ -42,9 +42,9 @@ namespace gruzdev
         }
         std::string input = "";
         in >> input;
-        if ((input[1] == '.' && (input[4] == 'e'  input[4] == 'E')
-            && (input[5] == '+'  input[5] == '-'))
-             (input[1] == '.' && (input[3] == 'e'  input[3] == 'E')
+        if ((input[1] == '.' && (input[4] == 'e' || input[4] == 'E')
+            && (input[5] == '+' || input[5] == '-'))
+            || (input[1] == '.' && (input[3] == 'e' || input[3] == 'E')
                 && (input[4] == '+' || input[4] == '-')))
         {
             if (input[input.length() - 2] == ':')
@@ -142,11 +142,10 @@ namespace gruzdev
         DataStruct input;
         {
             using sep = DelimiterIO;
-            using dbl = DoubleIO;
-            using chr = CharIO;
             using str = StringIO;
-            using ull_lit = UllLitIO; // Добавлен новый тип для поля key1
-            using ull_oct = UllOctIO; // Добавлен новый тип для поля key2
+            using ull_lit = UllLitIO; // Äîáàâëåí íîâûé òèï äëÿ ïîëÿ key1
+            using ull_oct = UllOctIO; // Äîáàâëåí íîâûé òèï äëÿ ïîëÿ key2
+
             in >> sep{ '(' };
             bool flag1 = false, flag2 = false, flag3 = false;
             while (true)
@@ -221,8 +220,8 @@ namespace gruzdev
 
         StreamGuard fmtguard(out);
         out << "(";
-        out << ":key1 " << src.key1; // Записываем без форматирования, т.к. это unsigned long long
-        out << ":key2 " << src.key2; // Записываем без форматирования, т.к. это unsigned long long
+        out << ":key1 " << src.key1; // Çàïèñûâàåì áåç ôîðìàòèðîâàíèÿ, ò.ê. ýòî unsigned long long
+        out << ":key2 " << src.key2; // Çàïèñûâàåì áåç ôîðìàòèðîâàíèÿ, ò.ê. ýòî unsigned long long
         out << ":key3 " << "\"" << src.key3 << "\"" << ":";
         out << ")";
         return out;
