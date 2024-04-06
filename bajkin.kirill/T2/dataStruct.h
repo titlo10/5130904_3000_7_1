@@ -59,7 +59,7 @@ namespace bajkin
     ss << std::scientific << x;
     std::string out = ss.str();
     size_t i = out.find('e');
-    while (out[i - 1] == '0')
+    while (out[i - 1] == '0' && out[i - 2] != '.')
     {
       out.erase(i - 1, 1);
       i = out.find('e');
@@ -95,7 +95,7 @@ namespace bajkin
     }
     std::string input = "";
     in >> input;
-    if (((input[4] == 'e' || input[4] == 'E')
+    if ((input[1] == '.' && (input[4] == 'e' || input[4] == 'E')
       && (input[5] == '+' || input[5] == '-'))
       || (input[1] == '.' && (input[3] == 'e' || input[3] == 'E')
         && (input[4] == '+' || input[4] == '-')))
