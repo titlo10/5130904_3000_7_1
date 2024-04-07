@@ -37,7 +37,6 @@ namespace gruzdev
         return in;
     }
 
-
     std::istream& operator>>(std::istream& in, DoubleIO&& dest)
     {
         std::istream::sentry sentry(in);
@@ -80,7 +79,6 @@ namespace gruzdev
             using ULL = ULLIO;
             using cmp = CMPDoubleIO;
             using str = StringIO;
-
             in >> sep{ '(' };
             bool flag1 = false, flag2 = false, flag3 = false;
             while (true) {
@@ -145,7 +143,6 @@ namespace gruzdev
 
         R_first = sqrt(pow(Re_first, 2) + pow(Im_first, 2));
         R_second = sqrt(pow(Re_second, 2) + pow(Im_second, 2));
-        
         if (ds_first.key1 < ds_second.key1)
         {
             return true;
