@@ -37,10 +37,10 @@ namespace gubanov
   class StreamGuard
   {
   public:
-    StreamGuard(std::basic_ios<char>& s);
+    StreamGuard(std::basic_ios<char>& stream);
     ~StreamGuard();
   private:
-    std::basic_ios<char>& s_;
+    std::basic_ios<char>& stream_;
     char fill_;
     std::streamsize precision_;
     std::basic_ios<char>::fmtflags fmt_;
@@ -52,6 +52,6 @@ namespace gubanov
   std::istream& operator>>(std::istream& in, StringIO&& dest);
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
-  std::string doubleToScientific(double x);
+  std::string doubleToScientific(double number);
 }
 #endif

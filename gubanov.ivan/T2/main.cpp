@@ -15,23 +15,23 @@ int main()
   while (std::getline(std::cin, line))
   {
     std::istringstream iss(line);
-    DataStruct tmp;
-    if (iss >> tmp)
+    DataStruct temp;
+    if (iss >> temp)
     {
-      data.push_back(tmp);
+      data.push_back(temp);
     }
   }
 
   std::sort(std::begin(data), std::end(data),
-    [](const DataStruct& d1, const DataStruct& d2)
+    [](const DataStruct& data1, const DataStruct& data2)
     {
-      if (d1.key1 == d2.key1)
+      if (data1.key1 == data2.key1)
       {
-        if (d1.key2 == d2.key2)
-          return d1.key3.length() < d2.key3.length();
-        return d1.key2 < d2.key2;
+        if (data1.key2 == data2.key2)
+          return data1.key3.length() < data2.key3.length();
+        return data1.key2 < data2.key2;
       }
-      return d1.key1 < d2.key1;
+      return data1.key1 < data2.key1;
     }
   );
 

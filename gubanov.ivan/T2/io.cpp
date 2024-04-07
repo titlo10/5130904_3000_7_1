@@ -2,18 +2,18 @@
 #include <iomanip>
 #include "io.h"
 
-gubanov::StreamGuard::StreamGuard(std::basic_ios<char>& s) :
-  s_(s),
-  fill_(s.fill()),
-  precision_(s.precision()),
-  fmt_(s.flags())
+gubanov::StreamGuard::StreamGuard(std::basic_ios<char>& stream) :
+  stream_(stream),
+  fill_(stream.fill()),
+  precision_(stream.precision()),
+  fmt_(stream.flags())
 {}
 
 gubanov::StreamGuard::~StreamGuard()
 {
-  s_.fill(fill_);
-  s_.precision(precision_);
-  s_.flags(fmt_);
+  stream_.fill(fill_);
+  stream_.precision(precision_);
+  stream_.flags(fmt_);
 }
 
 std::istream& gubanov::operator>>(std::istream& in, gubanov::DelimiterIO&& dest)
@@ -23,9 +23,9 @@ std::istream& gubanov::operator>>(std::istream& in, gubanov::DelimiterIO&& dest)
   {
     return in;
   }
-  char c = '0';
-  in >> c;
-  if (in && (c != dest.exp))
+  char symbol = '0';
+  in >> symbol;
+  if (in && (symbol != dest.exp))
   {
     in.setstate(std::ios::failbit);
   }
@@ -78,10 +78,10 @@ std::istream& gubanov::operator>>(std::istream& in, gubanov::CharIO&& dest)
   {
     return in;
   }
-  char c;
-  if (in >> DelimiterIO{ '\'' } >> c >> DelimiterIO{ '\'' })
+  char symbol;
+  if (in >> DelimiterIO{ '\'' } >> symbol >> DelimiterIO{ '\'' })
   {
-    dest.ref = c;
+    dest.ref = symbol;
   }
   return in;
 }
@@ -121,14 +121,14 @@ std::istream& gubanov::operator>>(std::istream& in, gubanov::DataStruct& dest)
         break;
       }
       std::string key;
-      char c = '0';
-      in >> c;
+      char symbol = '0';
+      in >> symbol;
       if (!in)
       {
         break;
       }
 
-      if (c == ':' && (in >> key))
+      if (symbol == ':' && (in >> key))
       {
         if (key == "key1")
         {
@@ -156,10 +156,10 @@ std::istream& gubanov::operator>>(std::istream& in, gubanov::DataStruct& dest)
   return in;
 }
 
-std::string gubanov::doubleToScientific(double x)
+std::string gubanov::doubleToScientific(double number)
 {
   std::stringstream ss;
-  ss << std::scientific << x;
+  ss << std::scientific << number;
   std::string out = ss.str();
   size_t i = std::min(out.find('E'), out.find('e'));
   while (out[i - 1] == '0' && out[i - 2] != '.')
