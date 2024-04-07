@@ -74,4 +74,6 @@ namespace gruzdev
 
     bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second);
 }
+
+
 #endif
