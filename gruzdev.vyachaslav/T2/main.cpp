@@ -1,30 +1,29 @@
 #include "namespace.h"
-
-using gruzdev::DataStruct;
+#include <iterator>
 
 int main()
 {
     try
     {
         std::string input = "";
-        std::vector< DataStruct > data;
+        std::vector<gruzdev::DataStruct> data;
 
         while (std::getline(std::cin, input))
         {
             std::istringstream iss(input);
-            DataStruct temp;
+            gruzdev::DataStruct temp;
             if (iss >> temp)
             {
                 data.push_back(temp);
             }
         }
 
-        std::sort(std::begin(data), std::end(data), gruzdev::compareDataStruct);
+        std::sort(data.begin(), data.end(), gruzdev::compareDataStruct);
 
         std::copy(
-            std::begin(data),
-            std::end(data),
-            std::ostream_iterator< DataStruct >(std::cout, "\n")
+            data.begin(),
+            data.end(),
+            std::ostream_iterator<gruzdev::DataStruct>(std::cout, "\n")
         );
     }
     catch (std::exception& ex)

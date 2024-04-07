@@ -4,21 +4,18 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <cassert>
-#include <iterator>
 #include <vector>
 #include <iomanip>
 #include <complex>
 #include <algorithm>
 #include <cmath>
-#include <exception>
 
 namespace gruzdev
 {
     struct DataStruct
     {
         unsigned long long key1;
-        std::complex< double > key2;
+        unsigned long long key2;
         std::string key3;
     };
 
@@ -27,19 +24,14 @@ namespace gruzdev
         char exp;
     };
 
-    struct CMPDoubleIO
-    {
-        std::complex< double >& ref;
-    };
-
-    struct ULLIO
+    struct ULLLitIO
     {
         unsigned long long& ref;
     };
 
-    struct DoubleIO
+    struct ULLOctIO
     {
-        double& num;
+        unsigned long long& ref;
     };
 
     struct StringIO
@@ -52,21 +44,9 @@ namespace gruzdev
         std::string exp;
     };
 
-    class iofmtguard
-    {
-    public:
-        iofmtguard(std::basic_ios< char >& s);
-        ~iofmtguard();
-    private:
-        std::basic_ios< char >& s_;
-        char fill_;
-        std::streamsize precision_;
-        std::basic_ios< char >::fmtflags fmt_;
-    };
-
     std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
-    std::istream& operator>>(std::istream& in, CMPDoubleIO&& dest);
-    std::istream& operator>>(std::istream& in, ULLIO&& dest);
+    std::istream& operator>>(std::istream& in, ULLLitIO&& dest);
+    std::istream& operator>>(std::istream& in, ULLOctIO&& dest);
     std::istream& operator>>(std::istream& in, StringIO&& dest);
     std::istream& operator>>(std::istream& in, LabelIO&& dest);
     std::istream& operator>>(std::istream& in, DataStruct& dest);
@@ -74,6 +54,5 @@ namespace gruzdev
 
     bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second);
 }
-
 
 #endif
