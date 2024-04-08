@@ -1,19 +1,7 @@
 #include "namespace.h"
 
-namespace anisimov
+namespace golikov
 {
-  std::string binaryNull(unsigned long long ref)
-  {
-    std::stringstream ss;
-    ss << "0b" << std::setfill('0') << std::setw(2) << std::to_string(ref);
-    std::string out = ss.str();
-    size_t i = out.find('b');
-    if (out[i + 1] == '0' and out[i + 2] == '0')
-    {
-      out.erase(i + 2, 1);
-    }
-    return out;
-  }
   std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -29,24 +17,46 @@ namespace anisimov
     }
     return in;
   }
-  std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest)
+
+  std::istream& operator>>(std::istream& in, CMPDoubleIO&& dest)
   {
     std::istream::sentry sentry(in);
     if (!sentry)
     {
       return in;
     }
-    return in >> dest.ref;
+
+    double real = 0.0;
+    double imag = 0.0;
+
+    in >> DelimiterIO{ '(' } >> real >> imag >> DelimiterIO{ ')' };
+    if (in)
+    {
+      dest.ref = std::complex<double>(real, imag);
+    }
+    return in;
   }
-  std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest)
+
+
+  std::istream& operator>>(std::istream& in, DoubleIO&& dest)
   {
     std::istream::sentry sentry(in);
     if (!sentry)
     {
       return in;
     }
-    return in >> dest.ref;
+    return in >> dest.num;
   }
+
+  std::istream& operator>>(std::istream& in, ULLIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    return in >> std::hex >> dest.ref;
+  }
+
   std::istream& operator>>(std::istream& in, StringIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -56,6 +66,7 @@ namespace anisimov
     }
     return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
   }
+
   std::istream& operator>>(std::istream& in, DataStruct& dest)
   {
     std::istream::sentry sentry(in);
@@ -63,41 +74,31 @@ namespace anisimov
     {
       return in;
     }
-
     DataStruct input;
     {
       using sep = DelimiterIO;
-      using ull = ULongLiteralIO;
-      using ulbl = ULongBinaryLiteralIO;
+      using ULL = ULLIO;
+      using cmp = CMPDoubleIO;
       using str = StringIO;
       in >> sep{ '(' };
-      bool flag1 = false;
-      bool flag2 = false;
-      bool flag3 = false;
-      while (true)
-      {
-        if (flag1 && flag2 && flag3)
-        {
-          break;
-        }
+      bool flag1 = false, flag2 = false, flag3 = false;
+      while (true) {
+        if (flag1 && flag2 && flag3) break;
         std::string key;
         char c;
         in >> c;
-        if (!in)
-        {
-          break;
-        }
+        if (!in) break;
 
         if (c == ':' && (in >> key))
         {
           if (key == "key1")
           {
-            in >> ull{ input.key1 } >> sep{ 'u' } >> sep{ 'l' } >> sep{ 'l' };
+            in >> ULL{ input.key1 };
             flag1 = true;
           }
           else if (key == "key2")
           {
-            in >> sep{ '0' } >> sep{ 'b' } >> ulbl{ input.key2 };
+            in >> sep{ '#' } >> sep{ 'c' } >> cmp{ input.key2 };
             flag2 = true;
           }
           else if (key == "key3")
@@ -115,6 +116,7 @@ namespace anisimov
     }
     return in;
   }
+
   std::ostream& operator<<(std::ostream& out, const DataStruct& src)
   {
     std::ostream::sentry sentry(out);
@@ -124,33 +126,50 @@ namespace anisimov
     }
     iofmtguard fmtguard(out);
     out << "(";
-    out << ":key1 " << src.key1 << "ull";
-    out << ":key2 " << binaryNull(src.key2);
-    out << ":key3 " << "\"" << src.key3 << "\"";
+    out << ":key1 " << std::uppercase << std::hex << "0x" << src.key1;
+    out << ":key2 " << std::fixed << std::setprecision(1) << "#c(" << src.key2.real() << " " << src.key2.imag() << ")";
+    out << ":key3 \"" << src.key3 << "\"";
     out << ":)";
     return out;
   }
-  bool compareDataStruct(const DataStruct& a, const DataStruct& b)
+
+  bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second)
   {
-    if (a.key1 != b.key1)
+    double Re_first = ds_first.key2.real(),
+      Re_second = ds_second.key2.real(),
+      Im_first = ds_first.key2.imag(),
+      Im_second = ds_second.key2.imag(),
+      R_first = 0.0,
+      R_second = 0.0;
+
+    R_first = sqrt(pow(Re_first, 2) + pow(Im_first, 2));
+    R_second = sqrt(pow(Re_second, 2) + pow(Im_second, 2));
+
+    if (ds_first.key1 < ds_second.key1)
     {
-      return a.key1 < b.key1;
+      return true;
     }
-    else if (a.key2 != b.key2)
+    else if (ds_first.key1 == ds_second.key1)
     {
-      return a.key2 < b.key2;
+      if (R_first < R_second)
+      {
+        return true;
+      }
+      else if (R_first == R_second)
+      {
+        return ds_first.key3.length() < ds_second.key3.length();
+      }
     }
-    else
-    {
-      return a.key3.length() < b.key3.length();
-    }
+    return false;
   }
-  iofmtguard::iofmtguard(std::basic_ios<char>& s) :
+
+  iofmtguard::iofmtguard(std::basic_ios< char >& s) :
     s_(s),
     fill_(s.fill()),
     precision_(s.precision()),
     fmt_(s.flags())
   {}
+
   iofmtguard::~iofmtguard()
   {
     s_.fill(fill_);
