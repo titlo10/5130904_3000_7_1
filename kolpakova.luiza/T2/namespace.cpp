@@ -160,7 +160,7 @@ namespace kolpakova
     out << "(";
     out << ":key1 " << src.key1 << "ull";
     std::ios::fmtflags prev_flags = out.flags();
-    out << ":key2 0x" << std::hex << src.key2;
+    out << ":key2 0x" << std::uppercase << std::hex << src.key2;
     out.flags(prev_flags);
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
