@@ -80,6 +80,7 @@ namespace golikov
       using ULL = ULLIO;
       using cmp = CMPDoubleIO;
       using str = StringIO;
+
       in >> sep{ '(' };
       bool flag1 = false, flag2 = false, flag3 = false;
       while (true) {
