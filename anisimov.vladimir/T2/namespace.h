@@ -38,7 +38,6 @@ namespace anisimov
   {
     unsigned long long& ref;
   };
-
   class iofmtguard
   {
   public:

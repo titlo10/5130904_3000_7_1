@@ -70,7 +70,6 @@ namespace anisimov
       using ull = ULongLiteralIO;
       using ulbl = ULongBinaryLiteralIO;
       using str = StringIO;
-
       in >> sep{ '(' };
       bool flag1 = false;
       bool flag2 = false;
