@@ -8,10 +8,11 @@
 namespace jean {
   struct DataStruct {
     bool operator<(const DataStruct& other) const;
-    char key1;
-    std::pair< long long, unsigned long long > key2;
-    std::string key3;
+    char characterKey;
+    std::pair<long long, unsigned long long> rationalNumberKey;
+    std::string stringKey;
   };
+
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& out, const DataStruct& value);
 }

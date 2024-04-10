@@ -1,27 +1,28 @@
 #include <iostream>
-#include <list>
+#include <vector>
 #include <iterator>
 #include <limits>
+#include <algorithm>
 
 #include "DataStruct.h"
 
 int main()
 {
   using namespace jean;
-  using input_it_t = std::istream_iterator< DataStruct >;
-  using output_it_t = std::ostream_iterator< DataStruct  >;
-  std::list< DataStruct > data(input_it_t{ std::cin }, input_it_t{});
-  while (!std::cin.eof())
-  {
-    if (std::cin.fail())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
+  std::vector<DataStruct> data;
+  std::istream_iterator<DataStruct> start(std::cin), end;
+
+  std::copy(start, end, std::back_inserter(data)); 
+
+  if (std::cin.bad()) {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
-  data.sort();
-  std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" });
+
+  std::sort(data.begin(), data.end());
+
+  std::ostream_iterator<DataStruct> output(std::cout, "\n");
+  std::copy(data.begin(), data.end(), output);
+
   return 0;
 }
-
