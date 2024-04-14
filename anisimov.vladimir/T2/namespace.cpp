@@ -14,6 +14,7 @@ namespace anisimov
     }
     return out;
   }
+
   std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -29,6 +30,7 @@ namespace anisimov
     }
     return in;
   }
+
   std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -38,6 +40,7 @@ namespace anisimov
     }
     return in >> dest.ref;
   }
+
   std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -47,6 +50,7 @@ namespace anisimov
     }
     return in >> dest.ref;
   }
+
   std::istream& operator>>(std::istream& in, StringIO&& dest)
   {
     std::istream::sentry sentry(in);
@@ -56,6 +60,7 @@ namespace anisimov
     }
     return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
   }
+
   std::istream& operator>>(std::istream& in, DataStruct& dest)
   {
     std::istream::sentry sentry(in);
@@ -87,6 +92,7 @@ namespace anisimov
         {
           break;
         }
+
         if (ch == ':' && (in >> key))
         {
           if (key == "key1")
@@ -96,7 +102,9 @@ namespace anisimov
           }
           else if (key == "key2")
           {
-            in >> sep{ '0' } >> sep{ 'b' } >> ulbl{ input.key2 };
+            double real, imag;
+            in >> sep{ '(' } >> real >> sep{ ',' } >> imag >> sep{ ')' };
+            input.key2 = std::complex<double>(real, imag);
             flag2 = true;
           }
           else if (key == "key3")
@@ -114,6 +122,7 @@ namespace anisimov
     }
     return in;
   }
+
   std::ostream& operator<<(std::ostream& out, const DataStruct& src)
   {
     std::ostream::sentry sentry(out);
@@ -124,11 +133,12 @@ namespace anisimov
     iofmtguard fmtguard(out);
     out << "(";
     out << ":key1 " << src.key1 << "ull";
-    out << ":key2 " << binaryNull(src.key2);
+    out << ":key2 (" << std::real(src.key2) << "," << std::imag(src.key2) << ")";
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
     return out;
   }
+
   bool compareDataStruct(const DataStruct& a, const DataStruct& b)
   {
     if (a.key1 != b.key1)
@@ -148,12 +158,14 @@ namespace anisimov
       return a.key3.length() < b.key3.length();
     }
   }
+
   iofmtguard::iofmtguard(std::basic_ios<char>& s) :
     s_(s),
     fill_(s.fill()),
     precision_(s.precision()),
     fmt_(s.flags())
   {}
+
   iofmtguard::~iofmtguard()
   {
     s_.fill(fill_);
