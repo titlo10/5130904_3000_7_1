@@ -1,4 +1,5 @@
 #include "namespace.h"
+#include <cmath>
 
 namespace anisimov
 {
@@ -144,13 +145,10 @@ namespace anisimov
     {
       return a.key1 < b.key1;
     }
-    else if (a.key2.real() != b.key2.real())
-    {
-      return a.key2.real() < b.key2.real();
-    }
     else
     {
-      return a.key2.imag() < b.key2.imag();
+      
+      return std::abs(a.key2) < std::abs(b.key2);
     }
   }
 
