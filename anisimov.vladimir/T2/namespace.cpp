@@ -136,9 +136,13 @@ namespace anisimov
     {
       return a.key1 < b.key1;
     }
-    else if (a.key2 != b.key2)
+    else if (std::real(a.key2) != std::real(b.key2))
     {
-      return a.key2 < b.key2;
+      return std::real(a.key2) < std::real(b.key2);
+    }
+    else if (std::imag(a.key2) != std::imag(b.key2))
+    {
+      return std::imag(a.key2) < std::imag(b.key2);
     }
     else
     {
