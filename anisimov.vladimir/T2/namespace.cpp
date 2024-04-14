@@ -133,7 +133,7 @@ namespace anisimov
     }
     iofmtguard fmtguard(out);
     out << "(";
-    out << ":key1 " << src.key1 << "ull";
+    out << ":key1 " << src.key1;
     out << ":key2 (" << std::real(src.key2) << "," << std::imag(src.key2) << ")";
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
