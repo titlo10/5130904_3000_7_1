@@ -34,7 +34,7 @@ namespace anisimov
     }
     if (in)
     {
-      dest.key1 = static_cast<unsigned long long>(std::abs(dest.key2.real())); // Здесь используем абсолютное значение вещественной части комплексного числа
+      dest.key1 = static_cast<unsigned long long>(std::abs(dest.key2.real()));
       dest.key3 = std::to_string(dest.key1);
     }
     return in;
@@ -50,7 +50,7 @@ namespace anisimov
     iofmtguard fmtguard(out);
     out << "(";
     out << ":key1 " << src.key1 << "ull";
-    out << ":key2 " << binaryNull(static_cast<unsigned long long>(std::abs(src.key2.real()))); // Используем абсолютное значение вещественной части комплексного числа
+    out << ":key2 " << binaryNull(static_cast<unsigned long long>(std::abs(src.key2.real())));
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
     return out;
@@ -62,7 +62,7 @@ namespace anisimov
     {
       return a.key1 < b.key1;
     }
-    else if (std::abs(a.key2.real()) != std::abs(b.key2.real())) // Сравниваем абсолютные значения вещественных частей комплексных чисел
+    else if (std::abs(a.key2.real()) != std::abs(b.key2.real()))
     {
       return std::abs(a.key2.real()) < std::abs(b.key2.real());
     }
