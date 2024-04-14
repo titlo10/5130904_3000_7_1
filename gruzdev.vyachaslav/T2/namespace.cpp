@@ -2,7 +2,7 @@
 
 namespace gruzdev
 {
-    struct ULLIO
+    struct UnsignedLongLongIO
     {
         unsigned long long& ref;
     };
@@ -14,9 +14,9 @@ namespace gruzdev
         {
             return in;
         }
-        char c = '0';
-        in >> c;
-        if (in && (c != dest.exp))
+        char character = '0';
+        in >> character;
+        if (in && (character != dest.exp))
         {
             in.setstate(std::ios::failbit);
         }
@@ -31,17 +31,16 @@ namespace gruzdev
             return in;
         }
 
-        double real = 0.0;
-        double imag = 0.0;
+        double real_part = 0.0;
+        double imag_part = 0.0;
 
-        in >> DelimiterIO{ '(' } >> real >> imag >> DelimiterIO{ ')' };
+        in >> DelimiterIO{ '(' } >> real_part >> imag_part >> DelimiterIO{ ')' };
         if (in)
         {
-            dest.ref = std::complex<double>(real, imag);
+            dest.ref = std::complex<double>(real_part, imag_part);
         }
         return in;
     }
-
 
     std::istream& operator>>(std::istream& in, DoubleIO&& dest)
     {
@@ -53,7 +52,7 @@ namespace gruzdev
         return in >> dest.num;
     }
 
-    std::istream& operator>>(std::istream& in, ULLIO&& dest) {
+    std::istream& operator>>(std::istream& in, UnsignedLongLongIO&& dest) {
         std::istream::sentry sentry(in);
         if (!sentry)
         {
@@ -81,21 +80,21 @@ namespace gruzdev
         }
         DataStruct input;
         {
-            using sep = DelimiterIO;
-            using ULL = ULLIO;
-            using cmp = CMPDoubleIO;
-            using str = StringIO;
+            using Delimiter = DelimiterIO;
+            using ULL = UnsignedLongLongIO;
+            using CMPDouble = CMPDoubleIO;
+            using String = StringIO;
 
-            in >> sep{ '(' };
+            in >> Delimiter{ '(' };
             bool flag1 = false, flag2 = false, flag3 = false;
             while (true) {
                 if (flag1 && flag2 && flag3) break;
                 std::string key;
-                char c;
-                in >> c;
+                char character;
+                in >> character;
                 if (!in) break;
 
-                if (c == ':' && (in >> key))
+                if (character == ':' && (in >> key))
                 {
                     if (key == "key1")
                     {
@@ -104,17 +103,17 @@ namespace gruzdev
                     }
                     else if (key == "key2")
                     {
-                        in >> sep{ '#' } >> sep{ 'c' } >> cmp{ input.key2 };
+                        in >> Delimiter{ '#' } >> Delimiter{ 'c' } >> CMPDouble{ input.key2 };
                         flag2 = true;
                     }
                     else if (key == "key3")
                     {
-                        in >> str{ input.key3 };
+                        in >> String{ input.key3 };
                         flag3 = true;
                     }
                 }
             }
-            in >> sep{ ':' } >> sep{ ')' };
+            in >> Delimiter{ ':' } >> Delimiter{ ')' };
         }
         if (in)
         {
@@ -141,15 +140,14 @@ namespace gruzdev
 
     bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second)
     {
-        double Re_first = ds_first.key2.real(),
-            Re_second = ds_second.key2.real(),
-            Im_first = ds_first.key2.imag(),
-            Im_second = ds_second.key2.imag(),
-            R_first = 0.0,
-            R_second = 0.0;
-
-        R_first = sqrt(pow(Re_first, 2) + pow(Im_first, 2));
-        R_second = sqrt(pow(Re_second, 2) + pow(Im_second, 2));
+        double Real_first = ds_first.key2.real(),
+            Real_second = ds_second.key2.real(),
+            Imaginary_first = ds_first.key2.imag(),
+            Imaginary_second = ds_second.key2.imag(),
+            Magnitude_first = 0.0,
+            Magnitude_second = 0.0;
+        Magnitude_first = sqrt(pow(Real_first, 2) + pow(Imaginary_first, 2));
+        Magnitude_second = sqrt(pow(Real_second, 2) + pow(Imaginary_second, 2));
 
         if (ds_first.key1 < ds_second.key1)
         {
@@ -157,11 +155,11 @@ namespace gruzdev
         }
         else if (ds_first.key1 == ds_second.key1)
         {
-            if (R_first < R_second)
+            if (Magnitude_first < Magnitude_second)
             {
                 return true;
             }
-            else if (R_first == R_second)
+            else if (Magnitude_first == Magnitude_second)
             {
                 return ds_first.key3.length() < ds_second.key3.length();
             }
@@ -169,11 +167,11 @@ namespace gruzdev
         return false;
     }
 
-    iofmtguard::iofmtguard(std::basic_ios< char >& s) :
-        s_(s),
-        fill_(s.fill()),
-        precision_(s.precision()),
-        fmt_(s.flags())
+    iofmtguard::iofmtguard(std::basic_ios< char >& stream) :
+        s_(stream),
+        fill_(stream.fill()),
+        precision_(stream.precision()),
+        fmt_(stream.flags())
     {}
 
     iofmtguard::~iofmtguard()
