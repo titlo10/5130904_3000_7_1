@@ -22,9 +22,9 @@ namespace anisimov
     {
       return in;
     }
-    char ch = '0';
-    in >> ch;
-    if (in && (ch != dest.exp))
+    char c = '0';
+    in >> c;
+    if (in && (c != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
@@ -73,8 +73,7 @@ namespace anisimov
     {
       using sep = DelimiterIO;
       using ull = ULongLiteralIO;
-      // ”далено неиспользуемое объ€вление typedef
-      // using ulbl = ULongBinaryLiteralIO;
+      using ulbl = ULongBinaryLiteralIO;
       using str = StringIO;
       in >> sep{ '(' };
       bool flag1 = false;
@@ -87,14 +86,14 @@ namespace anisimov
           break;
         }
         std::string key;
-        char ch;
-        in >> ch;
+        char c;
+        in >> c;
         if (!in)
         {
           break;
         }
 
-        if (ch == ':' && (in >> key))
+        if (c == ':' && (in >> key))
         {
           if (key == "key1")
           {
@@ -103,9 +102,7 @@ namespace anisimov
           }
           else if (key == "key2")
           {
-            double real, imag;
-            in >> sep{ '(' } >> real >> sep{ ',' } >> imag >> sep{ ')' };
-            input.key2 = std::complex<double>(real, imag);
+            in >> sep{ '0' } >> sep{ 'b' } >> ulbl{ input.key2 };
             flag2 = true;
           }
           else if (key == "key3")
@@ -133,8 +130,8 @@ namespace anisimov
     }
     iofmtguard fmtguard(out);
     out << "(";
-    out << ":key1 " << src.key1;
-    out << ":key2 (" << std::real(src.key2) << "," << std::imag(src.key2) << ")";
+    out << ":key1 " << src.key1 << "ull";
+    out << ":key2 " << binaryNull(src.key2);
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
     return out;
