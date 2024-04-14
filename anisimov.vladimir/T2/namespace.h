@@ -1,5 +1,4 @@
-﻿#ifndef NAMESPACE_H
-#define NAMESPACE_H
+﻿#pragma once
 
 #include <iostream>
 #include <iomanip>
@@ -9,29 +8,32 @@
 
 namespace anisimov
 {
-  struct DelimiterIO
+  class DelimiterIO
   {
+  public:
+    DelimiterIO(char exp) : exp(exp) {}
     char exp;
   };
 
-  struct ULongLiteralIO
+  class ULongLiteralIO
   {
-    unsigned long long ref;
+  public:
+    ULongLiteralIO(unsigned long long& ref) : ref(ref) {}
+    unsigned long long& ref;
   };
 
-  struct ULongBinaryLiteralIO
+  class ULongBinaryLiteralIO
   {
-    unsigned long long ref;
+  public:
+    ULongBinaryLiteralIO(unsigned long long& ref) : ref(ref) {}
+    unsigned long long& ref;
   };
 
-  struct StringIO
+  class StringIO
   {
-    std::string ref;
-  };
-
-  struct ComplexLiteralIO
-  {
-    std::complex<double> ref;
+  public:
+    StringIO(std::string& ref) : ref(ref) {}
+    std::string& ref;
   };
 
   struct DataStruct
@@ -44,27 +46,21 @@ namespace anisimov
   class iofmtguard
   {
   public:
-    explicit iofmtguard(std::basic_ios<char>& s);
+    iofmtguard(std::basic_ios<char>& s);
     ~iofmtguard();
 
   private:
     std::basic_ios<char>& s_;
     std::streamsize precision_;
-    std::ios::fmtflags fmt_;
     char fill_;
+    std::ios_base::fmtflags fmt_;
   };
-
-  std::string binaryNull(unsigned long long ref);
 
   std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
   std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest);
   std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest);
   std::istream& operator>>(std::istream& in, StringIO&& dest);
-  std::istream& operator>>(std::istream& in, ComplexLiteralIO&& dest);
-
+  std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& src);
-
   bool compareDataStruct(const DataStruct& a, const DataStruct& b);
 }
-
-#endif
