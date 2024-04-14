@@ -12,7 +12,7 @@ int main()
   std::vector<DataStruct> data;
   std::istream_iterator<DataStruct> start(std::cin), end;
 
-  std::copy(start, end, std::back_inserter(data)); 
+  std::copy(start, end, std::back_inserter(data));
 
   if (std::cin.bad()) {
     std::cin.clear();
@@ -26,3 +26,4 @@ int main()
 
   return 0;
 }
+

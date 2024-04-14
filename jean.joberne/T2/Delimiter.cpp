@@ -7,7 +7,7 @@ std::istream& jean::operator>>(std::istream& in, const Delimiter&& exp)
   {
     return in;
   }
-  
+
   char readChar;
   in >> readChar;
   if (readChar != exp.expected) {
