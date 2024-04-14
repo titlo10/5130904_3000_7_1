@@ -1,30 +1,33 @@
 ﻿#include "namespace.h"
-#include <vector>
-#include <algorithm>
+
+using anisimov::DataStruct;
 
 int main()
 {
-  using anisimov::DataStruct;
-
-  std::vector<DataStruct> data;
-
-  std::string line;
-  while (std::getline(std::cin, line))
+  try
   {
-    std::istringstream iss(line);
-    DataStruct tmp;
-    if (iss >> tmp)
+    std::string input = "";
+    std::vector< DataStruct > data;
+
+    while (std::getline(std::cin, input))
     {
-      data.push_back(tmp);
+      std::istringstream iss(input);
+      DataStruct tmp;
+      if (iss >> tmp)
+      {
+        data.push_back(tmp);
+      }
     }
+
+    std::sort(std::begin(data), std::end(data), anisimov::compareDataStruct);
+
+    std::copy(std::begin(data), std::end(data), std::ostream_iterator< DataStruct >(std::cout, "\n"));
   }
-
-  std::sort(data.begin(), data.end(), anisimov::compareDataStruct);
-
-  for (const auto& elem : data)
+  catch (std::exception& ex)
   {
-    std::cout << elem << std::endl;
+    std::cerr << ex.what();
+    return EXIT_FAILURE;
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }
