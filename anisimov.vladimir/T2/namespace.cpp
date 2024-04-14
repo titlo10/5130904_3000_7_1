@@ -2,10 +2,12 @@
 
 namespace anisimov
 {
-  std::string binaryNull(unsigned long long ref)
+  std::string binaryNull(std::complex<double> ref)
   {
+    unsigned long long realPart = static_cast<unsigned long long>(std::real(ref));
+    unsigned long long imagPart = static_cast<unsigned long long>(std::imag(ref));
     std::stringstream ss;
-    ss << "0b" << std::setfill('0') << std::setw(2) << std::to_string(ref);
+    ss << "0b" << std::setfill('0') << std::setw(2) << std::hex << realPart << std::hex << imagPart;
     std::string out = ss.str();
     size_t i = out.find('b');
     if (out[i + 1] == '0' and out[i + 2] == '0')
@@ -131,8 +133,7 @@ namespace anisimov
     iofmtguard fmtguard(out);
     out << "(";
     out << ":key1 " << src.key1 << "ull";
-    out << ":key2 " << binaryNull(static_cast<unsigned long long>(std::real(src.key2))) << " "
-      << binaryNull(static_cast<unsigned long long>(std::imag(src.key2)));
+    out << ":key2 " << binaryNull(src.key2);
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
     return out;
