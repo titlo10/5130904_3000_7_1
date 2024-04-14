@@ -73,7 +73,8 @@ namespace anisimov
     {
       using sep = DelimiterIO;
       using ull = ULongLiteralIO;
-      using ulbl = ULongBinaryLiteralIO;
+      // ”далено неиспользуемое объ€вление typedef
+      // using ulbl = ULongBinaryLiteralIO;
       using str = StringIO;
       in >> sep{ '(' };
       bool flag1 = false;
