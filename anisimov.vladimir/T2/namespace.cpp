@@ -21,9 +21,9 @@ namespace anisimov
     {
       return in;
     }
-    char c = '0';
-    in >> c;
-    if (in && (c != dest.exp))
+    char ch = '0';
+    in >> ch;
+    if (in && (ch != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
@@ -81,14 +81,14 @@ namespace anisimov
           break;
         }
         std::string key;
-        char c;
-        in >> c;
+        char ch;
+        in >> ch;
         if (!in)
         {
           break;
         }
 
-        if (c == ':' && (in >> key))
+        if (ch == ':' && (in >> key))
         {
           if (key == "key1")
           {

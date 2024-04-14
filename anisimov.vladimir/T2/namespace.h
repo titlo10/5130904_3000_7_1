@@ -9,13 +9,14 @@
 #include <algorithm>
 #include <bitset>
 #include <string>
+#include <complex>
 
 namespace anisimov
 {
   struct DataStruct
   {
     unsigned long long key1;
-    unsigned long long key2;
+    std::complex<double> key2;
     std::string key3;
   };
 
@@ -38,6 +39,7 @@ namespace anisimov
   {
     unsigned long long& ref;
   };
+
   class iofmtguard
   {
   public:
