@@ -4,53 +4,53 @@
 #include <limits>
 #include "DataStruct.h"
 
-using namespace std;
+namespace deleske {
 
-istream& operator>>(istream& in, DelimiterIO&& dest)
+std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
 {
-  istream::sentry sentry(in);
+  std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
 
-  string del;
+  std::string del;
   size_t tSize = dest.delimiter.length();
-  in >> setw(tSize) >> del;
+  in >> std::setw(tSize) >> del;
   if (!in)
   {
     return in;
   }
   if (dest.delimiter != del)
   {
-    in.setstate(ios_base::failbit);
+    in.setstate(std::ios_base::failbit);
   }
   return in;
 }
 
-istream& operator>>(istream& in, UllIO&& dest)
+std::istream& operator>>(std::istream& in, UllIO&& dest)
 {
-  istream::sentry sentry(in);
+  std::istream::sentry sentry(in);
   ResPars rGard(in);
   if (!sentry)
   {
     return in;
   }
-  if (!(in >> oct >> dest.ref))
+  if (!(in >> std::oct >> dest.ref))
   {
     return in;
   }
   return in;
 }
 
-istream& operator>>(istream& in, ComplexIO&& dest)
+std::istream& operator>>(std::istream& in, ComplexIO&& dest)
 {
-  istream::sentry sentry(in);
+  std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
-  string del;
+  std::string del;
   double real, imag;
   if (!(in >> DelimiterIO{"#c("}))
   {
@@ -64,23 +64,23 @@ istream& operator>>(istream& in, ComplexIO&& dest)
   {
     return in;
   }
-  dest.ref = complex<double>(real, imag);
+  dest.ref = std::complex<double>(real, imag);
   return in;
 }
 
-istream& operator>>(istream& in, StringIO&& dest)
+std::istream& operator>>(std::istream& in, StringIO&& dest)
 {
-  istream::sentry sentry(in);
+  std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
-  return getline(in >> DelimiterIO{"\""}, dest.ref, '"');
+  return std::getline(in >> DelimiterIO{"\""}, dest.ref, '"');
 }
 
-istream& operator>>(istream& in, DataStruct& dest)
+std::istream& operator>>(std::istream& in, DataStruct& dest)
 {
-  istream::sentry sentry(in);
+  std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
@@ -94,7 +94,7 @@ istream& operator>>(istream& in, DataStruct& dest)
 
   for (int i = 0; i < 3; i++)
   {
-    string key;
+    std::string key;
     if (!(in >> key))
     {
       return in;
@@ -123,7 +123,7 @@ istream& operator>>(istream& in, DataStruct& dest)
     }
     else
     {
-      in.setstate(ios_base::failbit);
+      in.setstate(std::ios_base::failbit);
       return in;
     }
     in >> DelimiterIO{":"};
@@ -137,9 +137,9 @@ istream& operator>>(istream& in, DataStruct& dest)
   return in;
 }
 
-ostream& operator<<(ostream& out, const DataStruct& dest)
+std::ostream& operator<<(std::ostream& out, const DataStruct& dest)
 {
-  ostream::sentry sentry(out);
+  std::ostream::sentry sentry(out);
   if (!sentry)
   {
     return out;
@@ -147,14 +147,14 @@ ostream& operator<<(ostream& out, const DataStruct& dest)
 
   ResPars rGard(out);
 
-  out << "(:key1 " << "0" << oct << dest.key1 <<
-        ":key2 " << "#c(" << fixed << setprecision(1) << dest.key2.real() << " " <<
-        fixed << setprecision(1) << dest.key2.imag() << ")" <<
+  out << "(:key1 " << "0" << std::oct << dest.key1 <<
+        ":key2 " << "#c(" << std::fixed << std::setprecision(1) << dest.key2.real() << " " <<
+        std::fixed << std::setprecision(1) << dest.key2.imag() << ")" <<
         ":key3 \"" << dest.key3 << "\":)";
   return out;
 }
 
-ResPars::ResPars(basic_ios<char>& strm) :
+ResPars::ResPars(std::basic_ios<char>& strm) :
   strm_(strm),
   fill_(strm.fill()),
   precision_(strm.precision()),
@@ -166,5 +166,7 @@ ResPars::~ResPars()
   strm_.fill(fill_);
   strm_.precision(precision_);
   strm_.flags(fmtFlags_);
+}
+
 }
 

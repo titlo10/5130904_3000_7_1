@@ -5,13 +5,13 @@
 #include <vector>
 #include <complex>
 
-using namespace std;
+namespace deleske {
 
 struct DataStruct
 {
     unsigned long long key1;
-    complex<double> key2;
-    string key3;
+    std::complex<double> key2;
+    std::string key3;
 };
 
 struct UllIO
@@ -21,38 +21,42 @@ struct UllIO
 
 struct ComplexIO
 {
-    complex<double> &ref;
+    std::complex<double> &ref;
 };
 
 struct StringIO
 {
-    string &ref;
+    std::string &ref;
 };
 
 struct DelimiterIO
 {
-    string delimiter;
+    std::string delimiter;
 };
 
 class ResPars
 {
 public:
-    ResPars(basic_ios<char> &strm);
+    ResPars(std::basic_ios<char> &strm);
     ~ResPars();
 
 private:
-    basic_ios<char> &strm_;
+    std::basic_ios<char> &strm_;
     char fill_;
-    streamsize precision_;
-    basic_ios<char>::fmtflags fmtFlags_;
+    std::streamsize precision_;
+    std::basic_ios<char>::fmtflags fmtFlags_;
 };
 
-istream& operator>>(istream &in, DelimiterIO&& dest);
-istream& operator>>(istream &in, UllIO &dest);
-istream& operator>>(istream &in, ComplexIO &dest);
-istream& operator>>(istream &in, StringIO &dest);
-istream& operator>>(istream &in, DataStruct &dest);
-ostream& operator<<(ostream &out, const DataStruct &dest);
+std::istream& operator>>(std::istream &in, DelimiterIO&& dest);
+std::istream& operator>>(std::istream &in, UllIO &dest);
+std::istream& operator>>(std::istream &in, ComplexIO &dest);
+std::istream& operator>>(std::istream &in, StringIO &dest);
+std::istream& operator>>(std::istream &in, DataStruct &dest);
+std::ostream& operator<<(std::ostream &out, const DataStruct &dest);
+
+}
 
 #endif
+
+
 
