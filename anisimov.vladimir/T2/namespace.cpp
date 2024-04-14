@@ -87,7 +87,6 @@ namespace anisimov
         {
           break;
         }
-
         if (ch == ':' && (in >> key))
         {
           if (key == "key1")
