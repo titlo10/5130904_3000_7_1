@@ -22,9 +22,9 @@ namespace anisimov
     {
       return in;
     }
-    char c = '0';
-    in >> c;
-    if (in && (c != dest.exp))
+    char ch = '0';
+    in >> ch;
+    if (in && (ch != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
@@ -86,14 +86,14 @@ namespace anisimov
           break;
         }
         std::string key;
-        char c;
-        in >> c;
+        char ch;
+        in >> ch;
         if (!in)
         {
           break;
         }
 
-        if (c == ':' && (in >> key))
+        if (ch == ':' && (in >> key))
         {
           if (key == "key1")
           {
@@ -131,7 +131,8 @@ namespace anisimov
     iofmtguard fmtguard(out);
     out << "(";
     out << ":key1 " << src.key1 << "ull";
-    out << ":key2 " << binaryNull(src.key2);
+    out << ":key2 " << binaryNull(static_cast<unsigned long long>(std::real(src.key2))) << " "
+      << binaryNull(static_cast<unsigned long long>(std::imag(src.key2)));
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
     return out;
@@ -143,13 +144,9 @@ namespace anisimov
     {
       return a.key1 < b.key1;
     }
-    else if (std::real(a.key2) != std::real(b.key2))
+    else if (a.key2 != b.key2)
     {
-      return std::real(a.key2) < std::real(b.key2);
-    }
-    else if (std::imag(a.key2) != std::imag(b.key2))
-    {
-      return std::imag(a.key2) < std::imag(b.key2);
+      return a.key2 < b.key2;
     }
     else
     {
