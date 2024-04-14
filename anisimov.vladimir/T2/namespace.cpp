@@ -29,7 +29,7 @@ namespace anisimov
       using ull = ULongLiteralIO;
       using ulbl = ULongBinaryLiteralIO;
       using str = StringIO;
-      in >> sep{ '(' } >> ull{ realPart } >> sep{ ',' } >> ull{ imagPart } >> sep{ ')' };
+      in >> sep{ '(' } >> realPart >> sep{ ',' } >> imagPart >> sep{ ')' };
       dest.key2 = std::complex<double>(realPart, imagPart);
     }
     if (in)

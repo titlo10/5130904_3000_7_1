@@ -1,5 +1,6 @@
 ﻿#include "namespace.h"
 #include <vector>
+#include <algorithm>
 
 int main()
 {
@@ -17,11 +18,13 @@ int main()
       data.push_back(tmp);
     }
   }
+
   std::sort(data.begin(), data.end(), anisimov::compareDataStruct);
 
   for (const auto& elem : data)
   {
     std::cout << elem << std::endl;
   }
+
   return 0;
 }
