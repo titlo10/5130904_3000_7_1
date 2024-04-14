@@ -1,5 +1,4 @@
 #include "namespace.h"
-#include <cmath>
 
 namespace anisimov
 {
@@ -23,9 +22,9 @@ namespace anisimov
     {
       return in;
     }
-    char ch = '0';
-    in >> ch;
-    if (in && (ch != dest.exp))
+    char c = '0';
+    in >> c;
+    if (in && (c != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
@@ -62,6 +61,20 @@ namespace anisimov
     return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
   }
 
+  std::istream& operator>>(std::istream& in, ComplexLiteralIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    double realPart, imagPart;
+    char c;
+    in >> c >> realPart >> c >> imagPart >> c;
+    dest.ref = std::complex<double>(realPart, imagPart);
+    return in;
+  }
+
   std::istream& operator>>(std::istream& in, DataStruct& dest)
   {
     std::istream::sentry sentry(in);
@@ -74,6 +87,7 @@ namespace anisimov
     {
       using sep = DelimiterIO;
       using ull = ULongLiteralIO;
+      using ulbl = ULongBinaryLiteralIO;
       using str = StringIO;
       in >> sep{ '(' };
       bool flag1 = false;
@@ -86,14 +100,14 @@ namespace anisimov
           break;
         }
         std::string key;
-        char ch;
-        in >> ch;
+        char c;
+        in >> c;
         if (!in)
         {
           break;
         }
 
-        if (ch == ':' && (in >> key))
+        if (c == ':' && (in >> key))
         {
           if (key == "key1")
           {
@@ -102,9 +116,7 @@ namespace anisimov
           }
           else if (key == "key2")
           {
-            unsigned long long realPart, imagPart;
-            in >> sep{ '(' } >> ull{ realPart } >> sep{ ',' } >> ull{ imagPart } >> sep{ ')' };
-            input.key2 = std::complex<double>(realPart, imagPart);
+            in >> sep{ '0' } >> sep{ 'b' } >> ulbl{ input.key2 };
             flag2 = true;
           }
           else if (key == "key3")
@@ -133,7 +145,7 @@ namespace anisimov
     iofmtguard fmtguard(out);
     out << "(";
     out << ":key1 " << src.key1 << "ull";
-    out << ":key2 (" << src.key2.real() << "," << src.key2.imag() << ")";
+    out << ":key2 " << binaryNull(src.key2);
     out << ":key3 " << "\"" << src.key3 << "\"";
     out << ":)";
     return out;
@@ -145,10 +157,13 @@ namespace anisimov
     {
       return a.key1 < b.key1;
     }
+    else if (std::abs(a.key2) != std::abs(b.key2))
+    {
+      return std::abs(a.key2) < std::abs(b.key2);
+    }
     else
     {
-      
-      return std::abs(a.key2) < std::abs(b.key2);
+      return a.key3.length() < b.key3.length();
     }
   }
 
