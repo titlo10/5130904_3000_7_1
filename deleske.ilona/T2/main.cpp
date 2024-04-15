@@ -30,11 +30,10 @@ int main() {
     });
 
     std::copy(ds_original.begin(), ds_original.end(), std::ostream_iterator<DataStruct>(std::cout, "\n"));
-  } catch (const std::exception& e) {
-    std::cerr << e.what() << std::endl;
+  } catch (std::exception &er) {
+    std::cerr << er.what() << std::endl;
     return EXIT_FAILURE;
   }
-  
   return EXIT_SUCCESS;
 }
 
