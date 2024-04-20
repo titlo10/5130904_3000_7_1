@@ -1,30 +1,20 @@
 #include "namespace.h"
 
-using jean::DataStruct;
-using jean::comparator;
+using namespace jean;
 
 int main() {
     std::vector<DataStruct> data;
-    while (!std::cin.eof()) {
-        if (!std::cin) {
-            std::cin.clear();
-            std::cin.ignore(64, '\n');
-        }
+    DataStruct tmp;
 
-        std::copy(
-            std::istream_iterator<DataStruct>(std::cin),
-            std::istream_iterator<DataStruct>(),
-            std::back_inserter(data)
-        );
+    while (std::cin >> tmp) {
+        data.push_back(tmp);
     }
 
     std::sort(data.begin(), data.end(), comparator);
 
-    std::copy(
-        std::begin(data),
-        std::end(data),
-        std::ostream_iterator<DataStruct>(std::cout, "\n")
-    );
+    for (const auto& ds : data) {
+        std::cout << ds << '\n';
+    }
 
     return 0;
 }
