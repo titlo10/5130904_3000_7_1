@@ -4,18 +4,13 @@ namespace jean {
     std::istream& operator>>(std::istream& in, DataStruct& dest) {
         char sep;
         if (!(in >> sep && sep == '(')) return in;
-        
         if (!(in >> dest.key1)) return in;
-        
         long long num;
         unsigned long long denom;
         if (!(in >> num >> sep && sep == ':' && in >> denom)) return in;
         dest.key2 = {num, denom};
-        
         if (!(in >> std::quoted(dest.key3))) return in;
-        
         if (!(in >> sep && sep == ')')) return in;
-        
         return in;
     }
 
@@ -35,4 +30,3 @@ namespace jean {
         return left.key3 < right.key3;
     }
 }
-
