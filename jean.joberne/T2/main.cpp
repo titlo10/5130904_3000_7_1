@@ -1,20 +1,36 @@
 #include "namespace.h"
+#include <iterator>
 
-using namespace jean;
+int main()
+{
+    try
+    {
+        std::string input = "";
+        std::vector<jean::DataStruct> data;
 
-int main() {
-    std::vector<DataStruct> data;
-    DataStruct tmp;
+        while (std::getline(std::cin, input))
+        {
+            std::istringstream iss(input);
+            jean::DataStruct temp;
+            if (iss >> temp)
+            {
+                data.push_back(temp);
+            }
+        }
 
-    while (std::cin >> tmp) {
-        data.push_back(tmp);
+        std::sort(data.begin(), data.end(), jean::compareDataStruct);
+
+        std::copy(
+            data.begin(),
+            data.end(),
+            std::ostream_iterator<jean::DataStruct>(std::cout, "\n")
+        );
+    }
+    catch (std::exception& ex)
+    {
+        std::cerr << ex.what();
+        return EXIT_FAILURE;
     }
 
-    std::sort(data.begin(), data.end(), comparator);
-
-    for (const auto& ds : data) {
-        std::cout << ds << '\n';
-    }
-
-    return 0;
+    return EXIT_SUCCESS;
 }
