@@ -21,7 +21,7 @@ std::istream& jean::operator>>(std::istream& in, DataStruct& value) {
             } else if (keyNum == 2) {
                 long long n = 0;
                 unsigned long long d = 0;
-                char start, end;
+                char start;
                 in >> StrDel{"(:N"} >> n >> StrDel{":D"} >> d >> StrDel{":)"} >> start;
                 if (start != '(') {
                     in.setstate(std::ios_base::failbit);
