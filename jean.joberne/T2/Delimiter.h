@@ -14,3 +14,4 @@ namespace jean {
   std::istream& operator>>(std::istream& in, const StringDelimiter&& exp);
 }
 #endif // !DELIMITER_H
+

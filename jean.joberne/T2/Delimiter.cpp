@@ -2,7 +2,7 @@
 
 std::istream& jean::operator>>(std::istream& in, const Delimiter&& exp)
 {
-   std::istream::sentry guard(in);
+  std::istream::sentry guard(in);
   char current_char = 0;
   in >> current_char;
   if (current_char != exp.expected)
@@ -24,3 +24,4 @@ std::istream& jean::operator>>(std::istream& in, const StringDelimiter&& exp)
   }
   return in;
 }
+
