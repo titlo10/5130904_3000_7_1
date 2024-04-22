@@ -1,42 +1,5 @@
 #include "io.h"
 
-std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
-    std::istream::sentry sentry(in);
-    if (!sentry) {
-        return in;
-    }
-    char null = '0';
-    in >> null;
-    if (in && (null != dest.exp)) {
-        in.setstate(std::ios::failbit);
-    }
-    return in;
-}
-
-std::istream& operator>>(std::istream& in, ULongLiteralIO&& dest) {
-    std::istream::sentry sentry(in);
-    if (!sentry) {
-        return in;
-    }
-    return in >> dest.ref;
-}
-
-std::istream& operator>>(std::istream& in, ULongBinaryLiteralIO&& dest) {
-    std::istream::sentry sentry(in);
-    if (!sentry) {
-        return in;
-    }
-    return in >> dest.ref;
-}
-
-std::istream& operator>>(std::istream& in, StringIO&& dest) {
-    std::istream::sentry sentry(in);
-    if (!sentry) {
-        return in;
-    }
-    return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
-}
-
 std::istream& operator>>(std::istream& in, DataStruct& dest) {
     std::istream::sentry sentry(in);
     if (!sentry) {
@@ -47,7 +10,6 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
     {
         using sep = DelimiterIO;
         using ull = ULongLiteralIO;
-        using ulbl = ULongBinaryLiteralIO;
         using str = StringIO;
 
         in >> sep{ '(' };
@@ -67,11 +29,17 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
 
             if (c == ':' && (in >> key)) {
                 if (key == "key1") {
-                    in >> ull{ input.key1 };
+                    char temp;
+                    if (!(in >> temp)) {
+                        break;
+                    }
+                    input.key1 = temp;
                     flag1 = true;
                 }
                 else if (key == "key2") {
-                    in >> sep{ ' ' } >> ull{ input.key2 };
+                    if (!(in >> input.key2)) {
+                        break;
+                    }
                     flag2 = true;
                 }
                 else if (key == "key3") {
@@ -88,36 +56,3 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
     return in;
 }
 
-std::ostream& operator<<(std::ostream& out, const DataStruct& src) {
-    std::ostream::sentry sentry(out);
-    if (!sentry) {
-        return out;
-    }
-    out << "(:" << "key1 " << src.key1 << " key2 " << src.key2 << " key3 \"" << src.key3 << "\":)";
-    return out;
-}
-
-bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
-    if (a.key1 != b.key1) {
-        return a.key1 < b.key1;
-    }
-    else if (a.key2 != b.key2) {
-        return a.key2 < b.key2;
-    }
-    else {
-        return a.key3.length() < b.key3.length();
-    }
-}
-
-iofmtguard::iofmtguard(std::basic_ios<char>& s) :
-    s_(s),
-    fill_(s.fill()),
-    precision_(s.precision()),
-    fmt_(s.flags())
-{}
-
-iofmtguard::~iofmtguard() {
-    s_.fill(fill_);
-    s_.precision(precision_);
-    s_.flags(fmt_);
-}
