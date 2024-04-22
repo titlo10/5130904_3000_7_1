@@ -2,9 +2,10 @@
 #include "Delimiter.h"
 
 namespace jean {
-    std::istream& operator>>(std::istream& in, DataStruct& value) {
-        std::istream::sentry guard(in);
-        if (!guard) {
+    std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
+    {
+        std::istream::sentry sentry(in);
+        if (!sentry) {
             return in;
         } else {
             using Del = Delimiter;
