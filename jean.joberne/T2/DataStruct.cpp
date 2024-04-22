@@ -8,7 +8,7 @@ std::istream& jean::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   else
-  {  
+  {
   using Del = Delimiter;
   using StrDel = StringDelimiter;
   in >> Del{'('};
