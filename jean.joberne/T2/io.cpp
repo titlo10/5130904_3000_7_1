@@ -9,7 +9,6 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
     DataStruct input;
     {
         using sep = DelimiterIO;
-        using ull = ULongLiteralIO;
         using str = StringIO;
 
         in >> sep{ '(' };
@@ -55,4 +54,3 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
     }
     return in;
 }
-
