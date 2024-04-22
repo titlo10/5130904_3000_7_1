@@ -2,15 +2,14 @@
 #include <list>
 #include <iterator>
 #include <limits>
-
-#include "DataStruct.h"
+#include "dataStruct.hpp"
 
 int main()
 {
   using namespace jean;
   using input_it_t = std::istream_iterator< DataStruct >;
-  using output_it_t = std::ostream_iterator< DataStruct  >;
   std::list< DataStruct > data(input_it_t{ std::cin }, input_it_t{});
+  using output_it_t = std::ostream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
     if (std::cin.fail())
@@ -22,5 +21,5 @@ int main()
   }
   data.sort();
   std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" });
-  return 0;
 }
+
