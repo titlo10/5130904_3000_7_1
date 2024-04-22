@@ -2,10 +2,9 @@
 #include "Delimiter.h"
 
 namespace jean {
-    std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
-    {
-        std::istream::sentry sentry(in);
-        if (!sentry) {
+    std::istream& operator>>(std::istream& in, DataStruct& value) {
+        std::istream::sentry guard(in);
+        if (!guard) {
             return in;
         } else {
             using Del = Delimiter;
@@ -55,5 +54,5 @@ namespace jean {
         }
         return key1 < other.key1;
     }
-}
+} // namespace jean
 
