@@ -1,25 +1,23 @@
 #include "io.h"
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <iterator>
 
-using namespace jean;
+int main() {
+    try {
+        std::vector<DataStruct> data;
 
-int main()
-{
-    std::vector<DataStruct> data;
-    DataStruct temp;
+        // Read DataStructs from standard input
+        std::copy(std::istream_iterator<DataStruct>(std::cin), std::istream_iterator<DataStruct>(), std::back_inserter(data));
 
-    while (std::cin >> temp) {
-        data.push_back(temp);
+        // Sort the data
+        std::sort(data.begin(), data.end(), compareDataStruct);
+
+        // Output sorted data
+        std::copy(data.begin(), data.end(), std::ostream_iterator<DataStruct>(std::cout, "\n"));
+    }
+    catch (std::exception& ex) {
+        std::cerr << ex.what();
+        return EXIT_FAILURE;
     }
 
-    std::sort(data.begin(), data.end(), compareDataStruct);
-
-    for (const auto& item : data) {
-        std::cout << item << std::endl;
-    }
-
-    return 0;
+    return EXIT_SUCCESS;
 }
