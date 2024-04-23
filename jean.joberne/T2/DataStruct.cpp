@@ -7,28 +7,28 @@ namespace jean {
         if (!guard) {
             return in;
         } else {
-            using Del = Delimiter;
-            using StrDel = StringDelimiter;
-            in >> Del{'('};
+            using del = delimiter;
+            using strDel = StringDelimiter;
+            in >> del{'('};
             for (size_t i = 0; i < 3; i++) {
                 int keyNum = 0;
-                in >> StrDel{ ":key" } >> keyNum;
+                in >> strDel{ ":key" } >> keyNum;
                 if (keyNum == 1) {
-                    in >> Del{ '\'' } >> value.key1 >> Del{ '\'' };
+                    in >> del{ '\'' } >> value.key1 >> del{ '\'' };
                 }
                 if (keyNum == 2) {
                     long long n = 0;
                     unsigned long long d = 0;
-                    in >> StrDel{ "(:N" } >> n >> StrDel{ ":D" } >> d >> StrDel{ ":)" };
+                    in >> strDel{ "(:N" } >> n >> strDel{ ":D" } >> d >> strDel{ ":)" };
                     value.key2.first = n;
                     value.key2.second = d;
                 }
                 if (keyNum == 3) {
-                    in >> Del{ '"' };
+                    in >> del{ '"' };
                     std::getline(in, value.key3, '"');
                 }
             }
-            in >> StrDel{ ":)" };
+            in >> strDel{ ":)" };
             return in;
         }
     }
