@@ -8,17 +8,18 @@ std::istream& jean::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
 
-  using del = Delimiter;
   using StrDel = StringDelimiter;
 
-  in >> del{'('};
+  std::string del;
+  in >> del;
+
   for (size_t i = 0; i < 3; i++)
   {
     int keyNum = 0;
     in >> StrDel{":key"} >> keyNum;
     if (keyNum == 1)
     {
-      in >> del{'\''} >> value.key1 >> del{'\''};
+      in >> del >> value.key1 >> del;
     }
     if (keyNum == 2)
     {
@@ -30,7 +31,7 @@ std::istream& jean::operator>>(std::istream& in, DataStruct& value)
     }
     if (keyNum == 3)
     {
-      in >> del{'"'};
+      in >> del;
       std::getline(in, value.key3, '"');
     }
   }
@@ -64,4 +65,3 @@ bool jean::DataStruct::operator<(const DataStruct& other) const
   }
   return key1 < other.key1;
 }
-
