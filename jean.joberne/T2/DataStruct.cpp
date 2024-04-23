@@ -7,7 +7,7 @@ namespace jean {
         if (!guard) {
             return in;
         } else {
-            using del = delimiter;
+            using del = Delimiter; // Corrected alias name
             using strDel = StringDelimiter;
             in >> del{'('};
             for (size_t i = 0; i < 3; i++) {
@@ -55,4 +55,3 @@ namespace jean {
         return key1 < other.key1;
     }
 } // namespace jean
-
