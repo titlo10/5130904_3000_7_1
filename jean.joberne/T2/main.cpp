@@ -1,27 +1,36 @@
 #include <iostream>
-#include <list>
+#include <vector>
+#include <algorithm>
 #include <iterator>
-#include <limits>
+#include <sstream>
 
 #include "DataStruct.h"
 
 int main()
 {
-  using namespace jean;
-  using input_it_t = std::istream_iterator< DataStruct >;
-  using output_it_t = std::ostream_iterator< DataStruct  >;
-  std::list< DataStruct > data(input_it_t{ std::cin }, input_it_t{});
-  while (!std::cin.eof())
-  {
-    if (std::cin.fail())
+    try
     {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
-  }
-  data.sort();
-  std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" });
-  return 0;
-}
+        std::string input = "";
+        std::vector<jean::DataStruct> data;
 
+        while (std::getline(std::cin, input))
+        {
+            std::istringstream iss(input);
+            jean::DataStruct tmp;
+            if (iss >> tmp)
+            {
+                data.push_back(tmp);
+            }
+        }
+
+        std::sort(std::begin(data), std::end(data));
+
+        std::copy(std::begin(data), std::end(data), std::ostream_iterator<jean::DataStruct>(std::cout, "\n"));
+    }
+    catch (std::exception& ex)
+    {
+        std::cerr << ex.what();
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
+}
