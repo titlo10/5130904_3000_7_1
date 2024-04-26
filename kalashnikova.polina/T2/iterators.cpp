@@ -9,9 +9,9 @@ namespace kalashnikova
     {
       return in;
     }
-    char input = '0';
-    in >> input;
-    if (in && (input != dest.exp))
+    char symbol = '0';
+    in >> symbol;
+    if (in && (symbol != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
@@ -72,11 +72,11 @@ namespace kalashnikova
       while (true) {
         if (flag1 && flag2 && flag3) break;
         std::string key = "";
-        char input = '0';
-        in >> input;
+        char symbol = '0';
+        in >> symbol;
         if (!in) break;
 
-        if (input == ':' && (in >> key))
+        if (symbol == ':' && (in >> key))
         {
           if (key == "key1")
           {
