@@ -174,14 +174,14 @@ namespace bajkin
           break;
         }
         std::string key = "";
-        char c = '0';
-        in >> c;
+        char stream = '0';
+        in >> stream;
         if (!in)
         {
           break;
         }
 
-        if (c == ':' && (in >> key))
+        if (stream == ':' && (in >> key))
         {
           if (key == "key1")
           {
