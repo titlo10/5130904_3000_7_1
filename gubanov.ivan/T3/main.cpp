@@ -340,11 +340,11 @@ namespace gubanov {
 		  {
 			return a.x < b.x || a.y < b.y;
 		  });
-	rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x);
-	rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
-	rect.top_right.x = std::max(rect.top_right.x, (*result.second).x);
-	rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);
-	return rect;
+	  rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x);
+	  rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
+	  rect.top_right.x = std::max(rect.top_right.x, (*result.second).x);
+	  rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);
+	  return rect;
 	  }
 	);
 	return rect;
@@ -360,7 +360,10 @@ namespace gubanov {
 	  {
 		return point.x >= frame.bottom_left.x && point.x <= frame.top_right.x &&
 		  point.y >= frame.bottom_left.y && point.y <= frame.top_right.y;
-	  })) std::cout << "<TRUE>";
+	  }))
+	{
+	  std::cout << "<TRUE>";
+	}
 	else
 	{
 	  std::cout << "<FALSE>";
@@ -399,7 +402,7 @@ int main(int argc, char* argv[])
 	return EXIT_FAILURE;
   }
   const std::string filename = argv[1];
-  std::ifstream file("figures.txt");
+  std::ifstream file(filename);
 
   if (!file)
   {
@@ -411,7 +414,8 @@ int main(int argc, char* argv[])
 
   std::vector<Polygon> fileData;
 
-  while (!file.eof()) {
+  while (!file.eof())
+  {
 	std::copy(std::istream_iterator<Polygon>(file),
 	  std::istream_iterator<Polygon>(),
 	  std::back_inserter(fileData));
@@ -447,7 +451,6 @@ int main(int argc, char* argv[])
 	  else if (command == "ECHO")
 	  {
 		echo(fileData);
-		std::copy(fileData.begin(), fileData.end(), std::ostream_iterator<Polygon>(std::cout, "\n"));
 	  }
 	  else
 	  {
@@ -455,7 +458,8 @@ int main(int argc, char* argv[])
 	  }
 	}
   }
-  catch (const std::string& error) {
+  catch (const std::string& error)
+  {
 	std::cerr << error << std::endl;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
