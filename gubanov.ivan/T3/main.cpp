@@ -10,7 +10,8 @@
 #include <string>
 #include <iomanip>
 
-namespace gubanov {
+namespace gubanov
+{
 	struct Point
 	{
 		int x, y;
@@ -395,7 +396,7 @@ namespace gubanov {
 
 int main(int argc, char* argv[])
 {
-	using namespace gubanov;
+  using namespace gubanov;
 	if (argc != 2)
 	{
 		std::cerr << "Error: filename missing\n";
