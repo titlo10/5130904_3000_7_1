@@ -11,457 +11,457 @@
 #include <iomanip>
 
 namespace gubanov {
-  struct Point
-  {
-	int x, y;
-
-	double getDistance(const Point& point) const
+	struct Point
 	{
-	  return std::hypot(x - point.x, y - point.y);
-	}
+		int x, y;
 
-	bool operator !=(const Point& other) const
-	{
-	  return x != other.x || y != other.y;
-	}
-  };
-
-  double getTriangleArea(const Point& pointFirst, const Point& pointSecond, const Point& pointThird)
-  {
-	auto a = pointFirst.getDistance(pointSecond),
-	  b = pointSecond.getDistance(pointThird),
-	  c = pointFirst.getDistance(pointThird);
-	double perimeter = (a + b + c) / 2;
-	return sqrt(perimeter * (perimeter - a) * (perimeter - b) * (perimeter - c));
-  }
-
-  struct Polygon
-  {
-	std::vector<Point> points;
-
-	bool operator <(const Polygon& other) const
-	{
-	  return getArea() < other.getArea();
-	}
-
-	bool operator==(const Polygon& other) const
-	{
-	  if (points.size() != other.points.size())
-	  {
-		return false;
-	  }
-	  for (size_t i = 0; i < points.size(); i++)
-	  {
-		if (points[i] != other.points[i])
+		double getDistance(const Point& point) const
 		{
-		  return false;
+			return std::hypot(x - point.x, y - point.y);
 		}
-	  }
-	  return true;
-	}
 
-	double getArea() const
-	{
-	  const Point pointFirst = points[0];
-	  Point prev = points[1];
-	  return std::accumulate(points.begin() + 2, points.end(), 0.0,
-		[&pointFirst, &prev](double accumulatedArea, const Point& current)
+		bool operator !=(const Point& other) const
 		{
-		  double TriangleArea = getTriangleArea(pointFirst, prev, current);
-		  accumulatedArea += TriangleArea;
-		  prev = current;
-		  return accumulatedArea;
+			return x != other.x || y != other.y;
 		}
-	  );
-	}
-  };
+	};
 
-  int convertToNumber(const std::string& str) {
-	char* end;
-	int res = strtol(str.c_str(), &end, 10);
-	if (*end != 0)
+	double getTriangleArea(const Point& pointFirst, const Point& pointSecond, const Point& pointThird)
 	{
-	  return -1;
+		auto a = pointFirst.getDistance(pointSecond),
+			b = pointSecond.getDistance(pointThird),
+			c = pointFirst.getDistance(pointThird);
+		double perimeter = (a + b + c) / 2;
+		return sqrt(perimeter * (perimeter - a) * (perimeter - b) * (perimeter - c));
 	}
-	return res;
-  }
 
-  void getTotalArea(const std::vector<Polygon>& polygons)
-  {
-	using namespace std::placeholders;
-	std::string argument;
-	std::cin >> argument;
-	int number = convertToNumber(argument);
-	auto accumulatePolygonsArea =
-	  [&polygons, &number](double accumulatedArea, const Polygon& current, const std::string method)
-	  {
-		double result = accumulatedArea;
-		if (method == "EVEN" && current.points.size() % 2 != 0)
+	struct Polygon
+	{
+		std::vector<Point> points;
+
+		bool operator <(const Polygon& other) const
 		{
-		  result += current.getArea();
+			return getArea() < other.getArea();
 		}
-		else if (method == "ODD" && current.points.size() % 2 == 0)
+
+		bool operator==(const Polygon& other) const
 		{
-		  result += current.getArea();
+			if (points.size() != other.points.size())
+			{
+				return false;
+			}
+			for (size_t i = 0; i < points.size(); i++)
+			{
+				if (points[i] != other.points[i])
+				{
+					return false;
+				}
+			}
+			return true;
 		}
-		else if (method == "MEAN" && polygons.size() != 0)
+
+		double getArea() const
 		{
-		  result += current.getArea();
+			const Point pointFirst = points[0];
+			Point prev = points[1];
+			return std::accumulate(points.begin() + 2, points.end(), 0.0,
+				[&pointFirst, &prev](double accumulatedArea, const Point& current)
+				{
+					double TriangleArea = getTriangleArea(pointFirst, prev, current);
+					accumulatedArea += TriangleArea;
+					prev = current;
+					return accumulatedArea;
+				}
+			);
 		}
-		else if (method == "SPECIAL" && current.points.size() == number)
+	};
+
+	int convertToNumber(const std::string& str) {
+		char* end;
+		int res = strtol(str.c_str(), &end, 10);
+		if (*end != 0)
 		{
-		  result += current.getArea();
+			return -1;
 		}
-		return result;
-	  };
-	if (number == -1)
-	{
-	  if (argument == "EVEN" || argument == "ODD")
-	  {
-		std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-		  std::bind(accumulatePolygonsArea, _1, _2, argument)) << std::endl;
-	  }
-	  else if (argument == "MEAN")
-	  {
-		std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-		  std::bind(accumulatePolygonsArea, _1, _2, argument)) / polygons.size() << std::endl;
-	  }
-	  else
-	  {
-		throw "<INVALID COMMAND>";
-	  }
-	}
-	else if (number > 2)
-	{
-	  std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-		std::bind(accumulatePolygonsArea, _1, _2, "SPECIAL")) << std::endl;
-	}
-	else
-	{
-	  throw "<INVALID COMMAND>";
-	}
-  }
-
-  void calculateMinOrMax(const std::vector<Polygon>& polygons, const std::string& method)
-  {
-	std::string argument;
-	std::cin >> argument;
-	if (polygons.size() == 0)
-	{
-	  throw "<INVALID COMMAND>";
+		return res;
 	}
 
-	std::vector<size_t> sizeVector(polygons.size());
-
-	std::transform(polygons.begin(), polygons.end(), sizeVector.begin(),
-	  [](const Polygon& current)
-	  {
-		return current.points.size();
-	  }
-	);
-	if (argument == "AREA")
+	void getTotalArea(const std::vector<Polygon>& polygons)
 	{
-	  if (method == "MIN")
-	  {
-		std::cout << std::min_element(polygons.begin(), polygons.end())->getArea() << std::endl;
-	  }
-	  else
-	  {
-		std::cout << std::max_element(polygons.begin(), polygons.end())->getArea() << std::endl;
-	  }
-	}
-	else if (argument == "VERTEXES")
-	{
-	  if (method == "MAX")
-	  {
-		std::cout << *std::max_element(sizeVector.begin(), sizeVector.end()) << std::endl;
-	  }
-	  else
-	  {
-		std::cout << *std::min_element(sizeVector.begin(), sizeVector.end()) << std::endl;
-	  }
-	}
-	else
-	{
-	  throw "<INVALID COMMAND>";
-	}
-  }
-
-  void countPolygons(const std::vector<Polygon>& polygons)
-  {
-	using namespace std::placeholders;
-	std::string argument;
-	std::cin >> argument;
-	int number = convertToNumber(argument);
-	auto count = [&number](const Polygon& poly, const std::string& method)
-	  {
-		if (method == "EVEN")
+		using namespace std::placeholders;
+		std::string argument;
+		std::cin >> argument;
+		int number = convertToNumber(argument);
+		auto accumulatePolygonsArea =
+			[&polygons, &number](double accumulatedArea, const Polygon& current, const std::string method)
+			{
+				double result = accumulatedArea;
+				if (method == "EVEN" && current.points.size() % 2 != 0)
+				{
+					result += current.getArea();
+				}
+				else if (method == "ODD" && current.points.size() % 2 == 0)
+				{
+					result += current.getArea();
+				}
+				else if (method == "MEAN" && polygons.size() != 0)
+				{
+					result += current.getArea();
+				}
+				else if (method == "SPECIAL" && current.points.size() == number)
+				{
+					result += current.getArea();
+				}
+				return result;
+			};
+		if (number == -1)
 		{
-		  return poly.points.size() % 2 != 0;
+			if (argument == "EVEN" || argument == "ODD")
+			{
+				std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
+					std::bind(accumulatePolygonsArea, _1, _2, argument)) << std::endl;
+			}
+			else if (argument == "MEAN")
+			{
+				std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
+					std::bind(accumulatePolygonsArea, _1, _2, argument)) / polygons.size() << std::endl;
+			}
+			else
+			{
+				throw "<INVALID COMMAND>";
+			}
 		}
-		else if (method == "ODD")
+		else if (number > 2)
 		{
-		  return poly.points.size() % 2 == 0;
-		}
-		else if (method == "SPECIAL")
-		{
-		  return poly.points.size() == number;
-		}
-		return false;
-	  };
-	if (number == -1)
-	{
-	  if (argument == "EVEN" || argument == "ODD")
-	  {
-		std::cout << std::count_if(polygons.begin(), polygons.end(), std::bind(count, _1, argument)) << std::endl;
-	  }
-	  else
-	  {
-		throw "<INVALID COMMAND>";
-	  }
-	}
-	else if (number > 2)
-	{
-	  std::cout << std::count_if(polygons.begin(), polygons.end(), std::bind(count, _1, "SPECIAL")) << std::endl;
-	}
-	else
-	{
-	  throw "<INVALID COMMAND>";
-	}
-  }
-
-  struct DelimeterIO
-  {
-	char exp;
-  };
-
-  std::istream& operator>>(std::istream& in, DelimeterIO&& dest)
-  {
-	std::istream::sentry sentry(in);
-	if (!sentry)
-	{
-	  return in;
-	}
-	char symbol = '0';
-
-	in >> symbol;
-
-	if (in && (symbol != dest.exp))
-	{
-	  in.setstate(std::ios::failbit);
-	}
-	return in;
-  }
-
-  std::istream& operator>>(std::istream& in, Point& point)
-  {
-	std::istream::sentry sentry(in);
-	if (!sentry)
-	{
-	  return in;
-	}
-
-	in >> DelimeterIO{ '(' } >> point.x >> DelimeterIO{ ';' } >> point.y >> DelimeterIO{ ')' };
-	return in;
-  }
-
-  std::istream& operator>>(std::istream& in, Polygon& poly)
-  {
-	std::istream::sentry sentry(in);
-	if (!sentry)
-	{
-	  return in;
-	}
-	size_t numPoints;
-
-	in >> numPoints;
-
-	if (numPoints < 3)
-	{
-	  in.setstate(std::istream::failbit);
-	  return in;
-	}
-
-	poly.points.clear();
-	poly.points.resize(numPoints);
-
-	for (Point& point : poly.points)
-	{
-	  in >> point;
-	}
-	return in;
-  }
-
-  std::ostream& operator<<(std::ostream& out, const Point& point)
-  {
-	std::ostream::sentry sentry(out);
-	if (!sentry)
-	{
-	  return out;
-	}
-	out << "(" << point.x << ";" << point.y << ")";
-	return out;
-  }
-
-  std::ostream& operator<<(std::ostream& out, const Polygon& poly)
-  {
-	std::ostream::sentry sentry(out);
-	if (!sentry)
-	{
-	  return out;
-	}
-
-	out << poly.points.size() << " ";
-
-	for (const Point& point : poly.points)
-	{
-	  out << point << " ";
-	}
-	return out;
-  }
-
-  struct FrameRectangle
-  {
-	Point bottom_left;
-	Point top_right;
-  };
-
-  FrameRectangle getFrameRectangle(const std::vector<Polygon>& polygons)
-  {
-	FrameRectangle rect;
-	rect.bottom_left.x = std::numeric_limits<int>::max();
-	rect.bottom_left.y = std::numeric_limits<int>::max();
-	rect.top_right.x = std::numeric_limits<int>::min();
-	rect.top_right.y = std::numeric_limits<int>::min();
-	rect = std::accumulate(polygons.begin(), polygons.end(), rect, [](FrameRectangle rect, const Polygon& polygon)
-	  {
-		auto result = std::minmax_element(polygon.points.begin(), polygon.points.end(),
-		[](const Point& a, const Point& b)
-		  {
-			return a.x < b.x || a.y < b.y;
-		  });
-	  rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x);
-	  rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
-	  rect.top_right.x = std::max(rect.top_right.x, (*result.second).x);
-	  rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);
-	  return rect;
-	  }
-	);
-	return rect;
-  }
-
-  void InFrame(const std::vector<Polygon>& polygons)
-  {
-	Polygon polygon_param;
-	std::cin >> polygon_param;
-	FrameRectangle frame = getFrameRectangle(polygons);
-	if (std::all_of(polygon_param.points.begin(), polygon_param.points.end(),
-	  [&frame](const Point& point)
-	  {
-		return point.x >= frame.bottom_left.x && point.x <= frame.top_right.x &&
-		  point.y >= frame.bottom_left.y && point.y <= frame.top_right.y;
-	  }))
-	{
-	  std::cout << "<TRUE>";
-	}
-	else
-	{
-	  std::cout << "<FALSE>";
-	}
-  }
-
-  void echo(std::vector<Polygon>& polygons)
-  {
-	Polygon p;
-	std::cin >> p;
-	std::vector<Polygon> result = std::accumulate(polygons.begin(), polygons.end(), std::vector<Polygon>(),
-	  [&p](std::vector<Polygon> acc, const Polygon& poly)
-	  {
-		if (poly == p)
-		{
-		  acc.push_back(poly);
-		  acc.push_back(p);
+			std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
+				std::bind(accumulatePolygonsArea, _1, _2, "SPECIAL")) << std::endl;
 		}
 		else
 		{
-		  acc.push_back(poly);
+			throw "<INVALID COMMAND>";
 		}
-		return acc;
-	  });
-	polygons = result;
-	std::cout << std::count(polygons.begin(), polygons.end(), p) << '\n';
-  }
+	}
+
+	void calculateMinOrMax(const std::vector<Polygon>& polygons, const std::string& method)
+	{
+		std::string argument;
+		std::cin >> argument;
+		if (polygons.size() == 0)
+		{
+			throw "<INVALID COMMAND>";
+		}
+
+		std::vector<size_t> sizeVector(polygons.size());
+
+		std::transform(polygons.begin(), polygons.end(), sizeVector.begin(),
+			[](const Polygon& current)
+			{
+				return current.points.size();
+			}
+		);
+		if (argument == "AREA")
+		{
+			if (method == "MIN")
+			{
+				std::cout << std::min_element(polygons.begin(), polygons.end())->getArea() << std::endl;
+			}
+			else
+			{
+				std::cout << std::max_element(polygons.begin(), polygons.end())->getArea() << std::endl;
+			}
+		}
+		else if (argument == "VERTEXES")
+		{
+			if (method == "MAX")
+			{
+				std::cout << *std::max_element(sizeVector.begin(), sizeVector.end()) << std::endl;
+			}
+			else
+			{
+				std::cout << *std::min_element(sizeVector.begin(), sizeVector.end()) << std::endl;
+			}
+		}
+		else
+		{
+			throw "<INVALID COMMAND>";
+		}
+	}
+
+	void countPolygons(const std::vector<Polygon>& polygons)
+	{
+		using namespace std::placeholders;
+		std::string argument;
+		std::cin >> argument;
+		int number = convertToNumber(argument);
+		auto count = [&number](const Polygon& poly, const std::string& method)
+			{
+				if (method == "EVEN")
+				{
+					return poly.points.size() % 2 != 0;
+				}
+				else if (method == "ODD")
+				{
+					return poly.points.size() % 2 == 0;
+				}
+				else if (method == "SPECIAL")
+				{
+					return poly.points.size() == number;
+				}
+				return false;
+			};
+		if (number == -1)
+		{
+			if (argument == "EVEN" || argument == "ODD")
+			{
+				std::cout << std::count_if(polygons.begin(), polygons.end(), std::bind(count, _1, argument)) << std::endl;
+			}
+			else
+			{
+				throw "<INVALID COMMAND>";
+			}
+		}
+		else if (number > 2)
+		{
+			std::cout << std::count_if(polygons.begin(), polygons.end(), std::bind(count, _1, "SPECIAL")) << std::endl;
+		}
+		else
+		{
+			throw "<INVALID COMMAND>";
+		}
+	}
+
+	struct DelimeterIO
+	{
+		char exp;
+	};
+
+	std::istream& operator>>(std::istream& in, DelimeterIO&& dest)
+	{
+		std::istream::sentry sentry(in);
+		if (!sentry)
+		{
+			return in;
+		}
+		char symbol = '0';
+
+		in >> symbol;
+
+		if (in && (symbol != dest.exp))
+		{
+			in.setstate(std::ios::failbit);
+		}
+		return in;
+	}
+
+	std::istream& operator>>(std::istream& in, Point& point)
+	{
+		std::istream::sentry sentry(in);
+		if (!sentry)
+		{
+			return in;
+		}
+
+		in >> DelimeterIO{ '(' } >> point.x >> DelimeterIO{ ';' } >> point.y >> DelimeterIO{ ')' };
+		return in;
+	}
+
+	std::istream& operator>>(std::istream& in, Polygon& poly)
+	{
+		std::istream::sentry sentry(in);
+		if (!sentry)
+		{
+			return in;
+		}
+		size_t numPoints;
+
+		in >> numPoints;
+
+		if (numPoints < 3)
+		{
+			in.setstate(std::istream::failbit);
+			return in;
+		}
+
+		poly.points.clear();
+		poly.points.resize(numPoints);
+
+		for (Point& point : poly.points)
+		{
+			in >> point;
+		}
+		return in;
+	}
+
+	std::ostream& operator<<(std::ostream& out, const Point& point)
+	{
+		std::ostream::sentry sentry(out);
+		if (!sentry)
+		{
+			return out;
+		}
+		out << "(" << point.x << ";" << point.y << ")";
+		return out;
+	}
+
+	std::ostream& operator<<(std::ostream& out, const Polygon& poly)
+	{
+		std::ostream::sentry sentry(out);
+		if (!sentry)
+		{
+			return out;
+		}
+
+		out << poly.points.size() << " ";
+
+		for (const Point& point : poly.points)
+		{
+			out << point << " ";
+		}
+		return out;
+	}
+
+	struct FrameRectangle
+	{
+		Point bottom_left;
+		Point top_right;
+	};
+
+	FrameRectangle getFrameRectangle(const std::vector<Polygon>& polygons)
+	{
+		FrameRectangle rect;
+		rect.bottom_left.x = std::numeric_limits<int>::max();
+		rect.bottom_left.y = std::numeric_limits<int>::max();
+		rect.top_right.x = std::numeric_limits<int>::min();
+		rect.top_right.y = std::numeric_limits<int>::min();
+		rect = std::accumulate(polygons.begin(), polygons.end(), rect, [](FrameRectangle rect, const Polygon& polygon)
+			{
+				auto result = std::minmax_element(polygon.points.begin(), polygon.points.end(),
+				[](const Point& a, const Point& b)
+					{
+						return a.x < b.x || a.y < b.y;
+					});
+		rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x);
+		rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
+		rect.top_right.x = std::max(rect.top_right.x, (*result.second).x);
+		rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);
+		return rect;
+			}
+		);
+		return rect;
+	}
+
+	void InFrame(const std::vector<Polygon>& polygons)
+	{
+		Polygon polygon_param;
+		std::cin >> polygon_param;
+		FrameRectangle frame = getFrameRectangle(polygons);
+		if (std::all_of(polygon_param.points.begin(), polygon_param.points.end(),
+			[&frame](const Point& point)
+			{
+				return point.x >= frame.bottom_left.x && point.x <= frame.top_right.x &&
+					point.y >= frame.bottom_left.y && point.y <= frame.top_right.y;
+			}))
+		{
+			std::cout << "<TRUE>";
+		}
+		else
+		{
+			std::cout << "<FALSE>";
+		}
+	}
+
+	void echo(std::vector<Polygon>& polygons)
+	{
+		Polygon p;
+		std::cin >> p;
+		std::vector<Polygon> result = std::accumulate(polygons.begin(), polygons.end(), std::vector<Polygon>(),
+			[&p](std::vector<Polygon> acc, const Polygon& poly)
+			{
+				if (poly == p)
+				{
+					acc.push_back(poly);
+					acc.push_back(p);
+				}
+				else
+				{
+					acc.push_back(poly);
+				}
+				return acc;
+			});
+		polygons = result;
+		std::cout << std::count(polygons.begin(), polygons.end(), p) << '\n';
+	}
 }
 
 int main(int argc, char* argv[])
 {
-  using namespace gubanov;
-  if (argc != 2)
-  {
-	std::cerr << "Error: filename missing\n";
-	return EXIT_FAILURE;
-  }
-  const std::string filename = argv[1];
-  std::ifstream file(filename);
-
-  if (!file)
-  {
-	std::cerr << "Error: file doesn't exists\n";
-	return EXIT_FAILURE;
-  }
-
-  std::cout << std::setprecision(1) << std::fixed;
-
-  std::vector<Polygon> fileData;
-
-  while (!file.eof())
-  {
-	std::copy(std::istream_iterator<Polygon>(file),
-	  std::istream_iterator<Polygon>(),
-	  std::back_inserter(fileData));
-
-	if (file.fail() && !file.eof())
+	using namespace gubanov;
+	if (argc != 2)
 	{
-	  file.clear();
-	  file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cerr << "Error: filename missing\n";
+		return EXIT_FAILURE;
 	}
-  }
-  try
-  {
-	while (!std::cin.eof())
+	const std::string filename = argv[1];
+	std::ifstream file(filename);
+
+	if (!file)
 	{
-	  std::string command;
-	  std::cin >> command;
-	  if (command == "AREA")
-	  {
-		getTotalArea(fileData);
-	  }
-	  else if (command == "MAX" || command == "MIN")
-	  {
-		calculateMinOrMax(fileData, command);
-	  }
-	  else if (command == "COUNT")
-	  {
-		countPolygons(fileData);
-	  }
-	  else if (command == "INFRAME")
-	  {
-		InFrame(fileData);
-	  }
-	  else if (command == "ECHO")
-	  {
-		echo(fileData);
-	  }
-	  else
-	  {
-		throw "<INVALID COMMAND>";
-	  }
+		std::cerr << "Error: file doesn't exists\n";
+		return EXIT_FAILURE;
 	}
-  }
-  catch (const std::string& error)
-  {
-	std::cerr << error << std::endl;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  }
-  return EXIT_SUCCESS;
+
+	std::cout << std::setprecision(1) << std::fixed;
+
+	std::vector<Polygon> fileData;
+
+	while (!file.eof())
+	{
+		std::copy(std::istream_iterator<Polygon>(file),
+			std::istream_iterator<Polygon>(),
+			std::back_inserter(fileData));
+
+		if (file.fail() && !file.eof())
+		{
+			file.clear();
+			file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+	try
+	{
+		while (!std::cin.eof())
+		{
+			std::string command;
+			std::cin >> command;
+			if (command == "AREA")
+			{
+				getTotalArea(fileData);
+			}
+			else if (command == "MAX" || command == "MIN")
+			{
+				calculateMinOrMax(fileData, command);
+			}
+			else if (command == "COUNT")
+			{
+				countPolygons(fileData);
+			}
+			else if (command == "INFRAME")
+			{
+				InFrame(fileData);
+			}
+			else if (command == "ECHO")
+			{
+				echo(fileData);
+			}
+			else
+			{
+				throw "<INVALID COMMAND>";
+			}
+		}
+	}
+	catch (const std::string& error)
+	{
+		std::cerr << error << std::endl;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+	return EXIT_SUCCESS;
 }
