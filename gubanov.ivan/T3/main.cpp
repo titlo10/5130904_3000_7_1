@@ -329,25 +329,25 @@ namespace gubanov {
   FrameRectangle getFrameRectangle(const std::vector<Polygon>& polygons)
   {
 	FrameRectangle rect;
-	rect.bottom_left.x = std::numeric_limits<int>::max(); 
-	rect.bottom_left.y = std::numeric_limits<int>::max(); 
-	rect.top_right.x = std::numeric_limits<int>::min(); 
-	rect.top_right.y = std::numeric_limits<int>::min(); 
+	rect.bottom_left.x = std::numeric_limits<int>::max();
+	rect.bottom_left.y = std::numeric_limits<int>::max();
+	rect.top_right.x = std::numeric_limits<int>::min();
+	rect.top_right.y = std::numeric_limits<int>::min();
 	rect = std::accumulate(polygons.begin(), polygons.end(), rect, [](FrameRectangle rect, const Polygon& polygon)
 	  {
 		auto result = std::minmax_element(polygon.points.begin(), polygon.points.end(),
-		  [](const Point& a, const Point& b)
+		[](const Point& a, const Point& b)
 		  {
 			return a.x < b.x || a.y < b.y;
 		  });
-		rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x); 
-		rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
-		rect.top_right.x = std::max(rect.top_right.x, (*result.second).x); 
-		rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);  
-		return rect;
+	rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x);
+	rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
+	rect.top_right.x = std::max(rect.top_right.x, (*result.second).x);
+	rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);
+	return rect;
 	  }
 	);
-	return rect; 
+	return rect;
   }
 
   void InFrame(const std::vector<Polygon>& polygons)
@@ -366,41 +366,39 @@ namespace gubanov {
 	  std::cout << "<FALSE>";
 	}
   }
-  
-  void echo(std::vector<Polygon>& polygons) 
+
+  void echo(std::vector<Polygon>& polygons)
   {
 	Polygon p;
 	std::cin >> p;
 	std::vector<Polygon> result = std::accumulate(polygons.begin(), polygons.end(), std::vector<Polygon>(),
-	[&p](std::vector<Polygon> acc, const Polygon& poly)
-	{
-	  if (poly == p) 
+	  [&p](std::vector<Polygon> acc, const Polygon& poly)
 	  {
-		acc.push_back(poly); 
-		acc.push_back(p); 
-	  }
-	  else 
-	  {
-		acc.push_back(poly);
-	  }
-	  return acc;
-	});
+		if (poly == p)
+		{
+		  acc.push_back(poly);
+		  acc.push_back(p);
+		}
+		else
+		{
+		  acc.push_back(poly);
+		}
+		return acc;
+	  });
 	polygons = result;
-	std::cout << std::count(polygons.begin(), polygons.end(), p) << '\n'; 
+	std::cout << std::count(polygons.begin(), polygons.end(), p) << '\n';
   }
 }
 
 int main(int argc, char* argv[])
 {
   using namespace gubanov;
-  /*
   if (argc != 2)
   {
 	std::cerr << "Error: filename missing\n";
 	return EXIT_FAILURE;
   }
   const std::string filename = argv[1];
-  */
   std::ifstream file("figures.txt");
 
   if (!file)
@@ -408,23 +406,23 @@ int main(int argc, char* argv[])
 	std::cerr << "Error: file doesn't exists\n";
 	return EXIT_FAILURE;
   }
-  
-  std::cout << std::setprecision(1) << std::fixed; 
+
+  std::cout << std::setprecision(1) << std::fixed;
 
   std::vector<Polygon> fileData;
-  
+
   while (!file.eof()) {
 	std::copy(std::istream_iterator<Polygon>(file),
 	  std::istream_iterator<Polygon>(),
 	  std::back_inserter(fileData));
-	 
-	if (file.fail() && !file.eof()) 
-	{ 
-	  file.clear(); 
-	  file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-	} 
+
+	if (file.fail() && !file.eof())
+	{
+	  file.clear();
+	  file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
   }
-  try 
+  try
   {
 	while (!std::cin.eof())
 	{
@@ -451,7 +449,7 @@ int main(int argc, char* argv[])
 		echo(fileData);
 		std::copy(fileData.begin(), fileData.end(), std::ostream_iterator<Polygon>(std::cout, "\n"));
 	  }
-	  else 
+	  else
 	  {
 		throw "<INVALID COMMAND>";
 	  }
@@ -461,5 +459,5 @@ int main(int argc, char* argv[])
 	std::cerr << error << std::endl;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 }
