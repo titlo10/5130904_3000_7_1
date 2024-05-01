@@ -109,7 +109,7 @@ namespace gubanov
         {
           result += current.getArea();
         }
-        else if (method == "SPECIAL" && current.points.size() == number)
+        else if (method == "SPECIAL" && current.points.size() == static_cast<size_t>(number))
         {
           result += current.getArea();
         }
@@ -206,7 +206,7 @@ namespace gubanov
         }
         else if (method == "SPECIAL")
         {
-          return poly.points.size() == number;
+          return poly.points.size() == static_cast<size_t>(number);
         }
         return false;
       };
