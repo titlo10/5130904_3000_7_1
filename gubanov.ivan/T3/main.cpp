@@ -198,11 +198,11 @@ namespace gubanov
       {
         if (method == "EVEN")
         {
-          return poly.points.size() % 2 != 0;
+          return poly.points.size() % 2 == 0;
         }
         else if (method == "ODD")
         {
-          return poly.points.size() % 2 == 0;
+          return poly.points.size() % 2 != 0;
         }
         else if (method == "SPECIAL")
         {
@@ -397,6 +397,7 @@ namespace gubanov
 int main(int argc, char* argv[])
 {
   using namespace gubanov;
+
   if (argc != 2)
   {
     std::cerr << "Error: filename missing\n";
@@ -427,12 +428,13 @@ int main(int argc, char* argv[])
       file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
-  try
+ 
+  while (!std::cin.eof())
   {
-    while (!std::cin.eof())
+    std::string command;
+    std::cin >> command;
+    try
     {
-      std::string command;
-      std::cin >> command;
       if (command == "AREA")
       {
         getTotalArea(fileData);
@@ -453,16 +455,16 @@ int main(int argc, char* argv[])
       {
         echo(fileData);
       }
-      else
+      else if (command != "")
       {
         throw "<INVALID COMMAND>";
       }
     }
-  }
-  catch (const std::string& error)
-  {
-    std::cerr << error << std::endl;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    catch (const char* error)
+    {
+      std::cout << error << std::endl;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
   }
   return EXIT_SUCCESS;
 }
