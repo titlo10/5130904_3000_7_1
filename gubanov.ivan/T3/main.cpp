@@ -344,17 +344,17 @@ namespace gubanov
       {
         return pointFirst.y < pointSecond.y;
       };
-    rect = std::accumulate(polygons.begin(), polygons.end(), rect, 
+    rect = std::accumulate(polygons.begin(), polygons.end(), rect,
     [&](FrameRectangle rect, const Polygon& polygon)
     {
         auto min_x = std::min_element(polygon.points.begin(), polygon.points.end(), comparatorwithX);
         auto min_y = std::min_element(polygon.points.begin(), polygon.points.end(), comparatorwithY);
         auto max_x = std::max_element(polygon.points.begin(), polygon.points.end(), comparatorwithX);
         auto max_y = std::max_element(polygon.points.begin(), polygon.points.end(), comparatorwithY);
-        rect.bottom_left.x = std::min(rect.bottom_left.x, min_x->x);      
-        rect.bottom_left.y = std::min(rect.bottom_left.y, min_y->y); 
-        rect.top_right.x = std::max(rect.top_right.x, max_x->x); 
-        rect.top_right.y = std::max(rect.top_right.y, max_y->y); 
+        rect.bottom_left.x = std::min(rect.bottom_left.x, min_x->x);   
+        rect.bottom_left.y = std::min(rect.bottom_left.y, min_y->y);
+        rect.top_right.x = std::max(rect.top_right.x, max_x->x);
+        rect.top_right.y = std::max(rect.top_right.y, max_y->y);
         return rect;
     }
     );
