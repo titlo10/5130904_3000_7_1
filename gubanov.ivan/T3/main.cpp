@@ -97,15 +97,15 @@ namespace gubanov
       [&polygons, &number](double accumulatedArea, const Polygon& current, const std::string method)
       {
         double result = accumulatedArea;
-        if (method == "EVEN" && current.points.size() % 2 != 0)
+        if (method == "EVEN" && current.points.size() % 2 == 0)
         {
           result += current.getArea();
         }
-        else if (method == "ODD" && current.points.size() % 2 == 0)
+        else if (method == "ODD" && current.points.size() % 2 != 0)
         {
           result += current.getArea();
         }
-        else if (method == "MEAN" && polygons.size() != 0)
+        else if (method == "MEAN")
         {
           result += current.getArea();
         }
@@ -122,7 +122,7 @@ namespace gubanov
         std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
           std::bind(accumulatePolygonsArea, _1, _2, argument)) << std::endl;
       }
-      else if (argument == "MEAN")
+      else if (argument == "MEAN" && polygons.size() != 0)
       {
         std::cout << std::accumulate(polygons.begin(), polygons.end(), 0.0,
           std::bind(accumulatePolygonsArea, _1, _2, argument)) / polygons.size() << std::endl;
@@ -363,11 +363,11 @@ namespace gubanov
           point.y >= frame.bottom_left.y && point.y <= frame.top_right.y;
       }))
     {
-      std::cout << "<TRUE>";
+      std::cout << "<TRUE>\n";
     }
     else
     {
-      std::cout << "<FALSE>";
+      std::cout << "<FALSE>\n";
     }
   }
 
