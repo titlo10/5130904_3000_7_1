@@ -442,7 +442,6 @@ namespace gubanov
 int main(int argc, char* argv[])
 {
   using namespace gubanov;
-  /*
   if (argc != 2)
   {
     std::cerr << "Error: filename missing\n";
@@ -450,8 +449,7 @@ int main(int argc, char* argv[])
   }
 
   const std::string filename = argv[1];
-  */
-  std::ifstream file("figures.txt");
+  std::ifstream file(filename);
 
   if (!file)
   {
