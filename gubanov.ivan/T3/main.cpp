@@ -334,19 +334,29 @@ namespace gubanov
     rect.bottom_left.y = std::numeric_limits<int>::max();
     rect.top_right.x = std::numeric_limits<int>::min();
     rect.top_right.y = std::numeric_limits<int>::min();
-    rect = std::accumulate(polygons.begin(), polygons.end(), rect, [](FrameRectangle rect, const Polygon& polygon)
+    auto comparatorwithX =
+      [](const Point& pointFirst, const Point& pointSecond)
       {
-        auto result = std::minmax_element(polygon.points.begin(), polygon.points.end(),
-        [](const Point& a, const Point& b)
-          {
-            return a.x < b.x || a.y < b.y;
-          });
-    rect.bottom_left.x = std::min(rect.bottom_left.x, (*result.first).x);
-    rect.bottom_left.y = std::min(rect.bottom_left.y, (*result.first).y);
-    rect.top_right.x = std::max(rect.top_right.x, (*result.second).x);
-    rect.top_right.y = std::max(rect.top_right.y, (*result.second).y);
-    return rect;
-      }
+        return pointFirst.x < pointSecond.x;
+      };
+    auto comparatorwithY =
+      [](const Point& pointFirst, const Point& pointSecond)
+      {
+        return pointFirst.y < pointSecond.y;
+      };
+    rect = std::accumulate(polygons.begin(), polygons.end(), rect, 
+    [&](FrameRectangle rect, const Polygon& polygon)
+    {
+        auto min_x = std::min_element(polygon.points.begin(), polygon.points.end(), comparatorwithX);
+        auto min_y = std::min_element(polygon.points.begin(), polygon.points.end(), comparatorwithY);
+        auto max_x = std::max_element(polygon.points.begin(), polygon.points.end(), comparatorwithX);
+        auto max_y = std::max_element(polygon.points.begin(), polygon.points.end(), comparatorwithY);
+        rect.bottom_left.x = std::min(rect.bottom_left.x, min_x->x);      
+        rect.bottom_left.y = std::min(rect.bottom_left.y, min_y->y); 
+        rect.top_right.x = std::max(rect.top_right.x, max_x->x); 
+        rect.top_right.y = std::max(rect.top_right.y, max_y->y); 
+        return rect;
+    }
     );
     return rect;
   }
@@ -355,6 +365,23 @@ namespace gubanov
   {
     Polygon polygon_param;
     std::cin >> polygon_param;
+    int ch = std::cin.get();
+
+    while (ch != int('\n') && ch != EOF)
+    {
+      if (!isspace(ch))
+      {
+        std::cin.setstate(std::istream::failbit);
+        break;
+      }
+      ch = std::cin.get();
+    }
+
+    if (!std::cin)
+    {
+      std::cin.clear();
+      throw "<INVALID COMMAND>";
+    }
     FrameRectangle frame = getFrameRectangle(polygons);
     if (std::all_of(polygon_param.points.begin(), polygon_param.points.end(),
       [&frame](const Point& point)
@@ -375,6 +402,24 @@ namespace gubanov
   {
     Polygon p;
     std::cin >> p;
+
+    int ch = std::cin.get();
+
+    while (ch != int('\n') && ch != EOF)
+    {
+      if (!isspace(ch))
+      {
+        std::cin.setstate(std::istream::failbit);
+        break;
+      }
+      ch = std::cin.get();
+    }
+
+    if (!std::cin)
+    {
+      std::cin.clear();
+      throw "<INVALID COMMAND>";
+    }
     std::vector<Polygon> result = std::accumulate(polygons.begin(), polygons.end(), std::vector<Polygon>(),
       [&p](std::vector<Polygon> acc, const Polygon& poly)
       {
@@ -389,15 +434,15 @@ namespace gubanov
         }
         return acc;
       });
-    polygons = result;
     std::cout << std::count(polygons.begin(), polygons.end(), p) << '\n';
+    polygons = result;
   }
 }
 
 int main(int argc, char* argv[])
 {
   using namespace gubanov;
-
+  /*
   if (argc != 2)
   {
     std::cerr << "Error: filename missing\n";
@@ -405,7 +450,8 @@ int main(int argc, char* argv[])
   }
 
   const std::string filename = argv[1];
-  std::ifstream file(filename);
+  */
+  std::ifstream file("figures.txt");
 
   if (!file)
   {
