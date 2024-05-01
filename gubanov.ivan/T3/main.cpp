@@ -403,6 +403,7 @@ int main(int argc, char* argv[])
     std::cerr << "Error: filename missing\n";
     return EXIT_FAILURE;
   }
+
   const std::string filename = argv[1];
   std::ifstream file(filename);
 
@@ -428,7 +429,7 @@ int main(int argc, char* argv[])
       file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
- 
+
   while (!std::cin.eof())
   {
     std::string command;
