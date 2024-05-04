@@ -16,4 +16,4 @@ namespace command
   void echo(std::vector<gubanov::Polygon>& polygons);
 }
 
-#endif 
+#endif
