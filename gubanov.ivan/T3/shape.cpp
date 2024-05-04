@@ -1,4 +1,4 @@
-#include "Shape.h"
+#include "shape.h"
 
 double gubanov::Point::getDistance(const Point& point) const
 {
